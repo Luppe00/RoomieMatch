@@ -1,0 +1,26 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p class="auth-subtitle">Login to find your perfect roomie</p>
+
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" [(ngModel)]="email" required email
+                    placeholder="Enter your email" [disabled]="loading">
+            </div>
+
+            <div class="error-message" *ngIf="error">
+                {{ error }}
+            </div>
+
+            <button type="submit" class="btn-primary full-width" [disabled]="!loginForm.form.valid || loading">
+                {{ loading ? 'Logging in...' : 'Login' }}
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+        </div>
+    </div>
+</div>

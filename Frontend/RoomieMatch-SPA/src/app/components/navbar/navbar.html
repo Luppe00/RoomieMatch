@@ -1,0 +1,22 @@
+<nav>
+    <a routerLink="/" class="brand">RoomieMatch</a>
+
+    <div class="links" *ngIf="currentUser">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Find Matches</a>
+        <a routerLink="/matches" routerLinkActive="active">My Matches</a>
+        <a routerLink="/profile" routerLinkActive="active">Profile</a>
+    </div>
+
+    <div class="user-info">
+        <div *ngIf="currentUser; else loginTemplate">
+            <span style="margin-right: 1rem;">Hi, {{ currentUser.firstName }}!</span>
+            <button (click)="logout()" class="logout-btn">Log out</button>
+        </div>
+        <ng-template #loginTemplate>
+            <div class="auth-buttons">
+                <a routerLink="/login" class="nav-link">Login</a>
+                <a routerLink="/register" class="btn-register">Register</a>
+            </div>
+        </ng-template>
+    </div>
+</nav>

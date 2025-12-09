@@ -1,0 +1,85 @@
+.matches-container {
+    width: 100%;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.match-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.match-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #888;
+    background-size: cover;
+    background-position: center;
+}
+
+.match-info {
+    flex: 1;
+}
+
+.match-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+}
+
+.email {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.contact-btn {
+    background: #ff385c;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.contact-btn:hover {
+    background: #d90b3e;
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.badge-has-room {
+    background: #e6fffa;
+    color: #047857;
+}
+
+.badge-needs-room {
+    background: #fff5f5;
+    color: #c53030;
+}

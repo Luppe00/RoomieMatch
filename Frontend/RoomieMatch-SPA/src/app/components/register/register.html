@@ -1,0 +1,63 @@
+<div class="auth-container">
+    <div class="auth-card register-card">
+        <h2>Create Account</h2>
+        <p class="auth-subtitle">Join the community</p>
+
+        <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <div class="row">
+                <div class="form-group half">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" [(ngModel)]="user.firstName" required>
+                </div>
+                <div class="form-group half">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" [(ngModel)]="user.lastName" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" [(ngModel)]="user.email" required email>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" [(ngModel)]="user.age" required min="18">
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" [(ngModel)]="user.gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="userType">I am...</label>
+                <select id="userType" name="userType" [(ngModel)]="user.userType" required>
+                    <option value="NEEDS_ROOM">Looking for a Room</option>
+                    <option value="HAS_ROOM">Offering a Room</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bio">Bio (Optional)</label>
+                <textarea id="bio" name="bio" [(ngModel)]="user.bio" rows="3"></textarea>
+            </div>
+
+            <div class="error-message" *ngIf="error">
+                {{ error }}
+            </div>
+
+            <button type="submit" class="btn-primary full-width" [disabled]="!registerForm.form.valid || loading">
+                {{ loading ? 'Creating Account...' : 'Register' }}
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a routerLink="/login">Login here</a></p>
+        </div>
+    </div>
+</div>

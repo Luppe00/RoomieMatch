@@ -1,0 +1,31 @@
+<div class="matches-container">
+    <h2>Your Matches</h2>
+
+    <div *ngIf="!currentUser" class="empty-state">
+        <p>Please log in to see your matches.</p>
+    </div>
+
+    <div *ngIf="currentUser && matches.length === 0" class="empty-state">
+        <p>No matches yet. Keep swiping!</p>
+    </div>
+
+    <div class="matches-grid" *ngIf="matches.length > 0">
+        <div class="match-card" *ngFor="let match of matches">
+            <div class="match-avatar"
+                [style.background-image]="match.profileImage ? 'url(' + match.profileImage + ')' : null">
+                <span *ngIf="!match.profileImage">{{ match.firstName[0] }}</span>
+            </div>
+            <div class="match-info">
+                <h3>{{ match.firstName }} {{ match.lastName }}</h3>
+                <p class="email">{{ match.email }}</p>
+                <div class="badges">
+                    <span class="badge"
+                        [ngClass]="{'badge-has-room': match.userType === 'HAS_ROOM', 'badge-needs-room': match.userType === 'NEEDS_ROOM'}">
+                        {{ match.userType === 'HAS_ROOM' ? 'Has Room' : 'Needs Room' }}
+                    </span>
+                </div>
+            </div>
+            <a href="mailto:{{match.email}}" class="contact-btn">Message</a>
+        </div>
+    </div>
+</div>

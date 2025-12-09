@@ -1,0 +1,29 @@
+<div class="user-list-container">
+    <div *ngIf="!currentUser" class="empty-state">
+        <h2>Welcome to RoomieMatch</h2>
+        <p>Please <a routerLink="/login">Login</a> or <a routerLink="/register">Register</a> to start matching.</p>
+    </div>
+
+    <div *ngIf="currentUser">
+        <div *ngIf="loading" class="loading">Loading potential roomies...</div>
+
+        <div *ngIf="!loading && currentUserCard" class="card-stack">
+            <app-swipe-card [user]="currentUserCard" (liked)="onLike()" (passed)="onPass()">
+            </app-swipe-card>
+        </div>
+
+        <div *ngIf="!loading && !currentUserCard" class="empty-state">
+            <h2>No more potential matches!</h2>
+            <p>Check back later or view your existing matches.</p>
+        </div>
+    </div>
+
+    <div class="match-overlay" *ngIf="matchMessage">
+        <div class="match-content">
+            {{ matchMessage }}
+            <div style="font-size: 3rem; margin: 1rem 0;">🎉</div>
+            <button (click)="closeMatch()" class="btn-primary" style="font-size: 1rem; padding: 0.5rem 1.5rem;">Keep
+                Swiping</button>
+        </div>
+    </div>
+</div>

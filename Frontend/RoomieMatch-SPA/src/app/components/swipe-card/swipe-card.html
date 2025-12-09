@@ -1,0 +1,42 @@
+<div class="card" *ngIf="user">
+    <!-- Image Area: Prioritize Room Image if User HAS_ROOM -->
+    <div class="card-image"
+        [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : (user.profileImage ? 'url(' + user.profileImage + ')' : null))"
+        [class.has-image]="user.room?.roomImage || user.profileImage">
+
+        <!-- Placeholder -->
+        <span *ngIf="!user.room?.roomImage && !user.profileImage">{{ user.firstName[0] }}</span>
+
+        <!-- Price Tag Overlay (if Room) -->
+        <span class="price-tag" *ngIf="user.userType === 'HAS_ROOM' && user.room?.rent">
+            ${{ user.room?.rent }}
+        </span>
+    </div>
+
+    <div class="card-content">
+        <div class="header">
+            <h2 class="name">
+                {{ user.firstName }}, <span class="age">{{ user.age }}</span>
+            </h2>
+            <span class="badge"
+                [ngClass]="{'badge-has-room': user.userType === 'HAS_ROOM', 'badge-needs-room': user.userType === 'NEEDS_ROOM'}">
+                {{ user.userType === 'HAS_ROOM' ? 'Has Room' : 'Needs Room' }}
+            </span>
+        </div>
+
+        <!-- Room Title & Details (if HAS_ROOM) -->
+        <div class="room-details" *ngIf="user.userType === 'HAS_ROOM' && user.room">
+            <h4 class="room-title">{{ user.room.title }}</h4>
+            <p class="room-specs">
+                📍 {{ user.room.location }} • 📏 {{ user.room.sizeSqm }} m²
+            </p>
+        </div>
+
+        <p class="bio">{{ user.room?.description || user.bio || 'No details provided.' }}</p>
+
+        <div class="actions">
+            <button class="btn-action btn-pass" (click)="onPass()">✕</button>
+            <button class="btn-action btn-like" (click)="onLike()">♥</button>
+        </div>
+    </div>
+</div>

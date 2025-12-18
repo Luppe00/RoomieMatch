@@ -47,34 +47,41 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Initialize Database
-using (var scope = app.Services.CreateScope())
+if (args.Contains("--init-db"))
 {
-    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-    var connString = config.GetConnectionString("AppProgDb");
-    
-    try 
+    using (var scope = app.Services.CreateScope())
     {
-        Console.WriteLine("Applying Database Schema...");
-        var schemaSql = File.ReadAllText("/Users/emilluplau/Documents/RoomieFinal/schema.sql");
-        var seedSql = File.ReadAllText("/Users/emilluplau/Documents/RoomieFinal/seed.sql");
-
-        using var conn = new Npgsql.NpgsqlConnection(connString);
-        conn.Open();
-
-        using var cmd = conn.CreateCommand();
-        cmd.CommandText = schemaSql;
-        cmd.ExecuteNonQuery();
-
-        Console.WriteLine("Applying Seed Data...");
-        cmd.CommandText = seedSql;
-        cmd.ExecuteNonQuery();
+        var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        var connString = config.GetConnectionString("AppProgDb");
         
-        Console.WriteLine("Database Initialized Successfully.");
+        try 
+        {
+            Console.WriteLine("Applying Database Schema...");
+            var schemaSql = File.ReadAllText("/Users/emilluplau/Documents/RoomieFinal/schema.sql");
+            var seedSql = File.ReadAllText("/Users/emilluplau/Documents/RoomieFinal/seed.sql");
+
+            using var conn = new Npgsql.NpgsqlConnection(connString);
+            conn.Open();
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = schemaSql;
+            cmd.ExecuteNonQuery();
+
+            Console.WriteLine("Applying Seed Data...");
+            cmd.CommandText = seedSql;
+            cmd.ExecuteNonQuery();
+            
+            Console.WriteLine("Database Initialized Successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing database: {ex.Message}");
+        }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error initializing database: {ex.Message}");
-    }
+}
+else
+{
+    Console.WriteLine("Skipping Database Initialization. Use --init-db to reset.");
 }
 
 app.Run();

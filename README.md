@@ -1,47 +1,46 @@
-# RoomieMatch
+# RoomieMatch ReadME-file.
 
-A full-stack web application for finding roommates and housing matches.
-- **Frontend**: Angular
-- **Backend**: ASP.NET Core Web API
-- **Database**: PostgreSQL
+### 1. Get database up and running
+Download RoomieMatchDb.sql
+- Open pgAdmin 4:
+- Create a new database, call it: RoomieMatchDb
+- Click Restore
+- Find and open RoomieMatchDb.sql
+- Click restore and refresh database
 
-## 🚀 Quick Start
+### 2. Prerequisites
+- Open IDE
 
-### 1. Prerequisites
+- Locate and open RoomieMatch
+
 Ensure you have these installed:
--   [PostgreSQL](https://postgresapp.com/) (Running on port 5432)
+-   [PostgreSQL](https://postgresapp.com/)
 -   [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
 -   [Node.js & npm](https://nodejs.org/)
 
-### 2. Run the Backend
+### 3. (MAY BE DEMANDED) Change your port
+- Go to RoomieMatch/Backend/RoomieMatch.API/appsettings.json
+- Change Port no. to your own port
+
+### 4. Run the Backend
 Open a terminal in the root folder:
 ```bash
 dotnet run --project Backend/RoomieMatch.API
 ```
-> **Note:** Your data is safe! It will NOT be deleted when you restart.
 
-### 3. Run the Frontend
+### 5. Run the Frontend
 Open a new terminal window:
 ```bash
 cd Frontend/RoomieMatch-SPA
 npm start
 ```
 
-### 4. Open the App
+### 6. Open the App
 -   **App**: [http://localhost:4200](http://localhost:4200)
 -   **API**: [http://localhost:5247](http://localhost:5247)
 
 ---
 
-## 💾 Database Management
-
-### Reset Database (Delete & Re-seed)
-If you want to **delete all data** and start fresh with sample users:
-```bash
-dotnet run --project Backend/RoomieMatch.API -- --init-db
-```
-
-### Import Backup (For Friends)
 If you have received the `roomiematch_backup.sql` file:
 
 1.  Create an empty database named `RoomieMatchDb`.

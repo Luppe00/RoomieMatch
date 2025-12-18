@@ -38,13 +38,3 @@ npm start
 ### 6. Open the App
 -   **App**: [http://localhost:4200](http://localhost:4200)
 -   **API**: [http://localhost:5247](http://localhost:5247)
-
----
-
-If you have received the `roomiematch_backup.sql` file:
-
-1.  Create an empty database named `RoomieMatchDb`.
-2.  Run this command in your terminal:
-    ```bash
-    psql -h localhost -U postgres -d RoomieMatchDb -f roomiematch_backup.sql
-    ```

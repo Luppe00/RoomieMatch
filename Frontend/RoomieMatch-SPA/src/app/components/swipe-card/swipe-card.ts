@@ -11,11 +11,14 @@ import { User } from '../../models';
 })
 export class SwipeCardComponent {
   @Input() user!: User;
+
+  // @Output: Signals sent UP to the parent
   @Output() liked = new EventEmitter<void>();
   @Output() passed = new EventEmitter<void>();
 
+ //Angular component, connects when we click like. We use the SwipeService to send the data to the BackEnd.
   onLike() {
-    this.liked.emit();
+    this.liked.emit(); // Sends signal to parent
   }
 
   onPass() {

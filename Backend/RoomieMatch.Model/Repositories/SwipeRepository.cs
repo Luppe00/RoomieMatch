@@ -11,20 +11,25 @@ namespace RoomieMatch.Model.Repositories
 
         public async Task CreateOrUpdateSwipeAsync(Swipe swipe)
         {
+            // create connection to Postgres
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
+            
+            // RAW SQL: We use "ON CONFLICT" to handle re-swipes (Upsert)
+            // If the swipe exists, we just update the 'liked' status.
             cmd.CommandText = @"
                 INSERT INTO swipes (swiper_user_id, target_user_id, liked)
                 VALUES (@swiper_user_id, @target_user_id, @liked)
                 ON CONFLICT (swiper_user_id, target_user_id) 
                 DO UPDATE SET liked = EXCLUDED.liked, created_at = NOW()";
             
+            // Parameters prevent SQL Injection (Security!)
             cmd.Parameters.AddWithValue("swiper_user_id", swipe.SwiperUserId);
             cmd.Parameters.AddWithValue("target_user_id", swipe.TargetUserId);
             cmd.Parameters.AddWithValue("liked", swipe.Liked);
             
             conn.Open();
-            await cmd.ExecuteNonQueryAsync();
+            await cmd.ExecuteNonQueryAsync(); // Execute the command
         }
 
         public async Task<Swipe?> GetSwipeAsync(int swiperUserId, int targetUserId)

@@ -20,6 +20,8 @@ export class MatchesComponent implements OnInit {
     private authService: AuthService
   ) { }
 
+  // ngOnInit: Runs automatically when the page loads.
+  // It checks who is logged in, then asks for their matches.
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
@@ -29,6 +31,7 @@ export class MatchesComponent implements OnInit {
     });
   }
 
+  // Ask the Service to fetch data from the API
   loadMatches() {
     if (!this.currentUser) return;
     this.matchService.getMatches(this.currentUser.id).subscribe(matches => {

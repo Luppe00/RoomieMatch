@@ -10,6 +10,8 @@ namespace RoomieMatch.Model.Repositories
     {
         public UserRepository(IConfiguration configuration) : base(configuration) { }
 
+        // CRUD: Read All Users
+        // Uses LEFT JOIN to fetch users AND their room details in one query.
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             var users = new List<User>();
@@ -30,6 +32,8 @@ namespace RoomieMatch.Model.Repositories
             return users;
         }
 
+        // CRUD: Read One User
+        // "WHERE u.id = @id" finds a specific person.
         public async Task<User?> GetByIdAsync(int id)
         {
             using var conn = CreateConnection();
@@ -51,6 +55,8 @@ namespace RoomieMatch.Model.Repositories
             return null;
         }
 
+        // CRUD: Create
+        // "RETURNING id" lets us get the new ID back instantly after inserting.
         public async Task<int> CreateAsync(User user)
         {
             using var conn = CreateConnection();
@@ -74,6 +80,7 @@ namespace RoomieMatch.Model.Repositories
             return Convert.ToInt32(result);
         }
 
+        // CRUD: Update an existing user
         public async Task UpdateAsync(User user)
         {
             using var conn = CreateConnection();
@@ -97,6 +104,7 @@ namespace RoomieMatch.Model.Repositories
             await cmd.ExecuteNonQueryAsync();
         }
 
+        // CRUD: Delete a user
         public async Task DeleteAsync(int id)
         {
             using var conn = CreateConnection();
@@ -108,6 +116,8 @@ namespace RoomieMatch.Model.Repositories
             await cmd.ExecuteNonQueryAsync();
         }
 
+        // HELPER: Connects the raw Database Data (Rows) to our C# Code (Objects).
+        // It handles null checks so the app doesn't crash.
         private static User MapUserWithRoom(NpgsqlDataReader reader)
         {
             var user = new User

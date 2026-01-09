@@ -14,9 +14,12 @@ namespace RoomieMatch.API.Controllers
             _matchRepository = matchRepository;
         }
 
+        // [HttpGet]: Defines this as a GET request (fetching data).
+        // URL: /api/matches/{userId}
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetMatches(int userId)
         {
+            // Talk to the Repository (SQL) to find people I matched with.
             var matches = await _matchRepository.GetMatchesForUserAsync(userId);
             return Ok(matches);
         }

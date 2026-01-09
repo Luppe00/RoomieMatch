@@ -25,11 +25,14 @@ namespace RoomieMatch.Model.Repositories
             return null;
         }
 
+        // LOGIC: Upsert (Update or Insert)
+        // If the preference exists, update it. If not, create it.
+        // We use SQL "ON CONFLICT" to do this in one step.
         public async Task UpsertAsync(Preference preference)
         {
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
-            // PostgreSQL Upsert using ON CONFLICT
+            
             cmd.CommandText = @"
                 INSERT INTO preferences (user_id, max_rent, preferred_location, min_age_roomie, max_age_roomie, preferred_gender)
                 VALUES (@user_id, @max_rent, @preferred_location, @min_age_roomie, @max_age_roomie, @preferred_gender)

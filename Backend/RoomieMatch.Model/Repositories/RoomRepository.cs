@@ -59,6 +59,8 @@ namespace RoomieMatch.Model.Repositories
             return rooms;
         }
 
+        // CRUD: Create (Insert) a new Room
+        // We use parameters (@rent, @title) to be safe from hackers (SQL Injection).
         public async Task<int> CreateAsync(Room room)
         {
             using var conn = CreateConnection();

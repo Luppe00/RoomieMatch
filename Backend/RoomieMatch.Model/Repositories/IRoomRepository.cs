@@ -5,7 +5,7 @@ using RoomieMatch.Model.Entities;
 namespace RoomieMatch.Model.Repositories
 {
     public interface IRoomRepository
-    {
+    { //This is a CRUD examples
         Task<IEnumerable<Room>> GetAllAsync();
         Task<Room?> GetByIdAsync(int id);
         Task<IEnumerable<Room>> GetByUserIdAsync(int userId);

@@ -12,7 +12,8 @@ namespace RoomieMatch.Model.Repositories
 
         public async Task CreateMatchAsync(int userAId, int userBId)
         {
-            // Ensure ordered pair to avoid duplicates
+            // LOGIC: We sort IDs so (1, 2) is the same match as (2, 1).
+            // This prevents duplicates in the database.
             int minId = Math.Min(userAId, userBId);
             int maxId = Math.Max(userAId, userBId);
 

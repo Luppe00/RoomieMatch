@@ -11,14 +11,19 @@ builder.Services.AddControllers();
 // builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
 
-// Register Repositories
+// 1. Dependency Injection (DI) Container
+// This "teaches" our app how to create Repositories.
+// "When a Controller asks for 'IUserRepository', give them a 'UserRepository'."
+// AddScoped means: "Create a new one for every HTTP Request."
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IPreferenceRepository, PreferenceRepository>();
 builder.Services.AddScoped<ISwipeRepository, SwipeRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 
-// Configure CORS
+// 2. Configure CORS (Cross-Origin Resource Sharing)
+// This asks the browser: "Please allow the Frontend (localhost:4200) to talk to us."
+// Without this, the browser blocks the connection for security.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularDev", policy =>
@@ -42,11 +47,16 @@ app.UseHttpsRedirection();
 
 app.UseCors("AngularDev");
 
+app.UseStaticFiles(); // Serve files from wwwroot (the Angular app)
+
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapFallbackToFile("index.html"); // Handle Angular routing (refreshing pages)
 
-// Initialize Database
+// 3. Database Initialization
+// I added this logic to clear/reset the database by running:
+// "dotnet run -- --init-db"
 if (args.Contains("--init-db"))
 {
     using (var scope = app.Services.CreateScope())
@@ -57,8 +67,20 @@ if (args.Contains("--init-db"))
         try 
         {
             Console.WriteLine("Applying Database Schema...");
-            var schemaSql = File.ReadAllText("/Users/emilluplau/Documents/RoomieFinal/schema.sql");
-            var seedSql = File.ReadAllText("/Users/emilluplau/Documents/RoomieFinal/seed.sql");
+            var schemaPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "schema.sql");
+            var seedPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "seed.sql");
+
+            Console.WriteLine($"Looking for SQL files at: {schemaPath} and {seedPath}");
+
+            if (!File.Exists(schemaPath) || !File.Exists(seedPath))
+            {
+               // Fallback for when running from bin directory or different structure
+               schemaPath = Path.Combine(Directory.GetCurrentDirectory(), "schema.sql");
+               seedPath = Path.Combine(Directory.GetCurrentDirectory(), "seed.sql");
+            }
+
+            var schemaSql = File.ReadAllText(schemaPath);
+            var seedSql = File.ReadAllText(seedPath);
 
             using var conn = new Npgsql.NpgsqlConnection(connString);
             conn.Open();

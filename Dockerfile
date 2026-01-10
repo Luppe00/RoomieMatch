@@ -22,8 +22,14 @@ RUN dotnet restore ./RoomieMatch.API/RoomieMatch.API.csproj
 
 # Copy everything else
 COPY Backend/ ./
+# Copy database scripts so they are included in the build context if needed, 
+COPY schema.sql seed.sql ./
+
 # Publish
 RUN dotnet publish ./RoomieMatch.API/RoomieMatch.API.csproj -c Release -o /app/publish
+
+# Copy SQL files to publish folder so they are available at runtime
+COPY schema.sql seed.sql /app/publish/
 
 # Copy frontend build to the publish wwwroot
 # We copy from dist/out/browser because the new Angular builder creates that subfolder

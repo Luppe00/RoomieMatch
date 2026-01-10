@@ -1,4 +1,4 @@
-/* Premium Register Form */
+/* Premium Multi-Step Register Form */
 .auth-container {
     display: flex;
     justify-content: center;
@@ -16,7 +16,7 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-xl);
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
     animation: slideUp 0.5s ease-out;
 }
 
@@ -32,8 +32,76 @@
     }
 }
 
-.auth-card h2 {
-    font-size: 2rem;
+/* ===== STEP PROGRESS ===== */
+.step-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    gap: 0;
+}
+
+.step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+}
+
+.step-indicator.active .step-number {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: white;
+}
+
+.step-indicator.completed .step-number {
+    background: var(--accent-success);
+    border-color: transparent;
+    color: white;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.step-indicator.active .step-label {
+    color: var(--primary-color);
+}
+
+.step-line {
+    width: 60px;
+    height: 3px;
+    background: var(--border-color);
+    margin: 0 8px;
+    margin-bottom: 22px;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.step-line.active {
+    background: var(--primary-gradient);
+}
+
+/* ===== STEP CONTENT ===== */
+.step-content h2 {
+    font-size: 1.8rem;
     font-weight: 700;
     background: var(--primary-gradient);
     -webkit-background-clip: text;
@@ -49,11 +117,53 @@
     margin-bottom: 2rem;
 }
 
+/* ===== USER TYPE CARDS ===== */
+.type-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.type-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.type-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.type-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.type-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.type-card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* ===== FORM STYLES ===== */
 .form-group {
     margin-bottom: 1.25rem;
 }
 
-/* Two column layout */
 .row {
     display: flex;
     gap: 1rem;
@@ -98,8 +208,18 @@ textarea:focus {
     box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
     color: var(--text-muted);
+}
+
+.field-hint {
+    display: block;
+    margin-top: -8px;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-style: italic;
 }
 
 .error-message {
@@ -113,8 +233,15 @@ input::placeholder {
     text-align: center;
 }
 
+/* ===== STEP BUTTONS ===== */
+.step-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
 .btn-primary {
-    width: 100%;
+    flex: 1;
     background: var(--primary-gradient);
     color: white;
     padding: 14px 24px;
@@ -125,7 +252,6 @@ input::placeholder {
     cursor: pointer;
     box-shadow: var(--shadow-md), var(--shadow-glow);
     transition: all 0.3s ease;
-    margin-top: 0.5rem;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -138,6 +264,24 @@ input::placeholder {
     cursor: not-allowed;
 }
 
+.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    border-color: var(--text-secondary);
+    background: var(--bg-secondary);
+}
+
+/* ===== FOOTER ===== */
 .auth-footer {
     margin-top: 1.5rem;
     text-align: center;
@@ -156,10 +300,34 @@ input::placeholder {
     text-decoration: underline;
 }
 
-/* Dark Mode */
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .type-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .half {
+        width: 100%;
+    }
+
+    .step-line {
+        width: 40px;
+    }
+}
+
+/* ===== DARK MODE ===== */
 body.dark-mode .auth-card {
     background: var(--glass-bg);
     border-color: var(--glass-border);
+}
+
+body.dark-mode .type-card {
+    background: var(--bg-tertiary);
 }
 
 body.dark-mode input,

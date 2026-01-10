@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../models';
+import { User, Room } from '../../models';
 
 @Component({
     selector: 'app-register',
@@ -14,6 +14,8 @@ import { User } from '../../models';
     styleUrls: ['./register.css']
 })
 export class RegisterComponent {
+    currentStep: number = 1;
+    totalSteps: number = 3; // Will be 2 for NEEDS_ROOM
     password: string = '';
 
     user: Partial<User> = {
@@ -21,10 +23,26 @@ export class RegisterComponent {
         lastName: '',
         email: '',
         age: undefined,
-        gender: 'Male', // Default or require user selection
+        gender: '',
         bio: '',
-        userType: 'NEEDS_ROOM'
+        userType: ''
     };
+
+    // Room details for HAS_ROOM users
+    room: Partial<Room> = {
+        rent: undefined,
+        deposit: undefined,
+        location: '',
+        sizeSqm: undefined,
+        availableFrom: undefined,
+        leasePeriod: '',
+        title: '',
+        description: ''
+    };
+
+    // Additional personal fields
+    smoker: string = '';
+    occupation: string = '';
 
     error: string = '';
     loading: boolean = false;
@@ -35,6 +53,46 @@ export class RegisterComponent {
         private router: Router
     ) { }
 
+    selectUserType(type: string) {
+        this.user.userType = type;
+        if (type === 'HAS_ROOM') {
+            this.totalSteps = 3;
+        } else {
+            this.totalSteps = 2;
+        }
+        this.nextStep();
+    }
+
+    nextStep() {
+        if (this.currentStep < this.totalSteps) {
+            this.currentStep++;
+        }
+    }
+
+    prevStep() {
+        if (this.currentStep > 1) {
+            this.currentStep--;
+        }
+    }
+
+    canProceedStep2(): boolean {
+        if (this.user.userType === 'HAS_ROOM') {
+            return !!(this.room.rent && this.room.location && this.room.title);
+        }
+        return true;
+    }
+
+    canProceedStep3(): boolean {
+        return !!(
+            this.user.firstName &&
+            this.user.lastName &&
+            this.user.email &&
+            this.user.age &&
+            this.user.gender &&
+            this.password
+        );
+    }
+
     onSubmit() {
         if (!this.password) {
             this.error = 'Password is required';
@@ -44,8 +102,18 @@ export class RegisterComponent {
         this.loading = true;
         this.error = '';
 
+        // Build bio from additional fields
+        let fullBio = this.user.bio || '';
+        if (this.occupation) {
+            fullBio = `Occupation: ${this.occupation}. ` + fullBio;
+        }
+        if (this.smoker) {
+            fullBio = `Smoker: ${this.smoker}. ` + fullBio;
+        }
+
         const registerModel = {
             ...this.user,
+            bio: fullBio,
             password: this.password
         };
 
@@ -54,7 +122,21 @@ export class RegisterComponent {
                 // Auto login after register
                 this.authService.login({ email: this.user.email, password: this.password }).subscribe({
                     next: () => {
-                        this.router.navigate(['/']);
+                        // If HAS_ROOM, save room details via profile update
+                        if (this.user.userType === 'HAS_ROOM' && this.room.rent) {
+                            const currentUser = this.authService.currentUser;
+                            if (currentUser) {
+                                const updatedUser = { ...currentUser, room: this.room as Room };
+                                this.userService.updateUser(currentUser.id!, updatedUser).subscribe({
+                                    next: () => this.router.navigate(['/']),
+                                    error: () => this.router.navigate(['/'])
+                                });
+                            } else {
+                                this.router.navigate(['/']);
+                            }
+                        } else {
+                            this.router.navigate(['/']);
+                        }
                     },
                     error: () => {
                         this.router.navigate(['/login']);

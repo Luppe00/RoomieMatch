@@ -21,10 +21,12 @@ export interface Room {
     title: string;
     location: string;
     rent: number;
+    deposit?: number;
     sizeSqm?: number;
     roomImage?: string;
     description?: string;
     availableFrom?: string; // DateTime
+    leasePeriod?: string;
 }
 
 export interface Swipe {

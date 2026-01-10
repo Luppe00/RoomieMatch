@@ -10,6 +10,12 @@
                     placeholder="Enter your email" [disabled]="loading">
             </div>
 
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" [(ngModel)]="password" required
+                    placeholder="Enter your password" [disabled]="loading">
+            </div>
+
             <div class="error-message" *ngIf="error">
                 {{ error }}
             </div>

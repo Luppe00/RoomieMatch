@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
     email: string = '';
+    password: string = '';
     error: string = '';
     loading: boolean = false;
 
@@ -22,20 +23,21 @@ export class LoginComponent {
     ) { }
 
     onSubmit() {
-        if (!this.email) return;
+        if (!this.email || !this.password) return;
 
         this.loading = true;
         this.error = '';
 
-        this.authService.login(this.email).subscribe({
-            next: (success) => {
-                if (success) {
-                    this.router.navigate(['/']);
-                } else {
-                    this.error = 'Login failed. User not found. Please register.';
-                }
+        this.authService.login({ email: this.email, password: this.password }).subscribe({
+            next: () => {
+                this.router.navigate(['/']);
                 this.loading = false;
             },
+            error: (err) => {
+                this.error = 'Login failed. User not found or wrong password.';
+                this.loading = false;
+                console.error(err);
+            }
             error: (err) => {
                 this.error = 'An error occurred. Please try again.';
                 this.loading = false;

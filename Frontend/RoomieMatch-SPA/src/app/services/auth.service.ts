@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core'; // id: 0
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { User } from '../models';
-import { UserService } from './user.service';
 
 @Injectable({
     providedIn: 'root'
@@ -9,30 +9,49 @@ import { UserService } from './user.service';
 export class AuthService {
     private currentUserSubject = new BehaviorSubject<User | null>(null);
     public currentUser$ = this.currentUserSubject.asObservable();
+    private baseUrl = '/api/auth';
 
-    constructor(private userService: UserService) {
-        // Attempt to restore user from localStorage if needed
-        // For now, simple mock login
+    constructor(private http: HttpClient) {
+        // Restore session if token exists
+        const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+        if (token && userStr) {
+            this.currentUserSubject.next(JSON.parse(userStr));
+        }
     }
 
-    login(email: string): Observable<boolean> {
-        return this.userService.getUsers().pipe(
-            map(users => {
-                const user = users.find(u => u.email === email);
-                if (user) {
+    login(model: any): Observable<void> {
+        return this.http.post<any>(this.baseUrl + '/login', model).pipe(
+            map(response => {
+                const user = response.user;
+                if (user && response.token) {
+                    localStorage.setItem('token', response.token);
+                    localStorage.setItem('user', JSON.stringify(user));
                     this.currentUserSubject.next(user);
-                    return true;
                 }
-                return false;
+            })
+        );
+    }
+
+    register(model: any): Observable<void> {
+        return this.http.post<any>(this.baseUrl + '/register', model).pipe(
+            map(() => {
+                // After register, you might want to auto-login or just return
             })
         );
     }
 
     logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         this.currentUserSubject.next(null);
     }
 
     getCurrentUser(): User | null {
         return this.currentUserSubject.value;
+    }
+
+    getToken(): string | null {
+        return localStorage.getItem('token');
     }
 }

@@ -14,6 +14,10 @@ import { User } from '../../models';
     styleUrls: ['./register.css']
 })
 export class RegisterComponent {
+    // ... items
+    password: string = '';
+    // ... items
+
     user: Partial<User> = {
         firstName: '',
         lastName: '',
@@ -34,22 +38,27 @@ export class RegisterComponent {
     ) { }
 
     onSubmit() {
+        if (!this.password) {
+            this.error = 'Password is required';
+            return;
+        }
+
         this.loading = true;
         this.error = '';
 
-        // Create user
-        const newUser = {
+        const registerModel = {
             ...this.user,
-            createdAt: new Date().toISOString()
-        } as User;
+            password: this.password
+        };
 
-        this.userService.createUser(newUser).subscribe({
-            next: (createdUser) => {
-                // Auto login
-                this.authService.login(createdUser.email).subscribe(success => {
-                    if (success) {
+        this.authService.register(registerModel).subscribe({
+            next: () => {
+                // Auto login after register
+                this.authService.login({ email: this.user.email, password: this.password }).subscribe({
+                    next: () => {
                         this.router.navigate(['/']);
-                    } else {
+                    },
+                    error: () => {
                         this.router.navigate(['/login']);
                     }
                 });

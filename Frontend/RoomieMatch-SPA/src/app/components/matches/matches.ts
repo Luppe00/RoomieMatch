@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // id: 0
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MatchService } from '../../services/match.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models';
@@ -7,7 +8,7 @@ import { User } from '../../models';
 @Component({
   selector: 'app-matches',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './matches.html',
   styleUrls: ['./matches.css']
 })

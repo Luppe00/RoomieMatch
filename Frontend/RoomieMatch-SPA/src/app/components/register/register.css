@@ -1,23 +1,22 @@
-/* Inherit most styles from login.css in global context or copy necessary parts */
-/* For now, including complete styles to be safe */
-
-/* Reusing auth container/card styles */
+/* Premium Register Form */
 .auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
+    min-height: calc(100vh - 100px);
     padding: 2rem;
 }
 
 .auth-card {
-    background: white;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
     padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
     width: 100%;
     max-width: 500px;
-    /* Slightly wider for register */
     animation: slideUp 0.5s ease-out;
 }
 
@@ -33,10 +32,13 @@
     }
 }
 
-h2 {
-    font-size: 1.8rem;
+.auth-card h2 {
+    font-size: 2rem;
     font-weight: 700;
-    color: var(--text-primary);
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 0.5rem;
     text-align: center;
 }
@@ -48,10 +50,10 @@ h2 {
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
-/* Two column layout for names */
+/* Two column layout */
 .row {
     display: flex;
     gap: 1rem;
@@ -61,28 +63,31 @@ h2 {
     flex: 1;
 }
 
-label {
+.form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
     font-weight: 500;
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
 input,
 select,
 textarea {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 14px 16px;
     border: 2px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-size: 1rem;
-    transition: all 0.2s;
-    background-color: white;
+    transition: all 0.2s ease;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     font-family: inherit;
 }
 
 textarea {
     resize: vertical;
+    min-height: 80px;
 }
 
 input:focus,
@@ -90,22 +95,47 @@ select:focus,
 textarea:focus {
     border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(255, 56, 92, 0.1);
+    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
+}
+
+input::placeholder {
+    color: var(--text-muted);
 }
 
 .error-message {
-    color: #ef4444;
-    background: #fef2f2;
-    padding: 0.75rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
+    color: #dc2626;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(248, 113, 113, 0.1));
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.25rem;
     font-size: 0.9rem;
     text-align: center;
 }
 
 .btn-primary {
     width: 100%;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    box-shadow: var(--shadow-md), var(--shadow-glow);
+    transition: all 0.3s ease;
     margin-top: 0.5rem;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(255, 107, 107, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .auth-footer {
@@ -122,5 +152,19 @@ textarea:focus {
 }
 
 .auth-footer a:hover {
+    color: var(--primary-hover);
     text-decoration: underline;
+}
+
+/* Dark Mode */
+body.dark-mode .auth-card {
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
 }

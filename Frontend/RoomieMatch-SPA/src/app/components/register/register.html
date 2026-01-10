@@ -146,8 +146,8 @@
                         </div>
                         <div class="dropdown-content" *ngIf="locationDropdownOpen">
                             <div class="dropdown-option select-all" (click)="selectAllLocations()">
-                                <span class="checkmark-box" [class.checked]="locationOptions.every(l => l.checked)">
-                                    {{ locationOptions.every(l => l.checked) ? '✓' : '' }}
+                                <span class="checkmark-box" [class.checked]="areAllLocationsSelected()">
+                                    {{ areAllLocationsSelected() ? '✓' : '' }}
                                 </span>
                                 <span>Select All</span>
                             </div>

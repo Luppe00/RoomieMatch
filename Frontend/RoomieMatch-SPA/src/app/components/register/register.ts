@@ -102,6 +102,10 @@ export class RegisterComponent {
         return this.locationOptions.filter(loc => loc.checked).length;
     }
 
+    areAllLocationsSelected(): boolean {
+        return this.locationOptions.every(loc => loc.checked);
+    }
+
     selectUserType(type: 'HAS_ROOM' | 'NEEDS_ROOM') {
         this.user.userType = type;
         // Both types now have 3 steps

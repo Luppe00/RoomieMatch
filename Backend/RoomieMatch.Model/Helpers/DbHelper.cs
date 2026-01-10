@@ -1,7 +1,7 @@
 using System;
 using Npgsql;
 
-namespace RoomieMatch.API.Helpers // Or Model.Helpers
+namespace RoomieMatch.Model.Helpers
 {
     public static class DbHelper
     {

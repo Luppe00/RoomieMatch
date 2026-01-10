@@ -2,6 +2,8 @@ using System.Data;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
+using RoomieMatch.Model.Helpers;
+
 namespace RoomieMatch.Model.Repositories
 {
     public abstract class BaseRepository
@@ -12,7 +14,7 @@ namespace RoomieMatch.Model.Repositories
         {
             var rawConn = configuration.GetConnectionString("AppProgDb") 
                                 ?? throw new ArgumentNullException("Connection string 'AppProgDb' not found.");
-            _connectionString = Helpers.DbHelper.ParseConnection(rawConn);
+            _connectionString = DbHelper.ParseConnection(rawConn);
         }
 
         protected IDbConnection CreateConnection()

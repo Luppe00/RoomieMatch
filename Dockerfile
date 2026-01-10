@@ -26,8 +26,8 @@ COPY Backend/ ./
 RUN dotnet publish ./RoomieMatch.API/RoomieMatch.API.csproj -c Release -o /app/publish
 
 # Copy frontend build to the publish wwwroot
-# effectively: /app/publish/wwwroot should contain index.html
-COPY --from=frontend-build /app/frontend/dist/out /app/publish/wwwroot
+# We copy from dist/out/browser because the new Angular builder creates that subfolder
+COPY --from=frontend-build /app/frontend/dist/out/browser /app/publish/wwwroot
 
 # Stage 3: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0

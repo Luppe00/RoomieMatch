@@ -58,6 +58,15 @@ CREATE TABLE swipes (
 
 -- Indexes for swipes to optimize lookup
 CREATE INDEX idx_swipes_swiper ON swipes(swiper_user_id);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id SERIAL PRIMARY KEY,
+    sender_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    recipient_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    date_sent TIMESTAMP DEFAULT NOW(),
+    date_read TIMESTAMP NULL
+);
 CREATE INDEX idx_swipes_target ON swipes(target_user_id);
 
 -- 3.5 Table: matches

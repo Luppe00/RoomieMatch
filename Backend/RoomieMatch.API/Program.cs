@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
@@ -24,6 +25,7 @@ builder.Services.AddScoped<IPreferenceRepository, PreferenceRepository>();
 builder.Services.AddScoped<ISwipeRepository, SwipeRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 // Configure Cloudinary Settings
 builder.Services.Configure<RoomieMatch.API.Helpers.CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
@@ -74,6 +76,7 @@ app.UseAuthentication(); // Must be before Authorization
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<RoomieMatch.API.Hubs.ChatHub>("/chatHub");
 app.MapFallbackToFile("index.html"); // Handle Angular routing (refreshing pages)
 
 // 3. Database Initialization

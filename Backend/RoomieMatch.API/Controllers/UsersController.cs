@@ -43,8 +43,24 @@ namespace RoomieMatch.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userRepository.GetAllAsync();
-            return Ok(users);
+            try 
+            {
+                // Get current user ID from JWT Token
+                var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+                
+                // Get Current User to check their type
+                var currentUser = await _userRepository.GetByIdAsync(userId);
+                if (currentUser == null) return Unauthorized();
+
+                // Get matches based on type (Opposites attract!)
+                var users = await _userRepository.GetPotentialMatchesAsync(userId, currentUser.UserType);
+                return Ok(users);
+            }
+            catch(Exception) 
+            {
+                 // Fallback if not logged in or other error
+                 return Ok(await _userRepository.GetAllAsync());
+            }
         }
 
         [HttpGet("{id}")]

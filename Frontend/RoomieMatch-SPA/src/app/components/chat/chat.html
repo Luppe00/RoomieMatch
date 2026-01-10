@@ -1,0 +1,42 @@
+<div class="chat-container">
+    <!-- Header -->
+    <div class="chat-header" *ngIf="recipient">
+        <div class="avatar">
+            <img [src]="recipient.profileImage || 'assets/default-avatar.png'" alt="Avatar">
+        </div>
+        <div class="info">
+            <h3>{{ recipient.firstName }} {{ recipient.lastName }}</h3>
+            <span class="status">Online</span>
+        </div>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="messages-list" #scrollMe>
+        <div *ngIf="messages.length === 0" class="no-messages">
+            Say Hi! 👋
+        </div>
+
+        <div *ngFor="let msg of messages" class="message-row"
+            [ngClass]="{'mine': msg.senderId === currentUser?.id, 'theirs': msg.senderId !== currentUser?.id}">
+
+            <div class="bubble">
+                <p>{{ msg.content }}</p>
+                <span class="timestamp">{{ msg.dateSent | date:'shortTime' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check if no messages/loading -->
+    <div *ngIf="!messages && !recipient" class="loading">
+        Loading chat...
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input">
+        <form (ngSubmit)="sendMessage()">
+            <input type="text" [(ngModel)]="newMessage" name="newMessage" placeholder="Type a message..."
+                autocomplete="off">
+            <button type="submit" [disabled]="!newMessage.trim()">Send</button>
+        </form>
+    </div>
+</div>

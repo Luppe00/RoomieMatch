@@ -47,9 +47,20 @@ export interface Preference {
     userId: number;
     maxRent?: number;
     preferredLocation?: string;
-    preferredGender?: 'Male' | 'Female' | 'Other' | 'Any';
+    preferredGender?: string;
     minAgeRoomie?: number;
     maxAgeRoomie?: number;
+}
+
+export interface Message {
+    id: number;
+    senderId: number;
+    recipientId: number;
+    content: string;
+    dateSent: Date;
+    dateRead?: Date;
+    senderName?: string; // Optional helpers
+    recipientName?: string;
 }
 
 export interface SwipeResponse {

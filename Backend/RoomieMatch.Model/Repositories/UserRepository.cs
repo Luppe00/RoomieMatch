@@ -32,6 +32,37 @@ namespace RoomieMatch.Model.Repositories
             return users;
         }
 
+        public async Task<IEnumerable<User>> GetPotentialMatchesAsync(int currentUserId, string currentUserType)
+        {
+            var users = new List<User>();
+            using var conn = CreateConnection();
+            using var cmd = conn.CreateCommand() as NpgsqlCommand;
+            
+            // Logic: 
+            // If HAS_ROOM -> Show NEEDS_ROOM
+            // If NEEDS_ROOM -> Show HAS_ROOM
+            
+            string targetType = (currentUserType == "HAS_ROOM") ? "NEEDS_ROOM" : "HAS_ROOM";
+
+            cmd.CommandText = @"
+                SELECT u.id, u.first_name, u.last_name, u.age, u.gender, u.email, u.bio, u.user_type, u.created_at, u.profile_image,
+                       r.id, r.title, r.location, r.rent, r.size_sqm, r.room_image, r.description, r.available_from
+                FROM users u
+                LEFT JOIN rooms r ON u.id = r.user_id
+                WHERE u.user_type = @targetType AND u.id != @currentUserId";
+            
+            cmd.Parameters.AddWithValue("targetType", targetType);
+            cmd.Parameters.AddWithValue("currentUserId", currentUserId);
+
+            conn.Open();
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                users.Add(MapUserWithRoom(reader));
+            }
+            return users;
+        }
+
         // CRUD: Read One User
         // "WHERE u.id = @id" finds a specific person.
         public async Task<User?> GetByIdAsync(int id)

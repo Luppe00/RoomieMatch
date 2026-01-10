@@ -25,5 +25,11 @@ export class UserService {
     updateUser(id: number, user: User): Observable<void> {
         return this.http.put<void>(`${this.apiUrl}/${id}`, user);
     }
+
+    uploadPhoto(id: number, file: File): Observable<any> {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http.post<any>(`api/users/upload-photo`, formData);
+    }
 }
 

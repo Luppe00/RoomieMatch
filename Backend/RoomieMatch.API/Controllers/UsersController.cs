@@ -11,10 +11,33 @@ namespace RoomieMatch.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly RoomieMatch.API.Services.IPhotoService _photoService;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, RoomieMatch.API.Services.IPhotoService photoService)
         {
             _userRepository = userRepository;
+            _photoService = photoService;
+        }
+
+        [HttpPost("upload-photo")]
+        public async Task<IActionResult> UploadPhoto(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded");
+
+            var result = await _photoService.AddPhotoAsync(file);
+
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            // Get current user ID from JWT Token
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+
+            var user = await _userRepository.GetByIdAsync(userId);
+            user.ProfileImage = result.SecureUrl.AbsoluteUri;
+            
+            await _userRepository.UpdateAsync(user);
+
+            return Ok(new { url = user.ProfileImage });
         }
 
         [HttpGet]

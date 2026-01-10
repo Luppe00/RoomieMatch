@@ -29,6 +29,7 @@ export class ProfileComponent implements OnInit {
 
     loading: boolean = true;
     saving: boolean = false;
+    uploadingPhoto: boolean = false;
     message: string = '';
     error: string = '';
 
@@ -38,6 +39,26 @@ export class ProfileComponent implements OnInit {
         private preferenceService: PreferenceService,
         private roomService: RoomService
     ) { }
+
+    onFileSelected(event: any) {
+        if (!this.user) return;
+        const file: File = event.target.files[0];
+        if (file) {
+            this.uploadingPhoto = true;
+            this.userService.uploadPhoto(this.user.id, file).subscribe({
+                next: (res) => {
+                    if (this.user) this.user.profileImage = res.url;
+                    this.uploadingPhoto = false;
+                    this.message = 'Photo uploaded successfully!';
+                },
+                error: (err) => {
+                    console.error(err);
+                    this.error = 'Photo upload failed';
+                    this.uploadingPhoto = false;
+                }
+            });
+        }
+    }
 
     ngOnInit() {
         this.authService.currentUser$.subscribe(currentUser => {

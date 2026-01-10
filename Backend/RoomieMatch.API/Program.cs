@@ -25,6 +25,10 @@ builder.Services.AddScoped<ISwipeRepository, SwipeRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
+// Configure Cloudinary Settings
+builder.Services.Configure<RoomieMatch.API.Helpers.CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<RoomieMatch.API.Services.IPhotoService, RoomieMatch.API.Services.PhotoService>();
+
 // 2. Configure CORS (Cross-Origin Resource Sharing)
 // This asks the browser: "Please allow the Frontend (localhost:4200) to talk to us."
 // Without this, the browser blocks the connection for security.

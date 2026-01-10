@@ -24,10 +24,12 @@
             </div>
 
             <div class="form-group">
-                <label for="profileImage">Profile Image URL</label>
-                <input type="url" id="profileImage" name="profileImage" [(ngModel)]="user.profileImage"
-                    placeholder="https://example.com/my-photo.jpg">
-                <small class="hint">Paste a link to your photo</small>
+                <label for="profileImage">Profile Image</label>
+                <div class="file-upload-container">
+                    <input type="file" (change)="onFileSelected($event)" accept="image/*" [disabled]="uploadingPhoto">
+                    <span *ngIf="uploadingPhoto">Uploading...</span>
+                </div>
+                <small class="hint">Upload a real photo (max 10MB)</small>
             </div>
 
             <div class="row">

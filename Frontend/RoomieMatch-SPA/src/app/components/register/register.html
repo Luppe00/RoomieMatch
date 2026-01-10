@@ -132,10 +132,30 @@
                     </div>
                 </div>
 
+                <!-- Preferred Locations (Checkboxes) -->
                 <div class="form-group">
-                    <label for="prefLocation">Preferred Location / Neighborhood</label>
-                    <input type="text" id="prefLocation" name="prefLocation" [(ngModel)]="preferences.preferredLocation"
-                        placeholder="e.g. Nørrebro, Vesterbro, or 'Anywhere in Copenhagen'">
+                    <label>Preferred Locations</label>
+                    <p class="checkbox-hint">Select all areas you're interested in</p>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item" *ngFor="let loc of locationOptions">
+                            <input type="checkbox" [(ngModel)]="loc.checked" [name]="'loc_' + loc.value">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">{{ loc.label }}</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Rent Period (Checkboxes) -->
+                <div class="form-group">
+                    <label>Rent Period</label>
+                    <p class="checkbox-hint">How long do you want to rent?</p>
+                    <div class="checkbox-row">
+                        <label class="checkbox-item" *ngFor="let period of rentPeriodOptions">
+                            <input type="checkbox" [(ngModel)]="period.checked" [name]="'period_' + period.value">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">{{ period.label }}</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="row">

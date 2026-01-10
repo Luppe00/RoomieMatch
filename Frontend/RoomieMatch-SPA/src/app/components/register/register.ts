@@ -47,7 +47,6 @@ export class RegisterComponent {
     // Preferences for NEEDS_ROOM users
     preferences = {
         maxRent: undefined as number | undefined,
-        preferredLocation: '',
         moveInDate: '',
         roomSize: '',
         preferredGender: '',
@@ -55,6 +54,30 @@ export class RegisterComponent {
         preferredAgeMax: undefined as number | undefined,
         acceptsSmoker: ''
     };
+
+    // Location checkboxes
+    locationOptions = [
+        { value: 'copenhagen-city', label: 'København (City)', checked: false },
+        { value: 'frederiksberg', label: 'Frederiksberg', checked: false },
+        { value: 'norrebro', label: 'Nørrebro', checked: false },
+        { value: 'vesterbro', label: 'Vesterbro', checked: false },
+        { value: 'osterbro', label: 'Østerbro', checked: false },
+        { value: 'amager', label: 'Amager', checked: false },
+        { value: 'valby', label: 'Valby', checked: false },
+        { value: 'vanlose', label: 'Vanløse', checked: false },
+        { value: 'gentofte', label: 'Gentofte', checked: false },
+        { value: 'lyngby', label: 'Lyngby-Taarbæk', checked: false },
+        { value: 'gladsaxe', label: 'Gladsaxe', checked: false },
+        { value: 'hvidovre', label: 'Hvidovre', checked: false }
+    ];
+
+    // Rent period checkboxes
+    rentPeriodOptions = [
+        { value: 'under-6-months', label: 'Under 6 months', checked: false },
+        { value: 'under-1-year', label: 'Under 1 year', checked: false },
+        { value: 'over-1-year', label: 'Over 1 year', checked: false },
+        { value: 'unlimited', label: 'Unlimited / Flexible', checked: false }
+    ];
 
     error: string = '';
     loading: boolean = false;

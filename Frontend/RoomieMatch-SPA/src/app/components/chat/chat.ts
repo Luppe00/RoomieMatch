@@ -76,12 +76,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     this.chatService.sendMessage(this.recipientId, this.newMessage).subscribe({
       next: (message) => {
-        // SignalR usually adds it to thread automatically, but for now we rely on the observable
-        // If backend does "ReceiveMessage" broadcast self-send too, it's fine.
-        // But usually we append locally or wait for echo. 
-        // My ChatService logic listens for NewMessage.
-        // So if implementation sends back to caller, it will duplicate if we push manually.
+        // Add the sent message to the local thread immediately
+        this.messages = [...this.messages, message];
         this.newMessage = '';
+      },
+      error: (err) => {
+        console.error('Failed to send message:', err);
+        alert('Failed to send message. Please try again.');
       }
     });
   }

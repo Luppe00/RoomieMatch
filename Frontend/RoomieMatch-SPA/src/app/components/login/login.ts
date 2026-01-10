@@ -38,11 +38,6 @@ export class LoginComponent {
                 this.loading = false;
                 console.error(err);
             }
-            error: (err) => {
-                this.error = 'An error occurred. Please try again.';
-                this.loading = false;
-                console.error(err);
-            }
         });
     }
 }

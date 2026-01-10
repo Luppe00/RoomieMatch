@@ -14,9 +14,8 @@ import { User } from '../../models';
     styleUrls: ['./register.css']
 })
 export class RegisterComponent {
-    // ... items
+export class RegisterComponent {
     password: string = '';
-    // ... items
 
     user: Partial<User> = {
         firstName: '',

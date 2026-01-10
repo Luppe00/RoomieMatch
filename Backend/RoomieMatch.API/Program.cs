@@ -1,6 +1,9 @@
 using RoomieMatch.Model.Repositories;
 using Npgsql;
 using System.IO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,7 @@ builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IPreferenceRepository, PreferenceRepository>();
 builder.Services.AddScoped<ISwipeRepository, SwipeRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 // 2. Configure CORS (Cross-Origin Resource Sharing)
 // This asks the browser: "Please allow the Frontend (localhost:4200) to talk to us."
@@ -33,6 +37,19 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+// 3. Configure Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 var app = builder.Build();
 
@@ -49,6 +66,7 @@ app.UseCors("AngularDev");
 
 app.UseStaticFiles(); // Serve files from wwwroot (the Angular app)
 
+app.UseAuthentication(); // Must be before Authorization
 app.UseAuthorization();
 
 app.MapControllers();

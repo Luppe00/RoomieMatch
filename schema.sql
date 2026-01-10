@@ -17,6 +17,8 @@ CREATE TABLE users (
     profile_image TEXT,
     bio TEXT,
     user_type TEXT NOT NULL CHECK (user_type IN ('HAS_ROOM', 'NEEDS_ROOM')),
+    password_hash BYTEA,
+    password_salt BYTEA,
     created_at TIMESTAMP DEFAULT NOW()
 );
 

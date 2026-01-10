@@ -7,14 +7,13 @@
                 <span class="step-label">Type</span>
             </div>
             <div class="step-line" [class.active]="currentStep > 1"></div>
-            <div class="step-indicator" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2"
-                *ngIf="user.userType === 'HAS_ROOM' || currentStep === 1">
+            <div class="step-indicator" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
                 <span class="step-number">2</span>
-                <span class="step-label">Room</span>
+                <span class="step-label">{{ user.userType === 'HAS_ROOM' ? 'Room' : 'Preferences' }}</span>
             </div>
-            <div class="step-line" [class.active]="currentStep > 2" *ngIf="user.userType === 'HAS_ROOM'"></div>
-            <div class="step-indicator" [class.active]="currentStep >= totalSteps">
-                <span class="step-number">{{ user.userType === 'HAS_ROOM' ? '3' : '2' }}</span>
+            <div class="step-line" [class.active]="currentStep > 2"></div>
+            <div class="step-indicator" [class.active]="currentStep >= 3">
+                <span class="step-number">3</span>
                 <span class="step-label">Profile</span>
             </div>
         </div>
@@ -109,9 +108,85 @@
             </form>
         </div>
 
-        <!-- Step 2/3: Personal Information -->
-        <div class="step-content" *ngIf="(currentStep === 2 && user.userType === 'NEEDS_ROOM') || 
-                                         (currentStep === 3 && user.userType === 'HAS_ROOM')">
+        <!-- Step 2: Preferences (NEEDS_ROOM only) -->
+        <div class="step-content" *ngIf="currentStep === 2 && user.userType === 'NEEDS_ROOM'">
+            <h2>Your Preferences</h2>
+            <p class="auth-subtitle">Help us find the perfect room for you</p>
+
+            <form #prefsForm="ngForm">
+                <div class="row">
+                    <div class="form-group half">
+                        <label for="maxRent">Maximum Budget ($)</label>
+                        <input type="number" id="maxRent" name="maxRent" [(ngModel)]="preferences.maxRent" required
+                            placeholder="e.g. 800">
+                    </div>
+                    <div class="form-group half">
+                        <label for="roomSize">Preferred Room Size</label>
+                        <select id="roomSize" name="roomSize" [(ngModel)]="preferences.roomSize">
+                            <option value="">Any size</option>
+                            <option value="Small (< 10m²)">Small (< 10m²)</option>
+                            <option value="Medium (10-15m²)">Medium (10-15m²)</option>
+                            <option value="Large (15-20m²)">Large (15-20m²)</option>
+                            <option value="Extra Large (> 20m²)">Extra Large (> 20m²)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prefLocation">Preferred Location / Neighborhood</label>
+                    <input type="text" id="prefLocation" name="prefLocation" [(ngModel)]="preferences.preferredLocation"
+                        placeholder="e.g. Nørrebro, Vesterbro, or 'Anywhere in Copenhagen'">
+                </div>
+
+                <div class="row">
+                    <div class="form-group half">
+                        <label for="moveInDate">Move-in Date</label>
+                        <input type="date" id="moveInDate" name="moveInDate" [(ngModel)]="preferences.moveInDate">
+                    </div>
+                    <div class="form-group half">
+                        <label for="prefGender">Preferred Roommate Gender</label>
+                        <select id="prefGender" name="prefGender" [(ngModel)]="preferences.preferredGender">
+                            <option value="">No preference</option>
+                            <option value="Male">Male only</option>
+                            <option value="Female">Female only</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group half">
+                        <label for="prefAgeMin">Min Roommate Age</label>
+                        <input type="number" id="prefAgeMin" name="prefAgeMin" [(ngModel)]="preferences.preferredAgeMin"
+                            placeholder="e.g. 20" min="18">
+                    </div>
+                    <div class="form-group half">
+                        <label for="prefAgeMax">Max Roommate Age</label>
+                        <input type="number" id="prefAgeMax" name="prefAgeMax" [(ngModel)]="preferences.preferredAgeMax"
+                            placeholder="e.g. 35">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="acceptsSmoker">Roommate Smoker Preference</label>
+                    <select id="acceptsSmoker" name="acceptsSmoker" [(ngModel)]="preferences.acceptsSmoker">
+                        <option value="">No preference</option>
+                        <option value="Non-smoker only">Non-smoker only</option>
+                        <option value="Smoker OK">Smoker OK</option>
+                    </select>
+                </div>
+
+                <div class="step-buttons">
+                    <button type="button" class="btn-secondary" (click)="prevStep()">← Back</button>
+                    <button type="button" class="btn-primary" (click)="nextStep()" [disabled]="!canProceedStep2()">
+                        Continue →
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Step 3: Personal Information (both types) -->
+        <div class="step-content" *ngIf="currentStep === 3">
             <h2>Tell Us About Yourself</h2>
             <p class="auth-subtitle">Almost there! Just a few more details</p>
 

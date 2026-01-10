@@ -15,7 +15,7 @@ import { User, Room } from '../../models';
 })
 export class RegisterComponent {
     currentStep: number = 1;
-    totalSteps: number = 3; // Will be 2 for NEEDS_ROOM
+    totalSteps: number = 3; // Always 3 steps: Type -> Details/Preferences -> Profile
     password: string = '';
 
     user: Partial<User> = {
@@ -44,6 +44,18 @@ export class RegisterComponent {
     smoker: string = '';
     occupation: string = '';
 
+    // Preferences for NEEDS_ROOM users
+    preferences = {
+        maxRent: undefined as number | undefined,
+        preferredLocation: '',
+        moveInDate: '',
+        roomSize: '',
+        preferredGender: '',
+        preferredAgeMin: undefined as number | undefined,
+        preferredAgeMax: undefined as number | undefined,
+        acceptsSmoker: ''
+    };
+
     error: string = '';
     loading: boolean = false;
 
@@ -55,11 +67,8 @@ export class RegisterComponent {
 
     selectUserType(type: 'HAS_ROOM' | 'NEEDS_ROOM') {
         this.user.userType = type;
-        if (type === 'HAS_ROOM') {
-            this.totalSteps = 3;
-        } else {
-            this.totalSteps = 2;
-        }
+        // Both types now have 3 steps
+        this.totalSteps = 3;
         this.nextStep();
     }
 
@@ -79,7 +88,8 @@ export class RegisterComponent {
         if (this.user.userType === 'HAS_ROOM') {
             return !!(this.room.rent && this.room.location && this.room.title);
         }
-        return true;
+        // For NEEDS_ROOM, budget is required
+        return !!(this.preferences.maxRent);
     }
 
     canProceedStep3(): boolean {

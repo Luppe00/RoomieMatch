@@ -50,37 +50,47 @@ namespace RoomieMatch.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await _repo.Login(userForLoginDto.Email.ToLower(), userForLoginDto.Password);
-
-            if (userFromRepo == null)
-                return Unauthorized();
-
-            // Generate JWT Token
-            var claims = new[]
+            try
             {
-                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.Email)
-            };
+                var userFromRepo = await _repo.Login(userForLoginDto.Email.ToLower(), userForLoginDto.Password);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
+                if (userFromRepo == null)
+                    return Unauthorized();
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+                // Generate JWT Token
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
+                    new Claim(ClaimTypes.Name, userFromRepo.Email)
+                };
 
-            var tokenDescriptor = new SecurityTokenDescriptor
+                var tokenKey = _config.GetSection("AppSettings:Token").Value;
+                if (string.IsNullOrEmpty(tokenKey)) throw new Exception("AppSettings:Token is null or empty!");
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
+
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.Now.AddDays(1),
+                    SigningCredentials = creds
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+
+                return Ok(new
+                {
+                    token = tokenHandler.WriteToken(token),
+                    user = userFromRepo
+                });
+            }
+            catch (Exception ex)
             {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return Ok(new
-            {
-                token = tokenHandler.WriteToken(token),
-                user = userFromRepo // Optional: Return user info for frontend (exclude password hash!)
-            });
+                return StatusCode(500, $"Internal Server Error: {ex.Message} | Stack: {ex.StackTrace}");
+            }
         }
     }
 }

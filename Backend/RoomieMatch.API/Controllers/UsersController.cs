@@ -52,8 +52,10 @@ namespace RoomieMatch.API.Controllers
                 var currentUser = await _userRepository.GetByIdAsync(userId);
                 if (currentUser == null) return Unauthorized();
 
-                // Get matches based on type (Opposites attract!)
-                var users = await _userRepository.GetPotentialMatchesAsync(userId, currentUser.UserType);
+                // matches based on type (Opposites attract!)
+                // DEBUG MODE: Return ALL users to verify Seed Data
+                // var users = await _userRepository.GetPotentialMatchesAsync(userId, currentUser.UserType);
+                var users = await _userRepository.GetAllAsync();
                 return Ok(users);
             }
             catch(Exception) 

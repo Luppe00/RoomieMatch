@@ -62,7 +62,8 @@ if (args.Contains("--init-db"))
     using (var scope = app.Services.CreateScope())
     {
         var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-        var connString = config.GetConnectionString("AppProgDb");
+        var rawConn = config.GetConnectionString("AppProgDb");
+        var connString = RoomieMatch.Model.Helpers.DbHelper.ParseConnection(rawConn);
         
         try 
         {

@@ -10,8 +10,9 @@ namespace RoomieMatch.Model.Repositories
 
         public BaseRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("AppProgDb") 
+            var rawConn = configuration.GetConnectionString("AppProgDb") 
                                 ?? throw new ArgumentNullException("Connection string 'AppProgDb' not found.");
+            _connectionString = Helpers.DbHelper.ParseConnection(rawConn);
         }
 
         protected IDbConnection CreateConnection()

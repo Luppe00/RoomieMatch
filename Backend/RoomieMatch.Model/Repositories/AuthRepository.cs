@@ -53,8 +53,11 @@ namespace RoomieMatch.Model.Repositories
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
             
-            // Fetch password hash/salt for the email
-            cmd.CommandText = "SELECT id, email, password_hash, password_salt FROM users WHERE email = @email";
+            // Fetch all user fields including password hash/salt
+            cmd.CommandText = @"
+                SELECT id, email, first_name, last_name, age, gender, user_type, profile_image, password_hash, password_salt 
+                FROM users 
+                WHERE email = @email";
             cmd.Parameters.AddWithValue("email", email);
 
             conn.Open();
@@ -64,7 +67,7 @@ namespace RoomieMatch.Model.Repositories
                 return null; // User not found
 
             // Check if password entries are null (legacy users)
-            if (reader.IsDBNull(2) || reader.IsDBNull(3))
+            if (reader.IsDBNull(8) || reader.IsDBNull(9))
                 return null; // or handle legacy login logic if needed
 
             var storedHash = (byte[])reader["password_hash"];
@@ -74,13 +77,16 @@ namespace RoomieMatch.Model.Repositories
                 return null; // Wrong password
 
             // Password correct! Return full user object (excluding password)
-            // Ideally we reuse GetById logic or fetch essential fields here.
-            // For now, let's return a basic User object or fetch full with another query.
-            // Let's just return the user with ID and Email for now to trigger the token generation.
             var user = new User 
             {
                 Id = reader.GetInt32(0),
-                Email = reader.GetString(1)
+                Email = reader.GetString(1),
+                FirstName = reader.GetString(2),
+                LastName = reader.GetString(3),
+                Age = reader.GetInt32(4),
+                Gender = reader.GetString(5),
+                UserType = reader.GetString(6),
+                ProfileImage = reader.IsDBNull(7) ? null : reader.GetString(7)
             };
             return user;
         }

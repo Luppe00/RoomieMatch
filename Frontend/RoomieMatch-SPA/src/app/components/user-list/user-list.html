@@ -1,7 +1,51 @@
 <div class="user-list-container">
-    <div *ngIf="!currentUser" class="empty-state">
-        <h2>Welcome to RoomieMatch</h2>
-        <p>Please <a routerLink="/login">Login</a> or <a routerLink="/register">Register</a> to start matching.</p>
+    <div *ngIf="!currentUser" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-badge">🏠 Find Your Perfect Roommate</div>
+            <h1 class="hero-title">
+                Where <span class="gradient-text">Roommates</span>
+                <br>Find Their Match
+            </h1>
+            <p class="hero-subtitle">
+                Swipe, match, and connect with compatible roommates in your city.
+                Whether you have a room to share or need one, we've got you covered.
+            </p>
+            <div class="hero-buttons">
+                <a routerLink="/register" class="btn-hero-primary">Get Started Free</a>
+                <a routerLink="/login" class="btn-hero-secondary">I Have an Account</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">5K+</span>
+                    <span class="stat-label">Matches Made</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">98%</span>
+                    <span class="stat-label">Satisfaction</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-card card-1">
+                <div class="mini-avatar">👨</div>
+                <div class="mini-info">
+                    <span class="mini-name">Alex, 24</span>
+                    <span class="mini-badge has">Has Room</span>
+                </div>
+            </div>
+            <div class="floating-card card-2">
+                <div class="mini-avatar">👩</div>
+                <div class="mini-info">
+                    <span class="mini-name">Sarah, 22</span>
+                    <span class="mini-badge needs">Needs Room</span>
+                </div>
+            </div>
+            <div class="match-heart">💕</div>
+        </div>
     </div>
 
     <div *ngIf="currentUser">

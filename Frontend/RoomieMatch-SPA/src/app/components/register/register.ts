@@ -23,9 +23,9 @@ export class RegisterComponent {
         lastName: '',
         email: '',
         age: undefined,
-        gender: '',
+        gender: undefined,
         bio: '',
-        userType: ''
+        userType: undefined
     };
 
     // Room details for HAS_ROOM users
@@ -53,7 +53,7 @@ export class RegisterComponent {
         private router: Router
     ) { }
 
-    selectUserType(type: string) {
+    selectUserType(type: 'HAS_ROOM' | 'NEEDS_ROOM') {
         this.user.userType = type;
         if (type === 'HAS_ROOM') {
             this.totalSteps = 3;
@@ -124,7 +124,8 @@ export class RegisterComponent {
                     next: () => {
                         // If HAS_ROOM, save room details via profile update
                         if (this.user.userType === 'HAS_ROOM' && this.room.rent) {
-                            const currentUser = this.authService.currentUser;
+                            const storedUser = localStorage.getItem('user');
+                            const currentUser = storedUser ? JSON.parse(storedUser) : null;
                             if (currentUser) {
                                 const updatedUser = { ...currentUser, room: this.room as Room };
                                 this.userService.updateUser(currentUser.id!, updatedUser).subscribe({

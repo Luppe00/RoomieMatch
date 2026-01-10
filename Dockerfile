@@ -13,7 +13,7 @@ COPY Frontend/RoomieMatch-SPA/ ./
 RUN npx ng build --output-path=dist/out
 
 # Stage 2: Build the .NET Backend
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS backend-build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS backend-build
 WORKDIR /app/backend
 # Copy project file
 COPY Backend/RoomieMatch.API/RoomieMatch.API.csproj ./RoomieMatch.API/
@@ -30,7 +30,7 @@ RUN dotnet publish ./RoomieMatch.API/RoomieMatch.API.csproj -c Release -o /app/p
 COPY --from=frontend-build /app/frontend/dist/out /app/publish/wwwroot
 
 # Stage 3: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=backend-build /app/publish .
 # This variable is crucial for Railway to listen on the right port

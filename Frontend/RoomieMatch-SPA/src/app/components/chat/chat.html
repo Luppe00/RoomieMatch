@@ -21,7 +21,12 @@
 
             <div class="bubble">
                 <p>{{ msg.content }}</p>
-                <span class="timestamp">{{ msg.dateSent | date:'shortTime' }}</span>
+                <span class="timestamp">
+                    {{ msg.dateSent | date:'shortTime' }}
+                    <span *ngIf="msg.senderId === currentUser?.id" class="read-receipt">
+                        {{ msg.dateRead ? '✓✓' : '✓' }}
+                    </span>
+                </span>
             </div>
         </div>
     </div>

@@ -49,7 +49,12 @@ namespace RoomieMatch.Model.Repositories
                        r.id, r.title, r.location, r.rent, r.size_sqm, r.room_image, r.description, r.available_from
                 FROM users u
                 LEFT JOIN rooms r ON u.id = r.user_id
-                WHERE u.user_type = @targetType AND u.id != @currentUserId";
+                WHERE u.user_type = @targetType 
+                  AND u.id != @currentUserId
+                  AND NOT EXISTS (
+                      SELECT 1 FROM swipes s 
+                      WHERE s.swiper_user_id = @currentUserId AND s.target_user_id = u.id
+                  )";
             
             cmd.Parameters.AddWithValue("targetType", targetType);
             cmd.Parameters.AddWithValue("currentUserId", currentUserId);

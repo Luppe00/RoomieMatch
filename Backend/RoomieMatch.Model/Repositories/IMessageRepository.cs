@@ -8,6 +8,7 @@ namespace RoomieMatch.Model.Repositories
     {
         Task AddMessage(Message message);
         Task<IEnumerable<Message>> GetMessageThread(int currentUserId, int recipientId);
-        // Task<Message> GetMessage(int id);
+        Task MarkMessagesAsRead(int currentUserId, int senderId);
+        Task<int> GetUnreadCount(int userId);
     }
 }

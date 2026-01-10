@@ -64,5 +64,43 @@ namespace RoomieMatch.Model.Repositories
 
             return messages;
         }
+
+        public async Task MarkMessagesAsRead(int currentUserId, int senderId)
+        {
+            using var conn = CreateConnection();
+            using var cmd = conn.CreateCommand() as NpgsqlCommand;
+            
+            // Mark all messages FROM sender TO currentUser as read
+            cmd.CommandText = @"
+                UPDATE messages 
+                SET date_read = @dateRead 
+                WHERE sender_id = @senderId 
+                  AND recipient_id = @currentUserId 
+                  AND date_read IS NULL";
+
+            cmd.Parameters.AddWithValue("dateRead", DateTime.UtcNow);
+            cmd.Parameters.AddWithValue("senderId", senderId);
+            cmd.Parameters.AddWithValue("currentUserId", currentUserId);
+
+            conn.Open();
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        public async Task<int> GetUnreadCount(int userId)
+        {
+            using var conn = CreateConnection();
+            using var cmd = conn.CreateCommand() as NpgsqlCommand;
+            
+            cmd.CommandText = @"
+                SELECT COUNT(*) 
+                FROM messages 
+                WHERE recipient_id = @userId AND date_read IS NULL";
+
+            cmd.Parameters.AddWithValue("userId", userId);
+
+            conn.Open();
+            var result = await cmd.ExecuteScalarAsync();
+            return Convert.ToInt32(result);
+        }
     }
 }

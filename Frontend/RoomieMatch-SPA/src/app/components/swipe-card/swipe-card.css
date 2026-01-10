@@ -146,3 +146,36 @@
     font-size: 0.9rem;
     color: #666;
 }
+
+/* Swipe Animations */
+@keyframes slideOutLeft {
+    0% {
+        transform: translateX(0) rotate(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-150%) rotate(-20deg);
+        opacity: 0;
+    }
+}
+
+@keyframes slideOutRight {
+    0% {
+        transform: translateX(0) rotate(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(150%) rotate(20deg);
+        opacity: 0;
+    }
+}
+
+.card.swiping-left {
+    animation: slideOutLeft 0.4s ease-out forwards;
+}
+
+.card.swiping-right {
+    animation: slideOutRight 0.4s ease-out forwards;
+}

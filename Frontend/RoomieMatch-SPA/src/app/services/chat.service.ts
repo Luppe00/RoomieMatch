@@ -59,4 +59,8 @@ export class ChatService {
         // We send via HTTP for simplicity and return Observable, letting SignalR handle the echo
         return this.http.post<Message>(`${this.apiUrl}/messages`, { recipientId, content });
     }
+
+    getUnreadCount() {
+        return this.http.get<{ count: number }>(`${this.apiUrl}/messages/unread-count`);
+    }
 }

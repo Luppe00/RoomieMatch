@@ -48,8 +48,20 @@ namespace RoomieMatch.API.Controllers
         public async Task<IActionResult> GetMessageThread(int userId)
         {
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            
+            // Mark messages from this user as read when we view the thread
+            await _repo.MarkMessagesAsRead(currentUserId, userId);
+            
             var messages = await _repo.GetMessageThread(currentUserId, userId);
             return Ok(messages);
+        }
+
+        [HttpGet("unread-count")]
+        public async Task<IActionResult> GetUnreadCount()
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var count = await _repo.GetUnreadCount(currentUserId);
+            return Ok(new { count });
         }
     }
 

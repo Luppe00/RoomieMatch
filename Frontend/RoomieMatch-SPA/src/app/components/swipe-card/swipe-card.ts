@@ -16,12 +16,23 @@ export class SwipeCardComponent {
   @Output() liked = new EventEmitter<void>();
   @Output() passed = new EventEmitter<void>();
 
- //Angular component, connects when we click like. We use the SwipeService to send the data to the BackEnd.
+  // Animation state
+  swipeDirection: 'left' | 'right' | null = null;
+
   onLike() {
-    this.liked.emit(); // Sends signal to parent
+    this.swipeDirection = 'right';
+    // Wait for animation to complete before emitting
+    setTimeout(() => {
+      this.liked.emit();
+      this.swipeDirection = null;
+    }, 400);
   }
 
   onPass() {
-    this.passed.emit();
+    this.swipeDirection = 'left';
+    setTimeout(() => {
+      this.passed.emit();
+      this.swipeDirection = null;
+    }, 400);
   }
 }

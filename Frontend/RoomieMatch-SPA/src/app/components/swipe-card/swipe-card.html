@@ -1,4 +1,5 @@
-<div class="card" *ngIf="user">
+<div class="card" *ngIf="user"
+    [ngClass]="{'swiping-left': swipeDirection === 'left', 'swiping-right': swipeDirection === 'right'}">
     <!-- Image Area: Prioritize Room Image if User HAS_ROOM -->
     <div class="card-image"
         [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : (user.profileImage ? 'url(' + user.profileImage + ')' : null))"

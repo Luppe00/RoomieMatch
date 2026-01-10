@@ -1,7 +1,8 @@
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: 80vh; /* Takes up most of the screen */
+    height: 80vh;
+    /* Takes up most of the screen */
     border: 1px solid #ddd;
     border-radius: 12px;
     background: #fff;
@@ -139,4 +140,10 @@
 
 .chat-input button:not(:disabled):hover {
     background: #0056b3;
+}
+
+/* Read Receipts */
+.read-receipt {
+    margin-left: 4px;
+    font-size: 0.7rem;
 }

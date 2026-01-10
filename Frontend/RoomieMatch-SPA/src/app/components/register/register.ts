@@ -81,12 +81,26 @@ export class RegisterComponent {
 
     error: string = '';
     loading: boolean = false;
+    locationDropdownOpen: boolean = false;
 
     constructor(
         private userService: UserService,
         private authService: AuthService,
         private router: Router
     ) { }
+
+    toggleLocationDropdown() {
+        this.locationDropdownOpen = !this.locationDropdownOpen;
+    }
+
+    selectAllLocations() {
+        const allSelected = this.locationOptions.every(loc => loc.checked);
+        this.locationOptions.forEach(loc => loc.checked = !allSelected);
+    }
+
+    getSelectedLocationsCount(): number {
+        return this.locationOptions.filter(loc => loc.checked).length;
+    }
 
     selectUserType(type: 'HAS_ROOM' | 'NEEDS_ROOM') {
         this.user.userType = type;

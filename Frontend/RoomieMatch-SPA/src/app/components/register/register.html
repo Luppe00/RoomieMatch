@@ -132,16 +132,34 @@
                     </div>
                 </div>
 
-                <!-- Preferred Locations (Checkboxes) -->
+                <!-- Preferred Locations (Dropdown) -->
                 <div class="form-group">
                     <label>Preferred Locations</label>
-                    <p class="checkbox-hint">Select all areas you're interested in</p>
-                    <div class="checkbox-grid">
-                        <label class="checkbox-item" *ngFor="let loc of locationOptions">
-                            <input type="checkbox" [(ngModel)]="loc.checked" [name]="'loc_' + loc.value">
-                            <span class="checkmark"></span>
-                            <span class="checkbox-label">{{ loc.label }}</span>
-                        </label>
+                    <div class="dropdown-select" [class.open]="locationDropdownOpen">
+                        <div class="dropdown-trigger" (click)="toggleLocationDropdown()">
+                            <span class="dropdown-text">
+                                {{ getSelectedLocationsCount() === 0 ? 'Select locations...' :
+                                getSelectedLocationsCount() === locationOptions.length ? 'All locations selected' :
+                                getSelectedLocationsCount() + ' locations selected' }}
+                            </span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="dropdown-content" *ngIf="locationDropdownOpen">
+                            <div class="dropdown-option select-all" (click)="selectAllLocations()">
+                                <span class="checkmark-box" [class.checked]="locationOptions.every(l => l.checked)">
+                                    {{ locationOptions.every(l => l.checked) ? '✓' : '' }}
+                                </span>
+                                <span>Select All</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <label class="dropdown-option" *ngFor="let loc of locationOptions">
+                                <input type="checkbox" [(ngModel)]="loc.checked" [name]="'loc_' + loc.value">
+                                <span class="checkmark-box" [class.checked]="loc.checked">
+                                    {{ loc.checked ? '✓' : '' }}
+                                </span>
+                                <span>{{ loc.label }}</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 

@@ -51,19 +51,12 @@ export class UserListComponent implements OnInit {
       preference: this.preferenceService.getPreference(this.currentUser.id)
     }).subscribe({
       next: ({ users, preference }) => {
-        // Filter Logic
+        // Backend already filters by opposite userType, just exclude self
         this.potentialMatches = users.filter(u => {
           // 1. Exclude self
           if (u.id === this.currentUser?.id) return false;
 
-          // 2. Opposite User Type
-          const isOppositeType = (this.currentUser?.userType === 'HAS_ROOM')
-            ? u.userType === 'NEEDS_ROOM'
-            : u.userType === 'HAS_ROOM';
-
-          if (!isOppositeType) return false;
-
-          // 3. Gender Preference
+          // 2. Gender Preference (optional)
           if (preference && preference.preferredGender && preference.preferredGender !== 'Any') {
             if (u.gender !== preference.preferredGender) return false;
           }

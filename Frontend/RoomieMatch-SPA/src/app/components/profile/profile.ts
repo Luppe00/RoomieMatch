@@ -62,42 +62,48 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Use setTimeout to ensure this runs after Angular's initial change detection
-        setTimeout(() => {
-            const currentUser = this.authService.getCurrentUser();
-            if (currentUser) {
-                this.user = { ...currentUser }; // Clone
+        // Load immediately - try to get user right away
+        this.initializeUser();
 
-                // Initialize room if HAS_ROOM but no room data exists
-                if (this.user.userType === 'HAS_ROOM' && !this.user.room) {
-                    this.user.room = {
-                        id: 0,
-                        userId: this.user.id,
-                        title: '',
-                        location: '',
-                        rent: 0,
-                        sizeSqm: 0,
-                        description: '',
-                        availableFrom: new Date().toISOString()
-                    };
-                }
-
-                this.loadPreference(currentUser.id);
-            } else {
-                this.loading = false;
-            }
-        }, 0);
-
-        // Subscribe for live updates (login/logout)
+        // Also subscribe for live updates (login/logout)
         this.authService.currentUser$.subscribe(currentUser => {
-            if (currentUser && !this.user) {
-                this.user = { ...currentUser };
-                this.loadPreference(currentUser.id);
-            } else if (!currentUser) {
+            if (currentUser) {
+                if (!this.user || this.user.id !== currentUser.id) {
+                    this.user = { ...currentUser };
+                    this.initializeRoom();
+                    this.loadPreference(currentUser.id);
+                }
+            } else {
                 this.user = null;
                 this.loading = false;
             }
         });
+    }
+
+    private initializeUser() {
+        const currentUser = this.authService.getCurrentUser();
+        if (currentUser) {
+            this.user = { ...currentUser };
+            this.initializeRoom();
+            this.loadPreference(currentUser.id);
+        } else {
+            this.loading = false;
+        }
+    }
+
+    private initializeRoom() {
+        if (this.user && this.user.userType === 'HAS_ROOM' && !this.user.room) {
+            this.user.room = {
+                id: 0,
+                userId: this.user.id,
+                title: '',
+                location: '',
+                rent: 0,
+                sizeSqm: 0,
+                description: '',
+                availableFrom: new Date().toISOString()
+            };
+        }
     }
 
     loadPreference(userId: number) {

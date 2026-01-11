@@ -9,7 +9,7 @@ import { ProfileComponent } from './components/profile/profile';
 import { ChatComponent } from './components/chat/chat';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },  // Redirect to dashboard
+    { path: '', component: UserListComponent },  // Landing page (has hero for logged out)
     { path: 'dashboard', component: DashboardComponent },  // Dashboard for logged in
     { path: 'explore', component: UserListComponent },  // Swiping interface
     { path: 'swipe', component: UserListComponent },  // Alias for explore

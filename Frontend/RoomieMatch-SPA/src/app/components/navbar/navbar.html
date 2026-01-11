@@ -1,5 +1,5 @@
 <nav>
-    <a routerLink="/dashboard" class="brand">RoomieMatch</a>
+    <a [routerLink]="currentUser ? '/dashboard' : '/'" class="brand">RoomieMatch</a>
 
     <div class="links" *ngIf="currentUser">
         <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>

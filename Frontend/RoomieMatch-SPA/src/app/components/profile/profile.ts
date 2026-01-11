@@ -62,8 +62,8 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Load with micro-delay to ensure Angular bootstrap is complete
-        Promise.resolve().then(() => this.initializeUser());
+        // Load immediately from localStorage (same pattern as Dashboard)
+        this.initializeUser();
 
         // Also subscribe for live updates (login/logout)
         this.authService.currentUser$.subscribe(currentUser => {
@@ -85,6 +85,7 @@ export class ProfileComponent implements OnInit {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             this.user = JSON.parse(storedUser);
+            this.loading = false; // Set loading false immediately - don't wait for preferences
             this.initializeRoom();
             this.loadPreference(this.user!.id);
         } else {

@@ -19,7 +19,10 @@ export class SwipeCardComponent {
   // Animation state
   swipeDirection: 'left' | 'right' | null = null;
 
-  onLike() {
+  onLike(event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
     this.swipeDirection = 'right';
     // Wait for animation to complete before emitting
     setTimeout(() => {
@@ -28,7 +31,10 @@ export class SwipeCardComponent {
     }, 400);
   }
 
-  onPass() {
+  onPass(event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
     this.swipeDirection = 'left';
     setTimeout(() => {
       this.passed.emit();

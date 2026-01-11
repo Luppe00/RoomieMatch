@@ -118,7 +118,7 @@
 
                     <div class="room-meta">
                         <div class="meta-item" *ngIf="selectedUser.room?.sizeSqm">
-                            <span class="meta-value">{{ selectedUser.room.sizeSqm }} m²</span>
+                            <span class="meta-value">{{ selectedUser.room?.sizeSqm }} m²</span>
                             <span class="meta-label">Size</span>
                         </div>
                         <div class="meta-item">
@@ -127,7 +127,7 @@
                             <span class="meta-label">Rent</span>
                         </div>
                         <div class="meta-item" *ngIf="selectedUser.room?.availableFrom">
-                            <span class="meta-value">{{ selectedUser.room.availableFrom | date:'mediumDate' }}</span>
+                            <span class="meta-value">{{ selectedUser.room?.availableFrom | date:'mediumDate' }}</span>
                             <span class="meta-label">Available</span>
                         </div>
                     </div>

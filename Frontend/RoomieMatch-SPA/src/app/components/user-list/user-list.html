@@ -143,8 +143,8 @@
                         <div class="renter-info">
                             <div class="renter-avatar">
                                 <img *ngIf="selectedUser.profileImage" [src]="selectedUser.profileImage" alt="Profile">
-                                <span *ngIf="!selectedUser.profileImage">{{ selectedUser.firstName?.[0] }}{{
-                                    selectedUser.lastName?.[0] }}</span>
+                                <span *ngIf="!selectedUser.profileImage">{{ selectedUser.firstName?.charAt(0) }}{{
+                                    selectedUser.lastName?.charAt(0) }}</span>
                             </div>
                             <div class="renter-details">
                                 <span class="renter-name">{{ selectedUser.firstName }} {{ selectedUser.lastName }}, {{

@@ -175,6 +175,6 @@
     <!-- Lightbox -->
     <div class="lightbox-overlay" *ngIf="showLightbox && selectedUser?.room?.roomImage" (click)="closeLightbox($event)">
         <button class="lightbox-close" (click)="closeLightbox($event)">×</button>
-        <img [src]="selectedUser.room.roomImage" alt="Room photo full">
+        <img [src]="selectedUser?.room?.roomImage" alt="Room photo full">
     </div>
 </div>

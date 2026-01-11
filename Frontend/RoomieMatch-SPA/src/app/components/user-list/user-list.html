@@ -70,13 +70,27 @@
         </div>
     </div>
 
-    <div *ngIf="currentUser">
+    <div *ngIf="currentUser" class="explore-section">
+        <!-- Explore Header -->
+        <div class="explore-header">
+            <div class="explore-title">
+                <h1>Discover</h1>
+                <p>Swipe right to like, left to pass</p>
+            </div>
+            <div class="explore-counter" *ngIf="users.length > 0">
+                {{ currentIndex + 1 }} / {{ users.length }}
+            </div>
+        </div>
+
         <div *ngIf="loading" class="loading">Loading potential roomies...</div>
 
         <div *ngIf="!loading && currentUserCard" class="card-stack" (click)="openDetailModal(currentUserCard)">
             <app-swipe-card [user]="currentUserCard" (liked)="onLike()" (passed)="onPass()">
             </app-swipe-card>
-            <div class="tap-hint">Tap card for details</div>
+            <div class="tap-hint">
+                <span class="tap-icon">👆</span>
+                <span>Tap card for details</span>
+            </div>
         </div>
 
         <div *ngIf="!loading && !currentUserCard" class="empty-state">

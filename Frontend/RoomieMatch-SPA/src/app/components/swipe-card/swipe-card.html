@@ -36,8 +36,8 @@
         <p class="bio">{{ user.room?.description || user.bio || 'No details provided.' }}</p>
 
         <div class="actions">
-            <button class="btn-action btn-pass" (click)="onPass()">✕</button>
-            <button class="btn-action btn-like" (click)="onLike()">♥</button>
+            <button class="btn-action btn-pass" (click)="$event.stopPropagation(); onPass()">✕</button>
+            <button class="btn-action btn-like" (click)="$event.stopPropagation(); onLike()">♥</button>
         </div>
     </div>
 </div>

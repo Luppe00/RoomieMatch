@@ -14,7 +14,7 @@ namespace RoomieMatch.Model.Repositories
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
             cmd.CommandText = @"SELECT id, user_id, max_rent, preferred_location, min_age_roomie, max_age_roomie, 
-                                      preferred_gender, preferred_locations, rent_period, smoker_preference 
+                                      preferred_gender, rent_period, smoker_preference 
                                FROM preferences WHERE user_id = @user_id";
             cmd.Parameters.AddWithValue("user_id", userId);
 
@@ -37,16 +37,15 @@ namespace RoomieMatch.Model.Repositories
             
             cmd.CommandText = @"
                 INSERT INTO preferences (user_id, max_rent, preferred_location, min_age_roomie, max_age_roomie, 
-                                        preferred_gender, preferred_locations, rent_period, smoker_preference)
+                                        preferred_gender, rent_period, smoker_preference)
                 VALUES (@user_id, @max_rent, @preferred_location, @min_age_roomie, @max_age_roomie, 
-                        @preferred_gender, @preferred_locations, @rent_period, @smoker_preference)
+                        @preferred_gender, @rent_period, @smoker_preference)
                 ON CONFLICT (user_id) DO UPDATE 
                 SET max_rent = EXCLUDED.max_rent,
                     preferred_location = EXCLUDED.preferred_location,
                     min_age_roomie = EXCLUDED.min_age_roomie,
                     max_age_roomie = EXCLUDED.max_age_roomie,
                     preferred_gender = EXCLUDED.preferred_gender,
-                    preferred_locations = EXCLUDED.preferred_locations,
                     rent_period = EXCLUDED.rent_period,
                     smoker_preference = EXCLUDED.smoker_preference";
 
@@ -56,7 +55,6 @@ namespace RoomieMatch.Model.Repositories
             cmd.Parameters.AddWithValue("min_age_roomie", (object?)preference.MinAgeRoomie ?? DBNull.Value);
             cmd.Parameters.AddWithValue("max_age_roomie", (object?)preference.MaxAgeRoomie ?? DBNull.Value);
             cmd.Parameters.AddWithValue("preferred_gender", (object?)preference.PreferredGender ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("preferred_locations", (object?)preference.PreferredLocations ?? DBNull.Value);
             cmd.Parameters.AddWithValue("rent_period", (object?)preference.RentPeriod ?? DBNull.Value);
             cmd.Parameters.AddWithValue("smoker_preference", (object?)preference.SmokerPreference ?? DBNull.Value);
 
@@ -75,9 +73,8 @@ namespace RoomieMatch.Model.Repositories
                 MinAgeRoomie = reader.IsDBNull(4) ? null : reader.GetInt32(4),
                 MaxAgeRoomie = reader.IsDBNull(5) ? null : reader.GetInt32(5),
                 PreferredGender = reader.IsDBNull(6) ? null : reader.GetString(6),
-                PreferredLocations = reader.IsDBNull(7) ? null : reader.GetString(7),
-                RentPeriod = reader.IsDBNull(8) ? null : reader.GetString(8),
-                SmokerPreference = reader.IsDBNull(9) ? null : reader.GetString(9)
+                RentPeriod = reader.IsDBNull(7) ? null : reader.GetString(7),
+                SmokerPreference = reader.IsDBNull(8) ? null : reader.GetString(8)
             };
         }
     }

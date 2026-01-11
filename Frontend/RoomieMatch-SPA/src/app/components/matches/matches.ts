@@ -1,3 +1,4 @@
+// BUILD VERSION: 2026-01-11-v2 - Forces Railway to rebuild
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';

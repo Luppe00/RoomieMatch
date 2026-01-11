@@ -1,45 +1,49 @@
-<!-- Premium Swipe Card with Overlay Design -->
-<div class="card" *ngIf="user"
-    [ngClass]="{'swiping-left': swipeDirection === 'left', 'swiping-right': swipeDirection === 'right'}">
-
-    <!-- Full Card Image -->
+<div class="card" [ngClass]="{'swiping-left': swipingLeft, 'swiping-right': swipingRight}" (click)="onCardClick()">
+    <!-- Card Image -->
     <div class="card-image"
         [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : (user.profileImage ? 'url(' + user.profileImage + ')' : null))"
         [class.has-image]="user.room?.roomImage || user.profileImage">
 
-        <!-- Placeholder Initial -->
-        <span class="initial-placeholder" *ngIf="!user.room?.roomImage && !user.profileImage">{{ user.firstName[0]
-            }}</span>
+        <!-- Show initial if no image -->
+        <span *ngIf="!user.room?.roomImage && !user.profileImage">{{ user.firstName[0] }}</span>
 
-        <!-- Gradient Overlay for text readability -->
-        <div class="card-overlay"></div>
-
-        <!-- Info Overlay at Bottom -->
-        <div class="card-info-overlay">
-            <div class="user-badge"
-                [ngClass]="{'badge-has-room': user.userType === 'HAS_ROOM', 'badge-needs-room': user.userType === 'NEEDS_ROOM'}">
-                {{ user.userType === 'HAS_ROOM' ? '🏠 Has Room' : '🔍 Needs Room' }}
-            </div>
-
-            <h2 class="user-name">{{ user.firstName }}<span class="user-age">, {{ user.age }}</span></h2>
-
-            <!-- Room Info -->
-            <div class="room-info" *ngIf="user.userType === 'HAS_ROOM' && user.room">
-                <span class="room-price">${{ user.room.rent }}/mo</span>
-                <span class="room-location">📍 {{ user.room.location }}</span>
-            </div>
-
-            <p class="user-bio">{{ user.room?.description || user.bio || 'No details provided.' }}</p>
+        <!-- Price tag for rooms -->
+        <div class="price-tag" *ngIf="user.room?.rent">
+            {{ user.room.rent | currency:'DKK':'symbol':'1.0-0' }}/mo
         </div>
     </div>
 
-    <!-- Action Buttons Outside Card -->
-    <div class="actions">
-        <button class="btn-action btn-pass" (click)="$event.stopPropagation(); onPass()">
-            <span>✕</span>
-        </button>
-        <button class="btn-action btn-like" (click)="$event.stopPropagation(); onLike()">
-            <span>♥</span>
-        </button>
+    <!-- Card Content -->
+    <div class="card-content">
+        <!-- Room details if available -->
+        <div class="room-details" *ngIf="user.room?.title">
+            <h4 class="room-title">{{ user.room.title }}</h4>
+            <p class="room-specs">
+                <span *ngIf="user.room.location">📍 {{ user.room.location }}</span>
+                <span *ngIf="user.room.sizeSqm"> · {{ user.room.sizeSqm }}m²</span>
+            </p>
+        </div>
+
+        <!-- User info -->
+        <div class="header">
+            <div class="user-info">
+                <h3 class="name">{{ user.firstName }}, <span class="age">{{ user.age }}</span></h3>
+            </div>
+            <span class="badge" [ngClass]="user.userType === 'HAS_ROOM' ? 'badge-has-room' : 'badge-needs-room'">
+                {{ user.userType === 'HAS_ROOM' ? 'Has Room' : 'Needs Room' }}
+            </span>
+        </div>
+
+        <p class="bio">{{ user.bio || 'No details provided.' }}</p>
+
+        <!-- Action buttons -->
+        <div class="actions">
+            <button class="btn-action btn-pass" (click)="onPass($event)">
+                <span>✕</span>
+            </button>
+            <button class="btn-action btn-like" (click)="onLike($event)">
+                <span>♥</span>
+            </button>
+        </div>
     </div>
 </div>

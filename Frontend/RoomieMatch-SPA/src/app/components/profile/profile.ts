@@ -62,8 +62,8 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Load immediately - try to get user right away
-        this.initializeUser();
+        // Load with micro-delay to ensure Angular bootstrap is complete
+        Promise.resolve().then(() => this.initializeUser());
 
         // Also subscribe for live updates (login/logout)
         this.authService.currentUser$.subscribe(currentUser => {

@@ -24,13 +24,13 @@ export class MatchesComponent implements OnInit {
   // ngOnInit: Runs automatically when the page loads.
   // It checks who is logged in, then asks for their matches.
   ngOnInit() {
-    // Use setTimeout to ensure this runs after Angular's initial change detection
-    setTimeout(() => {
+    // Load with micro-delay to ensure Angular bootstrap is complete
+    Promise.resolve().then(() => {
       this.currentUser = this.authService.getCurrentUser();
       if (this.currentUser) {
         this.loadMatches();
       }
-    }, 0);
+    });
 
     // Subscribe for live updates
     this.authService.currentUser$.subscribe(user => {

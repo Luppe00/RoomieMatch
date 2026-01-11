@@ -81,11 +81,12 @@ export class ProfileComponent implements OnInit {
     }
 
     private initializeUser() {
-        const currentUser = this.authService.getCurrentUser();
-        if (currentUser) {
-            this.user = { ...currentUser };
+        // Read directly from localStorage (same pattern as Dashboard)
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            this.user = JSON.parse(storedUser);
             this.initializeRoom();
-            this.loadPreference(currentUser.id);
+            this.loadPreference(this.user!.id);
         } else {
             this.loading = false;
         }

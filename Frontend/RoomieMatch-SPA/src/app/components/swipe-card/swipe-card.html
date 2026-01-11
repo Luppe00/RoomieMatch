@@ -1,4 +1,4 @@
-<div class="card" [ngClass]="{'swiping-left': swipingLeft, 'swiping-right': swipingRight}" (click)="onCardClick()">
+<div class="card" [ngClass]="{'swiping-left': swipeDirection === 'left', 'swiping-right': swipeDirection === 'right'}">
     <!-- Card Image -->
     <div class="card-image"
         [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : (user.profileImage ? 'url(' + user.profileImage + ')' : null))"
@@ -38,10 +38,10 @@
 
         <!-- Action buttons -->
         <div class="actions">
-            <button class="btn-action btn-pass" (click)="onPass($event)">
+            <button class="btn-action btn-pass" (click)="onPass()">
                 <span>✕</span>
             </button>
-            <button class="btn-action btn-like" (click)="onLike($event)">
+            <button class="btn-action btn-like" (click)="onLike()">
                 <span>♥</span>
             </button>
         </div>

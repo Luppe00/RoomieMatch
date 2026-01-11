@@ -37,15 +37,8 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Read directly from localStorage (same pattern as Dashboard/Profile)
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.currentUser = JSON.parse(storedUser);
-      this.loading = false; // Set loading false immediately
-      this.loadUsers();
-    } else {
-      this.loading = false;
-    }
+    // Load immediately from localStorage (same pattern as Profile)
+    this.initializeUser();
 
     // Also subscribe to changes for live updates
     this.authService.currentUser$.subscribe(user => {
@@ -60,6 +53,18 @@ export class UserListComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  private initializeUser() {
+    // Read directly from localStorage (same pattern as Profile)
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+      this.loading = false; // Set loading false IMMEDIATELY - don't wait for API
+      this.loadUsers();
+    } else {
+      this.loading = false;
+    }
   }
 
   loadUsers() {

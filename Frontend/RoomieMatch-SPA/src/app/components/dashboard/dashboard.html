@@ -11,7 +11,7 @@
         </div>
         <div class="welcome-image">
             <div class="avatar-large" *ngIf="currentUser?.profileImage">
-                <img [src]="currentUser.profileImage" alt="Profile">
+                <img [src]="currentUser?.profileImage" alt="Profile">
             </div>
             <div class="avatar-placeholder-large" *ngIf="!currentUser?.profileImage">
                 {{ currentUser?.firstName?.charAt(0) || '?' }}

@@ -53,6 +53,7 @@ export class MatchesComponent implements OnInit {
     if (!this.currentUser) return;
     this.matchService.getMatches(this.currentUser.id).subscribe(matches => {
       this.matches = matches;
+      this.cdr.detectChanges(); // Force update after data loads
     });
   }
 }

@@ -123,6 +123,7 @@ export class UserListComponent implements OnInit {
 
         this.currentIndex = 0;
         this.loading = false;
+        this.cdr.detectChanges(); // Force update after data loads
       },
       error: (err) => {
         console.error(err);

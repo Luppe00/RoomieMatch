@@ -102,7 +102,7 @@
 
             <!-- Hero Image -->
             <div class="modal-hero" (click)="openLightbox(0)">
-                <img *ngIf="selectedUser.room?.roomImage" [src]="selectedUser.room.roomImage" alt="Room photo">
+                <img *ngIf="selectedUser.room?.roomImage" [src]="selectedUser.room?.roomImage" alt="Room photo">
                 <div *ngIf="!selectedUser.room?.roomImage" class="no-image-placeholder">
                     <span>📷</span>
                     <span>No photos yet</span>

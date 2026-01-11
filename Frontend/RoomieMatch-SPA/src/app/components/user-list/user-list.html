@@ -113,8 +113,9 @@
             <div class="modal-body">
                 <!-- Left Column: Details -->
                 <div class="modal-main">
-                    <h1 class="room-title">{{ selectedUser.room?.title || 'Room Available' }}</h1>
-                    <p class="room-location">📍 {{ selectedUser.room?.location || 'Location not specified' }}</p>
+                    <h1 class="room-title">📍 {{ selectedUser.room?.location || 'Location not specified' }}</h1>
+                    <p class="room-subtitle" *ngIf="selectedUser.room?.title">{{ selectedUser.room.title }}</p>
+                    <p class="address-note">🔒 Full address revealed after matching</p>
 
                     <div class="room-meta">
                         <div class="meta-item" *ngIf="selectedUser.room?.sizeSqm">

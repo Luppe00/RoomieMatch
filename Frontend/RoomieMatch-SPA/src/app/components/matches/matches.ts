@@ -24,12 +24,8 @@ export class MatchesComponent implements OnInit {
   // ngOnInit: Runs automatically when the page loads.
   // It checks who is logged in, then asks for their matches.
   ngOnInit() {
-    // Read directly from localStorage (same pattern as Dashboard/Profile)
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.currentUser = JSON.parse(storedUser);
-      this.loadMatches();
-    }
+    // Load immediately from localStorage (same pattern as Profile)
+    this.initializeUser();
 
     // Subscribe for live updates
     this.authService.currentUser$.subscribe(user => {
@@ -38,6 +34,15 @@ export class MatchesComponent implements OnInit {
         this.loadMatches();
       }
     });
+  }
+
+  private initializeUser() {
+    // Read directly from localStorage (same pattern as Profile)
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+      this.loadMatches();
+    }
   }
 
   // Ask the Service to fetch data from the API

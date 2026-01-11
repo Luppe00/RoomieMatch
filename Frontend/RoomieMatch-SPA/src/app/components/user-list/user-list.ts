@@ -4,9 +4,10 @@ import { UserService } from '../../services/user.service';
 import { MatchService } from '../../services/match.service';
 import { AuthService } from '../../services/auth.service';
 import { PreferenceService } from '../../services/preference.service';
-import { User } from '../../models';
+import { User, Preference } from '../../models';
 import { SwipeCardComponent } from '../swipe-card/swipe-card';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-list',
@@ -54,11 +55,16 @@ export class UserListComponent implements OnInit {
   loadUsers() {
     this.loading = true;
 
-    if (!this.currentUser) return;
+    if (!this.currentUser) {
+      this.loading = false;
+      return;
+    }
 
     forkJoin({
       users: this.userService.getUsers(),
-      preference: this.preferenceService.getPreference(this.currentUser.id)
+      preference: this.preferenceService.getPreference(this.currentUser.id).pipe(
+        catchError(() => of(null as Preference | null)) // If no preference exists, return null
+      )
     }).subscribe({
       next: ({ users, preference }) => {
         // Backend already filters by opposite userType, just exclude self

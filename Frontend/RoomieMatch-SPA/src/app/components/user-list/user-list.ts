@@ -63,8 +63,7 @@ export class UserListComponent implements OnInit {
   }
 
   loadUsers() {
-    this.loading = true;
-
+    // Don't reset loading to true - it's already set appropriately by ngOnInit
     if (!this.currentUser) {
       this.loading = false;
       return;

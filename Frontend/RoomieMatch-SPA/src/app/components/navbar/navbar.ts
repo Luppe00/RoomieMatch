@@ -18,6 +18,14 @@ export class NavbarComponent implements OnInit {
   unreadCount: number = 0;
 
   constructor(public authService: AuthService, private chatService: ChatService) {
+    // Read from localStorage IMMEDIATELY - same pattern as Dashboard
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+      this.loadUnreadCount();
+    }
+
+    // Also subscribe for live updates (login/logout)
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       if (user) {

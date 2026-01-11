@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatchService } from '../../services/match.service';
@@ -18,7 +18,8 @@ export class MatchesComponent implements OnInit {
 
   constructor(
     private matchService: MatchService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   // ngOnInit: Runs automatically when the page loads.
@@ -32,6 +33,7 @@ export class MatchesComponent implements OnInit {
       if (user && !this.currentUser) {
         this.currentUser = user;
         this.loadMatches();
+        this.cdr.detectChanges(); // Force update
       }
     });
   }
@@ -42,6 +44,7 @@ export class MatchesComponent implements OnInit {
     if (storedUser) {
       this.currentUser = JSON.parse(storedUser);
       this.loadMatches();
+      this.cdr.detectChanges(); // Force update immediately
     }
   }
 

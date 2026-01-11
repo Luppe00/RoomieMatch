@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { MatchService } from '../../services/match.service';
@@ -33,7 +33,8 @@ export class UserListComponent implements OnInit {
     private userService: UserService,
     private matchService: MatchService,
     private authService: AuthService,
-    private preferenceService: PreferenceService
+    private preferenceService: PreferenceService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -46,11 +47,13 @@ export class UserListComponent implements OnInit {
         // User just logged in
         this.currentUser = user;
         this.loadUsers();
+        this.cdr.detectChanges(); // Force update
       } else if (!user && this.currentUser) {
         // User logged out
         this.currentUser = null;
         this.potentialMatches = [];
         this.loading = false;
+        this.cdr.detectChanges(); // Force update
       }
     });
   }
@@ -62,8 +65,10 @@ export class UserListComponent implements OnInit {
       this.currentUser = JSON.parse(storedUser);
       this.loading = false; // Set loading false IMMEDIATELY - don't wait for API
       this.loadUsers();
+      this.cdr.detectChanges(); // Force update
     } else {
       this.loading = false;
+      this.cdr.detectChanges(); // Force update
     }
   }
 

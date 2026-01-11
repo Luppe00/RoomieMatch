@@ -95,38 +95,30 @@ export class ProfileComponent implements OnInit {
 
     private initializeRoom() {
         if (this.user && this.user.userType === 'HAS_ROOM') {
-            // Fetch room from backend
+            // Initialize with empty room FIRST so template renders the section
+            this.user.room = {
+                id: 0,
+                userId: this.user.id,
+                title: '',
+                location: '',
+                rent: 0,
+                sizeSqm: 0,
+                description: '',
+                availableFrom: new Date().toISOString()
+            };
+
+            // Then fetch from backend and update if room exists
             this.roomService.getRoomByUserId(this.user.id).subscribe({
                 next: (rooms) => {
                     if (rooms && rooms.length > 0) {
-                        // Use existing room from database
+                        // Update with existing room from database
                         this.user!.room = rooms[0];
-                    } else {
-                        // No room in DB yet, create empty one for form
-                        this.user!.room = {
-                            id: 0,
-                            userId: this.user!.id,
-                            title: '',
-                            location: '',
-                            rent: 0,
-                            sizeSqm: 0,
-                            description: '',
-                            availableFrom: new Date().toISOString()
-                        };
                     }
+                    // If no rooms found, keep the empty one we set above
                 },
-                error: () => {
-                    // Error fetching, create empty room
-                    this.user!.room = {
-                        id: 0,
-                        userId: this.user!.id,
-                        title: '',
-                        location: '',
-                        rent: 0,
-                        sizeSqm: 0,
-                        description: '',
-                        availableFrom: new Date().toISOString()
-                    };
+                error: (e) => {
+                    console.error('Error fetching room', e);
+                    // Keep the empty room we set above
                 }
             });
         }

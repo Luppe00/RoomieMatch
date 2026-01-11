@@ -216,17 +216,17 @@ export class RegisterComponent {
                                     userId: currentUser.id
                                 };
                                 this.roomService.createRoom(roomData).subscribe({
-                                    next: () => this.router.navigate(['/']),
+                                    next: () => this.router.navigate(['/dashboard']),
                                     error: (e) => {
                                         console.error('Error saving room', e);
-                                        this.router.navigate(['/']);
+                                        this.router.navigate(['/dashboard']);
                                     }
                                 });
                             } else {
-                                this.router.navigate(['/']);
+                                this.router.navigate(['/dashboard']);
                             }
                         } else {
-                            this.router.navigate(['/']);
+                            this.router.navigate(['/dashboard']);
                         }
                     },
                     error: () => {

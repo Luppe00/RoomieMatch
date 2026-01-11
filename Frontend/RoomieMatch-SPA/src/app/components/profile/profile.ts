@@ -61,7 +61,9 @@ export class ProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.authService.currentUser$.subscribe(currentUser => {
+        // Use setTimeout to ensure this runs after Angular's initial change detection
+        setTimeout(() => {
+            const currentUser = this.authService.getCurrentUser();
             if (currentUser) {
                 this.user = { ...currentUser }; // Clone
 
@@ -81,6 +83,17 @@ export class ProfileComponent implements OnInit {
 
                 this.loadPreference(currentUser.id);
             } else {
+                this.loading = false;
+            }
+        }, 0);
+
+        // Subscribe for live updates (login/logout)
+        this.authService.currentUser$.subscribe(currentUser => {
+            if (currentUser && !this.user) {
+                this.user = { ...currentUser };
+                this.loadPreference(currentUser.id);
+            } else if (!currentUser) {
+                this.user = null;
                 this.loading = false;
             }
         });

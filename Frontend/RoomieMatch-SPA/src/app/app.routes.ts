@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { UserListComponent } from './components/user-list/user-list';
 import { MatchesComponent } from './components/matches/matches';
-
+import { DashboardComponent } from './components/dashboard/dashboard';
 
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
@@ -9,7 +9,9 @@ import { ProfileComponent } from './components/profile/profile';
 import { ChatComponent } from './components/chat/chat';
 
 export const routes: Routes = [
-    { path: '', component: UserListComponent },
+    { path: '', component: UserListComponent },  // Landing page (has hero for logged out)
+    { path: 'dashboard', component: DashboardComponent },  // Dashboard for logged in
+    { path: 'swipe', component: UserListComponent },  // Swiping interface
     { path: 'matches', component: MatchesComponent },
     { path: 'profile', component: ProfileComponent },
     { path: 'login', component: LoginComponent },

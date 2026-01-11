@@ -1,0 +1,125 @@
+<div class="dashboard-container" *ngIf="!loading">
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-content">
+            <h1 class="welcome-title">
+                {{ getGreeting() }}, <span class="gradient-text">{{ currentUser?.firstName || 'there' }}</span>! 👋
+            </h1>
+            <p class="welcome-subtitle">
+                Ready to find your perfect roommate? Here's your overview.
+            </p>
+        </div>
+        <div class="welcome-image">
+            <div class="avatar-large" *ngIf="currentUser?.profileImage">
+                <img [src]="currentUser.profileImage" alt="Profile">
+            </div>
+            <div class="avatar-placeholder-large" *ngIf="!currentUser?.profileImage">
+                {{ currentUser?.firstName?.charAt(0) || '?' }}
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Cards -->
+    <section class="stats-section">
+        <div class="stat-card">
+            <div class="stat-icon">💕</div>
+            <div class="stat-info">
+                <span class="stat-value">{{ totalMatches }}</span>
+                <span class="stat-label">Total Matches</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-info">
+                <span class="stat-value">{{ newMatchesToday }}</span>
+                <span class="stat-label">New Today</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💬</div>
+            <div class="stat-info">
+                <span class="stat-value">{{ unreadCount }}</span>
+                <span class="stat-label">Unread Messages</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <span class="stat-value">{{ getProfileCompletion() }}%</span>
+                <span class="stat-label">Profile Complete</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="actions-section">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="action-cards">
+            <a routerLink="/swipe" class="action-card primary">
+                <div class="action-icon">🔍</div>
+                <h3>Find Roommates</h3>
+                <p>Browse and swipe on potential matches</p>
+            </a>
+            <a routerLink="/matches" class="action-card">
+                <div class="action-icon">💕</div>
+                <h3>View Matches</h3>
+                <p>See all your mutual connections</p>
+            </a>
+            <a routerLink="/profile" class="action-card">
+                <div class="action-icon">👤</div>
+                <h3>Edit Profile</h3>
+                <p>Update your details and photos</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Recent Matches Preview -->
+    <section class="recent-section" *ngIf="matchedUsers.length > 0">
+        <div class="section-header">
+            <h2 class="section-title">Recent Matches</h2>
+            <a routerLink="/matches" class="see-all-link">See all →</a>
+        </div>
+        <div class="recent-matches">
+            <div class="match-preview-card" *ngFor="let user of matchedUsers">
+                <div class="match-avatar" *ngIf="user.profileImage">
+                    <img [src]="user.profileImage" [alt]="user.firstName">
+                </div>
+                <div class="match-avatar-placeholder" *ngIf="!user.profileImage">
+                    {{ user.firstName?.charAt(0) }}
+                </div>
+                <div class="match-info">
+                    <span class="match-name">{{ user.firstName }}, {{ user.age }}</span>
+                    <span class="match-type">{{ user.userType === 'HAS_ROOM' ? 'Has Room' : 'Needs Room' }}</span>
+                </div>
+                <a [routerLink]="['/chat', user.id]" class="chat-btn">💬</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Empty State for No Matches -->
+    <section class="empty-section" *ngIf="matchedUsers.length === 0 && !loading">
+        <div class="empty-content">
+            <div class="empty-icon">🏠</div>
+            <h3>No matches yet</h3>
+            <p>Start swiping to find your perfect roommate!</p>
+            <a routerLink="/swipe" class="btn-primary">Start Exploring</a>
+        </div>
+    </section>
+
+    <!-- Profile Completion Reminder -->
+    <section class="reminder-section" *ngIf="getProfileCompletion() < 100">
+        <div class="reminder-card">
+            <div class="reminder-icon">💡</div>
+            <div class="reminder-content">
+                <h4>Complete Your Profile</h4>
+                <p>Profiles with photos get 10x more matches! Your profile is {{ getProfileCompletion() }}% complete.
+                </p>
+            </div>
+            <a routerLink="/profile" class="reminder-btn">Complete Now</a>
+        </div>
+    </section>
+</div>
+
+<div class="loading" *ngIf="loading">
+    Loading your dashboard...
+</div>

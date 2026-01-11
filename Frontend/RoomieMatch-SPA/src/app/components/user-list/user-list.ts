@@ -30,11 +30,21 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // First, try to get user synchronously from localStorage
+    this.currentUser = this.authService.getCurrentUser();
+    if (this.currentUser) {
+      this.loadUsers();
+    } else {
+      this.loading = false;
+    }
+
+    // Also subscribe to changes for live updates
     this.authService.currentUser$.subscribe(user => {
-      this.currentUser = user;
-      if (user) {
+      if (user && user.id !== this.currentUser?.id) {
+        this.currentUser = user;
         this.loadUsers();
-      } else {
+      } else if (!user) {
+        this.currentUser = null;
         this.potentialMatches = [];
         this.loading = false;
       }

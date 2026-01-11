@@ -37,15 +37,15 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Use setTimeout to ensure this runs after Angular's initial change detection
-    setTimeout(() => {
-      this.currentUser = this.authService.getCurrentUser();
-      if (this.currentUser) {
-        this.loadUsers();
-      } else {
-        this.loading = false;
-      }
-    }, 0);
+    // Read directly from localStorage (same pattern as Dashboard/Profile)
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+      this.loading = false; // Set loading false immediately
+      this.loadUsers();
+    } else {
+      this.loading = false;
+    }
 
     // Also subscribe to changes for live updates
     this.authService.currentUser$.subscribe(user => {

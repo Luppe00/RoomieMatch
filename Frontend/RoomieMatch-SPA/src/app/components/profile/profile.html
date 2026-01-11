@@ -4,6 +4,26 @@
         <p>Manage your details and preferences</p>
     </div>
 
+    <!-- Profile Completion Bar -->
+    <div *ngIf="!loading && user" class="completion-card">
+        <div class="completion-header">
+            <span class="completion-title">Profile Completion</span>
+            <span class="completion-percent" [class.complete]="getProfileCompletion() === 100">
+                {{ getProfileCompletion() }}%
+            </span>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" [style.width.%]="getProfileCompletion()"></div>
+        </div>
+        <div class="missing-fields" *ngIf="getMissingFields().length > 0">
+            <span class="missing-label">Missing:</span>
+            <span class="missing-item" *ngFor="let field of getMissingFields()">{{ field }}</span>
+        </div>
+        <div class="completion-success" *ngIf="getMissingFields().length === 0">
+            🎉 Your profile is complete!
+        </div>
+    </div>
+
     <div *ngIf="loading" class="loading-spinner">
         Loading...
     </div>

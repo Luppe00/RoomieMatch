@@ -156,4 +156,58 @@ export class ProfileComponent implements OnInit {
             }
         });
     }
+
+    getProfileCompletion(): number {
+        if (!this.user) return 0;
+
+        let score = 0;
+        const weights = {
+            firstName: 10,
+            lastName: 10,
+            age: 10,
+            gender: 10,
+            bio: 20,
+            profileImage: 25,
+            room: 15 // Only for HAS_ROOM users
+        };
+
+        if (this.user.firstName) score += weights.firstName;
+        if (this.user.lastName) score += weights.lastName;
+        if (this.user.age) score += weights.age;
+        if (this.user.gender) score += weights.gender;
+        if (this.user.bio && this.user.bio.length > 10) score += weights.bio;
+        if (this.user.profileImage) score += weights.profileImage;
+
+        // Room details only count for HAS_ROOM
+        if (this.user.userType === 'HAS_ROOM') {
+            if (this.user.room && this.user.room.rent && this.user.room.location) {
+                score += weights.room;
+            }
+        } else {
+            // For NEEDS_ROOM, redistribute room weight to other fields
+            score = Math.round(score * (100 / 85));
+        }
+
+        return Math.min(score, 100);
+    }
+
+    getMissingFields(): string[] {
+        if (!this.user) return [];
+
+        const missing: string[] = [];
+
+        if (!this.user.firstName) missing.push('First Name');
+        if (!this.user.lastName) missing.push('Last Name');
+        if (!this.user.age) missing.push('Age');
+        if (!this.user.gender) missing.push('Gender');
+        if (!this.user.bio || this.user.bio.length < 10) missing.push('Bio (min 10 chars)');
+        if (!this.user.profileImage) missing.push('Profile Photo');
+
+        if (this.user.userType === 'HAS_ROOM') {
+            if (!this.user.room?.rent) missing.push('Room Rent');
+            if (!this.user.room?.location) missing.push('Room Location');
+        }
+
+        return missing;
+    }
 }

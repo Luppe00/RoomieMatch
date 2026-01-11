@@ -9,13 +9,14 @@ import { ProfileComponent } from './components/profile/profile';
 import { ChatComponent } from './components/chat/chat';
 
 export const routes: Routes = [
-    { path: '', component: UserListComponent },  // Landing page (has hero for logged out)
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },  // Redirect to dashboard
     { path: 'dashboard', component: DashboardComponent },  // Dashboard for logged in
-    { path: 'swipe', component: UserListComponent },  // Swiping interface
+    { path: 'explore', component: UserListComponent },  // Swiping interface
+    { path: 'swipe', component: UserListComponent },  // Alias for explore
     { path: 'matches', component: MatchesComponent },
     { path: 'profile', component: ProfileComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'chat/:id', component: ChatComponent },
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'dashboard' }
 ];

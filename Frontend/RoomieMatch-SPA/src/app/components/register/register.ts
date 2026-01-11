@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
-import { User, Room } from '../../models';
+import { PreferenceService } from '../../services/preference.service';
+import { User, Room, Preference } from '../../models';
 
 @Component({
     selector: 'app-register',
@@ -87,7 +88,8 @@ export class RegisterComponent {
     constructor(
         private userService: UserService,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private preferenceService: PreferenceService
     ) { }
 
     toggleLocationDropdown() {
@@ -174,11 +176,34 @@ export class RegisterComponent {
                 // Auto login after register
                 this.authService.login({ email: this.user.email, password: this.password }).subscribe({
                     next: () => {
-                        // If HAS_ROOM, save room details via profile update
-                        if (this.user.userType === 'HAS_ROOM' && this.room.rent) {
-                            const storedUser = localStorage.getItem('user');
-                            const currentUser = storedUser ? JSON.parse(storedUser) : null;
-                            if (currentUser) {
+                        const storedUser = localStorage.getItem('user');
+                        const currentUser = storedUser ? JSON.parse(storedUser) : null;
+
+                        if (currentUser) {
+                            // 1. Save Preferences (for both user types)
+                            // Convert selected locations to comma-separated string
+                            const selectedLocs = this.locationOptions
+                                .filter(l => l.checked)
+                                .map(l => l.value)
+                                .join(',');
+
+                            const preferenceData: Preference = {
+                                ...this.preferences,
+                                id: 0, // Ignored by server
+                                userId: currentUser.id,
+                                preferredLocations: selectedLocs,
+                                rentPeriod: this.preferences.rentPeriod,
+                                // Map smoker answer to preference
+                                smokerPreference: this.smoker === 'No' ? 'Non-smoker only' : 'Smoker OK'
+                            };
+
+                            this.preferenceService.savePreference(currentUser.id, preferenceData).subscribe({
+                                next: () => console.log('Preferences saved'),
+                                error: (e) => console.error('Error saving preferences', e)
+                            });
+
+                            // 2. If HAS_ROOM, also save room details
+                            if (this.user.userType === 'HAS_ROOM' && this.room.rent) {
                                 const updatedUser = { ...currentUser, room: this.room as Room };
                                 this.userService.updateUser(currentUser.id!, updatedUser).subscribe({
                                     next: () => this.router.navigate(['/']),

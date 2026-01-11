@@ -43,7 +43,10 @@ CREATE TABLE preferences (
     preferred_location TEXT,
     preferred_gender TEXT CHECK (preferred_gender IN ('Male', 'Female', 'Other', 'Any')),
     min_age_roomie INTEGER,
-    max_age_roomie INTEGER
+    max_age_roomie INTEGER,
+    preferred_locations TEXT,
+    rent_period VARCHAR(50),
+    smoker_preference VARCHAR(50)
 );
 
 -- 3.4 Table: swipes

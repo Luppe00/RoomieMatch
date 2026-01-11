@@ -49,9 +49,12 @@ export interface Preference {
     userId: number;
     maxRent?: number;
     preferredLocation?: string;
+    preferredLocations?: string; // Comma-separated
     preferredGender?: string;
     minAgeRoomie?: number;
     maxAgeRoomie?: number;
+    rentPeriod?: string;
+    smokerPreference?: string;
 }
 
 export interface Message {

@@ -76,9 +76,31 @@ export class UserListComponent implements OnInit {
           // 1. Exclude self
           if (u.id === this.currentUser?.id) return false;
 
-          // 2. Gender Preference (optional)
-          if (preference && preference.preferredGender && preference.preferredGender !== 'Any') {
+          // If no preference, show all
+          if (!preference) return true;
+
+          // 2. Gender Preference
+          if (preference.preferredGender && preference.preferredGender !== 'Any') {
             if (u.gender !== preference.preferredGender) return false;
+          }
+
+          // 3. Age Preference
+          if (preference.minAgeRoomie && u.age < preference.minAgeRoomie) return false;
+          if (preference.maxAgeRoomie && u.age > preference.maxAgeRoomie) return false;
+
+          // 4. Room-specific filters (only for NEEDS_ROOM looking at HAS_ROOM users)
+          if (u.room) {
+            // Rent budget
+            if (preference.maxRent && u.room.rent > preference.maxRent) return false;
+
+            // Location check (if specific locations selected)
+            if (preference.preferredLocations && preference.preferredLocations.length > 0) {
+              const prefLocs = preference.preferredLocations.split(',');
+              // Check if room location is in preferred list
+              if (!prefLocs.some(loc => u.room?.location.includes(loc))) {
+                return false;
+              }
+            }
           }
 
           return true;

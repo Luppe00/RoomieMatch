@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { PreferenceService } from '../../services/preference.service';
+import { RoomService } from '../../services/room.service';
 import { User, Room, Preference } from '../../models';
 
 @Component({
@@ -94,7 +95,8 @@ export class RegisterComponent {
         private userService: UserService,
         private authService: AuthService,
         private router: Router,
-        private preferenceService: PreferenceService
+        private preferenceService: PreferenceService,
+        private roomService: RoomService
     ) { }
 
     toggleLocationDropdown() {
@@ -209,10 +211,16 @@ export class RegisterComponent {
 
                             // 2. If HAS_ROOM, also save room details
                             if (this.user.userType === 'HAS_ROOM' && this.room.rent) {
-                                const updatedUser = { ...currentUser, room: this.room as Room };
-                                this.userService.updateUser(currentUser.id!, updatedUser).subscribe({
+                                const roomData: Room = {
+                                    ...this.room as Room,
+                                    userId: currentUser.id
+                                };
+                                this.roomService.createRoom(roomData).subscribe({
                                     next: () => this.router.navigate(['/']),
-                                    error: () => this.router.navigate(['/'])
+                                    error: (e) => {
+                                        console.error('Error saving room', e);
+                                        this.router.navigate(['/']);
+                                    }
                                 });
                             } else {
                                 this.router.navigate(['/']);

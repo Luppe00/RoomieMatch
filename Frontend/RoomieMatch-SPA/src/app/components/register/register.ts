@@ -48,6 +48,7 @@ export class RegisterComponent {
     preferences = {
         maxRent: undefined as number | undefined,
         moveInDate: '',
+        rentPeriod: '',
         roomSize: '',
         preferredGender: '',
         preferredAgeMin: undefined as number | undefined,

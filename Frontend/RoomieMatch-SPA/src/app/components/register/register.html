@@ -163,24 +163,25 @@
                     </div>
                 </div>
 
-                <!-- Rent Period (Checkboxes) -->
-                <div class="form-group">
-                    <label>Rent Period</label>
-                    <p class="checkbox-hint">How long do you want to rent?</p>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item" *ngFor="let period of rentPeriodOptions">
-                            <input type="checkbox" [(ngModel)]="period.checked" [name]="'period_' + period.value">
-                            <span class="checkmark"></span>
-                            <span class="checkbox-label">{{ period.label }}</span>
-                        </label>
-                    </div>
-                </div>
-
                 <div class="row">
                     <div class="form-group half">
                         <label for="moveInDate">Move-in Date</label>
                         <input type="date" id="moveInDate" name="moveInDate" [(ngModel)]="preferences.moveInDate">
                     </div>
+                    <div class="form-group half">
+                        <label for="rentPeriod">Rent Period</label>
+                        <select id="rentPeriod" name="rentPeriod" [(ngModel)]="preferences.rentPeriod">
+                            <option value="">Select period</option>
+                            <option value="1-3 months">1-3 months</option>
+                            <option value="3-6 months">3-6 months</option>
+                            <option value="6-12 months">6-12 months</option>
+                            <option value="12+ months">12+ months</option>
+                            <option value="Flexible">Flexible</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="form-group half">
                         <label for="prefGender">Preferred Roommate Gender</label>
                         <select id="prefGender" name="prefGender" [(ngModel)]="preferences.preferredGender">

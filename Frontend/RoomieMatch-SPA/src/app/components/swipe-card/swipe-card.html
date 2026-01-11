@@ -9,7 +9,7 @@
 
         <!-- Price tag for rooms -->
         <div class="price-tag" *ngIf="user.room?.rent">
-            {{ user.room.rent | currency:'DKK':'symbol':'1.0-0' }}/mo
+            {{ user.room?.rent | currency:'DKK':'symbol':'1.0-0' }}/mo
         </div>
     </div>
 
@@ -17,10 +17,10 @@
     <div class="card-content">
         <!-- Room details if available -->
         <div class="room-details" *ngIf="user.room?.title">
-            <h4 class="room-title">{{ user.room.title }}</h4>
+            <h4 class="room-title">{{ user.room?.title }}</h4>
             <p class="room-specs">
-                <span *ngIf="user.room.location">📍 {{ user.room.location }}</span>
-                <span *ngIf="user.room.sizeSqm"> · {{ user.room.sizeSqm }}m²</span>
+                <span *ngIf="user.room?.location">📍 {{ user.room?.location }}</span>
+                <span *ngIf="user.room?.sizeSqm"> · {{ user.room?.sizeSqm }}m²</span>
             </p>
         </div>
 

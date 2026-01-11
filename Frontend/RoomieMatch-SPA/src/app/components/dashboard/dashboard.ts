@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -28,7 +28,8 @@ export class DashboardComponent implements OnInit {
         private authService: AuthService,
         private userService: UserService,
         private matchService: MatchService,
-        private chatService: ChatService
+        private chatService: ChatService,
+        private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
@@ -39,10 +40,14 @@ export class DashboardComponent implements OnInit {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             this.currentUser = JSON.parse(storedUser);
+            this.loading = false;
+            this.cdr.detectChanges(); // Force update immediately
             this.loadMatches();
             this.loadUnreadCount();
+        } else {
+            this.loading = false;
+            this.cdr.detectChanges();
         }
-        this.loading = false;
     }
 
     loadMatches() {
@@ -52,8 +57,8 @@ export class DashboardComponent implements OnInit {
             next: (users: User[]) => {
                 this.matchedUsers = users.slice(0, 3); // First 3 for preview
                 this.totalMatches = users.length;
-                // Simplified - we don't have createdAt on users from getMatches
-                this.newMatchesToday = 0; // Could be tracked separately
+                this.newMatchesToday = 0;
+                this.cdr.detectChanges(); // Force update after data loads
             },
             error: (err: any) => console.error('Error loading matches', err)
         });

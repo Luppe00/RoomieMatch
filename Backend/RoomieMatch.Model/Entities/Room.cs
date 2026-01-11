@@ -11,6 +11,7 @@ namespace RoomieMatch.Model.Entities
         public decimal Rent { get; set; } // numeric in DB
         public int? SizeSqm { get; set; }
         public string? RoomImage { get; set; }
+        public string[]? RoomImages { get; set; } // Multiple photos
         public string? Description { get; set; }
         public DateTime? AvailableFrom { get; set; }
     }

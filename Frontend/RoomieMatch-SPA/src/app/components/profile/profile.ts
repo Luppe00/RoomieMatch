@@ -240,10 +240,59 @@ export class ProfileComponent implements OnInit {
         }
     }
 
-    removeRoomImage(event: Event) {
+    // Handle multiple room image selection
+    onRoomImagesSelected(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+            this.uploadingRoomImage = true;
+
+            // Initialize roomImages array if needed
+            if (this.user?.room && !this.user.room.roomImages) {
+                this.user.room.roomImages = [];
+            }
+
+            const filesToProcess = Array.from(input.files);
+            const maxPhotos = 5;
+            const currentCount = this.user?.room?.roomImages?.length || 0;
+            const remainingSlots = maxPhotos - currentCount;
+            const filesToAdd = filesToProcess.slice(0, remainingSlots);
+
+            let processedCount = 0;
+            filesToAdd.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (this.user?.room) {
+                        this.user.room.roomImages = this.user.room.roomImages || [];
+                        this.user.room.roomImages.push(e.target?.result as string);
+
+                        // Also set first image as primary
+                        if (!this.user.room.roomImage) {
+                            this.user.room.roomImage = e.target?.result as string;
+                        }
+                    }
+                    processedCount++;
+                    if (processedCount === filesToAdd.length) {
+                        this.uploadingRoomImage = false;
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Reset input so same file can be selected again
+            input.value = '';
+        }
+    }
+
+    removeRoomImage(event: Event, index: number) {
         event.stopPropagation();
-        if (this.user?.room) {
-            this.user.room.roomImage = undefined;
+        if (this.user?.room?.roomImages) {
+            this.user.room.roomImages.splice(index, 1);
+            // Update primary image
+            if (this.user.room.roomImages.length > 0) {
+                this.user.room.roomImage = this.user.room.roomImages[0];
+            } else {
+                this.user.room.roomImage = undefined;
+            }
         }
     }
 }

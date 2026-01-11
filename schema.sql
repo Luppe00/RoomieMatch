@@ -31,6 +31,7 @@ CREATE TABLE rooms (
     rent NUMERIC NOT NULL,
     size_sqm INTEGER,
     room_image TEXT,
+    room_images TEXT[],
     description TEXT,
     available_from DATE
 );

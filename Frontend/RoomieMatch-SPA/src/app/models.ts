@@ -24,6 +24,7 @@ export interface Room {
     deposit?: number;
     sizeSqm?: number;
     roomImage?: string;
+    roomImages?: string[]; // Multiple photos
     description?: string;
     availableFrom?: string; // DateTime
     leasePeriod?: string;

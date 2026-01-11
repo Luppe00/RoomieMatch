@@ -105,19 +105,22 @@
             </div>
 
             <div class="form-group">
-                <label>Room Photo</label>
-                <div class="photo-upload-area" (click)="roomPhotoInput.click()">
-                    <div class="upload-placeholder" *ngIf="!user.room.roomImage">
-                        <span class="upload-icon">📷</span>
-                        <span class="upload-text">Click to upload room photo</span>
-                        <span class="upload-hint">JPG, PNG up to 10MB</span>
+                <label>Room Photos (up to 5)</label>
+                <div class="photos-grid">
+                    <!-- Existing photos -->
+                    <div class="photo-item" *ngFor="let img of user.room.roomImages || []; let i = index">
+                        <img [src]="img" alt="Room photo">
+                        <button type="button" class="remove-photo" (click)="removeRoomImage($event, i)">×</button>
                     </div>
-                    <div class="photo-preview" *ngIf="user.room.roomImage">
-                        <img [src]="user.room.roomImage" alt="Room preview">
-                        <button type="button" class="remove-photo" (click)="removeRoomImage($event)">×</button>
+                    <!-- Add more button (if less than 5) -->
+                    <div class="photo-add" *ngIf="(user.room.roomImages?.length || 0) < 5"
+                        (click)="roomPhotoInput.click()">
+                        <span class="add-icon">+</span>
+                        <span class="add-text">Add Photo</span>
                     </div>
                 </div>
-                <input type="file" #roomPhotoInput hidden accept="image/*" (change)="onRoomImageSelected($event)">
+                <input type="file" #roomPhotoInput hidden accept="image/*" multiple
+                    (change)="onRoomImagesSelected($event)">
                 <small class="hint" *ngIf="uploadingRoomImage">Uploading...</small>
             </div>
 

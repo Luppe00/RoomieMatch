@@ -23,6 +23,12 @@ export class UserListComponent implements OnInit {
   loading = true;
   matchMessage: string | null = null;
 
+  // Room detail modal state
+  showDetailModal = false;
+  selectedUser: User | null = null;
+  showLightbox = false;
+  lightboxImageIndex = 0;
+
   constructor(
     private userService: UserService,
     private matchService: MatchService,
@@ -155,5 +161,46 @@ export class UserListComponent implements OnInit {
 
   closeMatch() {
     this.matchMessage = null;
+  }
+
+  // Room Detail Modal Methods
+  openDetailModal(user: User) {
+    this.selectedUser = user;
+    this.showDetailModal = true;
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+  }
+
+  closeDetailModal() {
+    this.showDetailModal = false;
+    this.selectedUser = null;
+    this.showLightbox = false;
+    document.body.style.overflow = '';
+  }
+
+  likeFromModal() {
+    this.closeDetailModal();
+    this.onLike();
+  }
+
+  passFromModal() {
+    this.closeDetailModal();
+    this.onPass();
+  }
+
+  // Lightbox Methods
+  openLightbox(index: number = 0) {
+    this.lightboxImageIndex = index;
+    this.showLightbox = true;
+  }
+
+  closeLightbox(event?: Event) {
+    if (event) event.stopPropagation();
+    this.showLightbox = false;
+  }
+
+  navigateLightbox(direction: number, event?: Event) {
+    if (event) event.stopPropagation();
+    // For now we only have one room image, but this supports multiple
+    this.lightboxImageIndex += direction;
   }
 }

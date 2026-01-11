@@ -73,9 +73,10 @@
     <div *ngIf="currentUser">
         <div *ngIf="loading" class="loading">Loading potential roomies...</div>
 
-        <div *ngIf="!loading && currentUserCard" class="card-stack">
+        <div *ngIf="!loading && currentUserCard" class="card-stack" (click)="openDetailModal(currentUserCard)">
             <app-swipe-card [user]="currentUserCard" (liked)="onLike()" (passed)="onPass()">
             </app-swipe-card>
+            <div class="tap-hint">Tap card for details</div>
         </div>
 
         <div *ngIf="!loading && !currentUserCard" class="empty-state">
@@ -91,5 +92,89 @@
             <button (click)="closeMatch()" class="btn-primary" style="font-size: 1rem; padding: 0.5rem 1.5rem;">Keep
                 Swiping</button>
         </div>
+    </div>
+
+    <!-- Room Detail Modal -->
+    <div class="detail-modal-overlay" *ngIf="showDetailModal && selectedUser" (click)="closeDetailModal()">
+        <div class="detail-modal" (click)="$event.stopPropagation()">
+            <!-- Close Button -->
+            <button class="modal-close" (click)="closeDetailModal()">×</button>
+
+            <!-- Hero Image -->
+            <div class="modal-hero" (click)="openLightbox(0)">
+                <img *ngIf="selectedUser.room?.roomImage" [src]="selectedUser.room.roomImage" alt="Room photo">
+                <div *ngIf="!selectedUser.room?.roomImage" class="no-image-placeholder">
+                    <span>📷</span>
+                    <span>No photos yet</span>
+                </div>
+                <div class="image-hint" *ngIf="selectedUser.room?.roomImage">Click to enlarge</div>
+            </div>
+
+            <div class="modal-body">
+                <!-- Left Column: Details -->
+                <div class="modal-main">
+                    <h1 class="room-title">{{ selectedUser.room?.title || 'Room Available' }}</h1>
+                    <p class="room-location">📍 {{ selectedUser.room?.location || 'Location not specified' }}</p>
+
+                    <div class="room-meta">
+                        <div class="meta-item" *ngIf="selectedUser.room?.sizeSqm">
+                            <span class="meta-value">{{ selectedUser.room.sizeSqm }} m²</span>
+                            <span class="meta-label">Size</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-value">{{ selectedUser.room?.rent | currency:'DKK':'symbol':'1.0-0'
+                                }}/mo</span>
+                            <span class="meta-label">Rent</span>
+                        </div>
+                        <div class="meta-item" *ngIf="selectedUser.room?.availableFrom">
+                            <span class="meta-value">{{ selectedUser.room.availableFrom | date:'mediumDate' }}</span>
+                            <span class="meta-label">Available</span>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>About the Room</h3>
+                        <p class="description">{{ selectedUser.room?.description || 'No description provided.' }}</p>
+                    </div>
+
+                    <div class="section">
+                        <h3>About the Renter</h3>
+                        <div class="renter-info">
+                            <div class="renter-avatar">
+                                <img *ngIf="selectedUser.profileImage" [src]="selectedUser.profileImage" alt="Profile">
+                                <span *ngIf="!selectedUser.profileImage">{{ selectedUser.firstName?.[0] }}{{
+                                    selectedUser.lastName?.[0] }}</span>
+                            </div>
+                            <div class="renter-details">
+                                <span class="renter-name">{{ selectedUser.firstName }} {{ selectedUser.lastName }}, {{
+                                    selectedUser.age }}</span>
+                                <span class="renter-gender">{{ selectedUser.gender }}</span>
+                            </div>
+                        </div>
+                        <p class="renter-bio">{{ selectedUser.bio || 'No bio provided.' }}</p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Action Card -->
+                <div class="modal-sidebar">
+                    <div class="action-card">
+                        <div class="price-tag">
+                            <span class="price">{{ selectedUser.room?.rent | currency:'DKK':'symbol':'1.0-0' }}</span>
+                            <span class="price-period">per month</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-pass" (click)="passFromModal()">✕ Pass</button>
+                            <button class="btn-like" (click)="likeFromModal()">♥ Like</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" *ngIf="showLightbox && selectedUser?.room?.roomImage" (click)="closeLightbox($event)">
+        <button class="lightbox-close" (click)="closeLightbox($event)">×</button>
+        <img [src]="selectedUser.room.roomImage" alt="Room photo full">
     </div>
 </div>

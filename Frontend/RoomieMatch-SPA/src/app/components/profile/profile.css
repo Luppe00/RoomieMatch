@@ -323,3 +323,80 @@ body.dark-mode textarea {
     font-weight: 600;
     font-size: 1rem;
 }
+
+/* Photo Upload Area */
+.photo-upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--bg-secondary);
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-upload-area:hover {
+    border-color: var(--primary-color);
+    background: rgba(249, 115, 22, 0.05);
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+}
+
+.upload-text {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.upload-hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.photo-preview {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+}
+
+.photo-preview img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    max-height: 180px;
+}
+
+.remove-photo {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ef4444;
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.remove-photo:hover {
+    transform: scale(1.1);
+}

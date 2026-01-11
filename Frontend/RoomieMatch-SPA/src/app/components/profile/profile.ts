@@ -30,6 +30,7 @@ export class ProfileComponent implements OnInit {
     loading: boolean = true;
     saving: boolean = false;
     uploadingPhoto: boolean = false;
+    uploadingRoomImage: boolean = false;
     message: string = '';
     error: string = '';
 
@@ -209,5 +210,32 @@ export class ProfileComponent implements OnInit {
         }
 
         return missing;
+    }
+
+    onRoomImageSelected(event: Event) {
+        if (!this.user?.room) return;
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            this.uploadingRoomImage = true;
+
+            // For now, create a local preview using FileReader
+            // In production, you'd upload to server here
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (this.user?.room) {
+                    this.user.room.roomImage = e.target?.result as string;
+                }
+                this.uploadingRoomImage = false;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    removeRoomImage(event: Event) {
+        event.stopPropagation();
+        if (this.user?.room) {
+            this.user.room.roomImage = undefined;
+        }
     }
 }

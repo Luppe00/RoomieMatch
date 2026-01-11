@@ -105,9 +105,20 @@
             </div>
 
             <div class="form-group">
-                <label for="roomImage">Room Image URL</label>
-                <input type="url" id="roomImage" name="roomImage" [(ngModel)]="user.room.roomImage"
-                    placeholder="https://example.com/room.jpg">
+                <label>Room Photo</label>
+                <div class="photo-upload-area" (click)="roomPhotoInput.click()">
+                    <div class="upload-placeholder" *ngIf="!user.room.roomImage">
+                        <span class="upload-icon">📷</span>
+                        <span class="upload-text">Click to upload room photo</span>
+                        <span class="upload-hint">JPG, PNG up to 10MB</span>
+                    </div>
+                    <div class="photo-preview" *ngIf="user.room.roomImage">
+                        <img [src]="user.room.roomImage" alt="Room preview">
+                        <button type="button" class="remove-photo" (click)="removeRoomImage($event)">×</button>
+                    </div>
+                </div>
+                <input type="file" #roomPhotoInput hidden accept="image/*" (change)="onRoomImageSelected($event)">
+                <small class="hint" *ngIf="uploadingRoomImage">Uploading...</small>
             </div>
 
             <div class="form-group">
@@ -144,22 +155,30 @@
 
         <!-- Preferences Section -->
         <section class="form-section">
-            <h3>Preferences</h3>
-            <p class="section-desc">Help us find better matches for you</p>
+            <h3>Roommate Preferences</h3>
+            <p class="section-desc">
+                {{ user.userType === 'HAS_ROOM' ? 'What kind of roommate are you looking for?' : 'Help us find better
+                matches for you' }}
+            </p>
 
-            <div class="form-group">
-                <label for="maxRent">Maximum Rent ($)</label>
-                <input type="number" id="maxRent" name="maxRent" [(ngModel)]="preference.maxRent">
+            <!-- Budget & Location - Only for NEEDS_ROOM -->
+            <div *ngIf="user.userType === 'NEEDS_ROOM'">
+                <div class="form-group">
+                    <label for="maxRent">Maximum Budget ($)</label>
+                    <input type="number" id="maxRent" name="maxRent" [(ngModel)]="preference.maxRent"
+                        placeholder="e.g. 800">
+                </div>
+
+                <div class="form-group">
+                    <label for="preferredLocation">Preferred Location</label>
+                    <input type="text" id="preferredLocation" name="preferredLocation"
+                        [(ngModel)]="preference.preferredLocation" placeholder="e.g. Nørrebro, Vesterbro">
+                </div>
             </div>
 
+            <!-- Roommate preferences - For ALL users -->
             <div class="form-group">
-                <label for="preferredLocation">Preferred Location</label>
-                <input type="text" id="preferredLocation" name="preferredLocation"
-                    [(ngModel)]="preference.preferredLocation">
-            </div>
-
-            <div class="form-group">
-                <label for="preferredGender">Preferred Roomie Gender</label>
+                <label for="preferredGender">Preferred Roommate Gender</label>
                 <select id="preferredGender" name="preferredGender" [(ngModel)]="preference.preferredGender">
                     <option value="Any">Any</option>
                     <option value="Male">Male</option>
@@ -170,12 +189,14 @@
 
             <div class="row">
                 <div class="form-group half">
-                    <label for="minAge">Min Roomie Age</label>
-                    <input type="number" id="minAge" name="minAgeRoomie" [(ngModel)]="preference.minAgeRoomie">
+                    <label for="minAge">Min Roommate Age</label>
+                    <input type="number" id="minAge" name="minAgeRoomie" [(ngModel)]="preference.minAgeRoomie"
+                        placeholder="18">
                 </div>
                 <div class="form-group half">
-                    <label for="maxAge">Max Roomie Age</label>
-                    <input type="number" id="maxAge" name="maxAgeRoomie" [(ngModel)]="preference.maxAgeRoomie">
+                    <label for="maxAge">Max Roommate Age</label>
+                    <input type="number" id="maxAge" name="maxAgeRoomie" [(ngModel)]="preference.maxAgeRoomie"
+                        placeholder="99">
                 </div>
             </div>
         </section>

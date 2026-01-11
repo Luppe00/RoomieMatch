@@ -236,12 +236,62 @@
 .empty-state {
     text-align: center;
     color: var(--text-secondary);
-    padding: 3rem;
+    padding: 3rem 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    max-width: 440px;
+    width: 90%;
+    margin: 0 auto;
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s infinite;
 }
 
 .empty-state h2 {
     color: var(--text-primary);
     margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.empty-state p {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    max-width: 300px;
+    line-height: 1.5;
+}
+
+.empty-actions {
+    margin-top: 1rem;
+}
+
+.btn-refresh {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+}
+
+.btn-refresh:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
 }
 
 /* ===== HOW IT WORKS ===== */

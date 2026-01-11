@@ -94,8 +94,12 @@
         </div>
 
         <div *ngIf="!loading && !currentUserCard" class="empty-state">
-            <h2>No more potential matches!</h2>
-            <p>Check back later or view your existing matches.</p>
+            <div class="empty-icon">👀</div>
+            <h2>No more potential matches</h2>
+            <p>You've seen everyone in your area for now.</p>
+            <div class="empty-actions">
+                <button class="btn-refresh" (click)="loadUsers()">Check Again</button>
+            </div>
         </div>
     </div>
 

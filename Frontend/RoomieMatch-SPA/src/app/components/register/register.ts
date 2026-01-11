@@ -85,6 +85,11 @@ export class RegisterComponent {
     loading: boolean = false;
     locationDropdownOpen: boolean = false;
 
+    // Room photo upload
+    roomPhotoPreview: string | null = null;
+    roomPhotoFile: File | null = null;
+    uploadingRoomPhoto: boolean = false;
+
     constructor(
         private userService: UserService,
         private authService: AuthService,
@@ -227,5 +232,30 @@ export class RegisterComponent {
                 this.loading = false;
             }
         });
+    }
+
+    onRoomPhotoSelected(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files[0]) {
+            this.roomPhotoFile = input.files[0];
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.roomPhotoPreview = e.target?.result as string;
+            };
+            reader.readAsDataURL(this.roomPhotoFile);
+
+            // Store in room object for later upload
+            // The actual URL will be set after server upload during registration
+            this.room.roomImage = 'pending';
+        }
+    }
+
+    removeRoomPhoto(event: Event) {
+        event.stopPropagation();
+        this.roomPhotoPreview = null;
+        this.roomPhotoFile = null;
+        this.room.roomImage = undefined;
     }
 }

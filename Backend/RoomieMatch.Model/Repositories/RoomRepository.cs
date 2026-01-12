@@ -121,6 +121,21 @@ namespace RoomieMatch.Model.Repositories
 
         private static Room MapRoom(NpgsqlDataReader reader)
         {
+            // Try to read room_images safely - may not exist in all deployments
+            string[]? roomImages = null;
+            try
+            {
+                if (!reader.IsDBNull(7))
+                {
+                    roomImages = reader.GetFieldValue<string[]>(7);
+                }
+            }
+            catch
+            {
+                // Column might not exist or have wrong type - ignore
+                roomImages = null;
+            }
+
             return new Room
             {
                 Id = reader.GetInt32(0),
@@ -130,7 +145,7 @@ namespace RoomieMatch.Model.Repositories
                 Rent = reader.GetDecimal(4),
                 SizeSqm = reader.IsDBNull(5) ? null : reader.GetInt32(5),
                 RoomImage = reader.IsDBNull(6) ? null : reader.GetString(6),
-                RoomImages = reader.IsDBNull(7) ? null : reader.GetFieldValue<string[]>(7),
+                RoomImages = roomImages,
                 Description = reader.IsDBNull(8) ? null : reader.GetString(8),
                 AvailableFrom = reader.IsDBNull(9) ? null : reader.GetDateTime(9)
             };

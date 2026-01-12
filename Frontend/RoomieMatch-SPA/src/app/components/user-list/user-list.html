@@ -118,14 +118,30 @@
             <!-- Close Button -->
             <button class="modal-close" (click)="closeDetailModal()">×</button>
 
-            <!-- Hero Image -->
-            <div class="modal-hero" (click)="openLightbox(0)">
-                <img *ngIf="selectedUser.room?.roomImage" [src]="selectedUser.room?.roomImage" alt="Room photo">
-                <div *ngIf="!selectedUser.room?.roomImage" class="no-image-placeholder">
+            <!-- Hero Image with Gallery Navigation -->
+            <div class="modal-hero" (click)="openLightbox(modalPhotoIndex)">
+                <img *ngIf="getCurrentModalPhoto()" [src]="getCurrentModalPhoto()" alt="Room photo">
+                <div *ngIf="!getCurrentModalPhoto()" class="no-image-placeholder">
                     <span>📷</span>
                     <span>No photos yet</span>
                 </div>
-                <div class="image-hint" *ngIf="selectedUser.room?.roomImage">Click to enlarge</div>
+
+                <!-- Photo Navigation Arrows -->
+                <button class="gallery-nav gallery-prev" *ngIf="getModalPhotos().length > 1"
+                    (click)="prevModalPhoto($event)">
+                    ‹
+                </button>
+                <button class="gallery-nav gallery-next" *ngIf="getModalPhotos().length > 1"
+                    (click)="nextModalPhoto($event)">
+                    ›
+                </button>
+
+                <!-- Photo Counter -->
+                <div class="photo-counter" *ngIf="getModalPhotos().length > 1">
+                    {{ modalPhotoIndex + 1 }} / {{ getModalPhotos().length }}
+                </div>
+
+                <div class="image-hint" *ngIf="getCurrentModalPhoto()">Click to enlarge</div>
             </div>
 
             <div class="modal-body">

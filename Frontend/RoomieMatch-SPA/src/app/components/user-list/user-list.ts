@@ -28,6 +28,7 @@ export class UserListComponent implements OnInit {
   selectedUser: User | null = null;
   showLightbox = false;
   lightboxImageIndex = 0;
+  modalPhotoIndex = 0; // Current photo index in modal gallery
 
   constructor(
     private userService: UserService,
@@ -177,6 +178,7 @@ export class UserListComponent implements OnInit {
   openDetailModal(user: User) {
     this.selectedUser = user;
     this.showDetailModal = true;
+    this.modalPhotoIndex = 0; // Reset to first photo
     document.body.style.overflow = 'hidden'; // Prevent background scroll
   }
 
@@ -184,7 +186,42 @@ export class UserListComponent implements OnInit {
     this.showDetailModal = false;
     this.selectedUser = null;
     this.showLightbox = false;
+    this.modalPhotoIndex = 0;
     document.body.style.overflow = '';
+  }
+
+  // Get all photos for selected user (roomImages + roomImage as fallback)
+  getModalPhotos(): string[] {
+    if (!this.selectedUser?.room) return [];
+    const photos: string[] = [];
+    if (this.selectedUser.room.roomImages && this.selectedUser.room.roomImages.length > 0) {
+      photos.push(...this.selectedUser.room.roomImages);
+    } else if (this.selectedUser.room.roomImage) {
+      photos.push(this.selectedUser.room.roomImage);
+    }
+    return photos;
+  }
+
+  getCurrentModalPhoto(): string | null {
+    const photos = this.getModalPhotos();
+    if (photos.length === 0) return null;
+    return photos[this.modalPhotoIndex];
+  }
+
+  prevModalPhoto(event: Event) {
+    event.stopPropagation();
+    const photos = this.getModalPhotos();
+    if (photos.length > 0) {
+      this.modalPhotoIndex = (this.modalPhotoIndex - 1 + photos.length) % photos.length;
+    }
+  }
+
+  nextModalPhoto(event: Event) {
+    event.stopPropagation();
+    const photos = this.getModalPhotos();
+    if (photos.length > 0) {
+      this.modalPhotoIndex = (this.modalPhotoIndex + 1) % photos.length;
+    }
   }
 
   likeFromModal() {

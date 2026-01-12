@@ -74,6 +74,40 @@ namespace RoomieMatch.API.Controllers
             return Ok(new { url = room.RoomImage });
         }
 
+        [Authorize]
+        [HttpPost("{roomId}/add-photo")]
+        public async Task<IActionResult> AddRoomPhoto(int roomId, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded");
+
+            var room = await _roomRepository.GetByIdAsync(roomId);
+            if (room == null) return NotFound("Room not found");
+
+            // Check max photos limit (5)
+            var currentPhotos = room.RoomImages ?? Array.Empty<string>();
+            if (currentPhotos.Length >= 5)
+                return BadRequest("Maximum 5 photos allowed per room");
+
+            var result = await _photoService.AddPhotoAsync(file);
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            // Append to room_images array
+            var newPhotos = currentPhotos.ToList();
+            newPhotos.Add(result.SecureUrl.AbsoluteUri);
+            room.RoomImages = newPhotos.ToArray();
+
+            // If this is the first photo, also set as primary
+            if (string.IsNullOrEmpty(room.RoomImage))
+            {
+                room.RoomImage = result.SecureUrl.AbsoluteUri;
+            }
+
+            await _roomRepository.UpdateAsync(room);
+
+            return Ok(new { url = result.SecureUrl.AbsoluteUri, allPhotos = room.RoomImages });
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Room room)
         {

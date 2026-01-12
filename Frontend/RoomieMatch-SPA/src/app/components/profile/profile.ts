@@ -283,42 +283,61 @@ export class ProfileComponent implements OnInit {
         }
     }
 
-    // Handle multiple room image selection
+    // Handle multiple room image selection - uploads to Cloudinary
     onRoomImagesSelected(event: Event) {
+        if (!this.user?.room?.id) {
+            this.error = 'Please save your room first before uploading photos.';
+            return;
+        }
+
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
             this.uploadingRoomImage = true;
-
-            // Initialize roomImages array if needed
-            if (this.user?.room && !this.user.room.roomImages) {
-                this.user.room.roomImages = [];
-            }
+            this.error = '';
+            this.message = '';
 
             const filesToProcess = Array.from(input.files);
             const maxPhotos = 5;
             const currentCount = this.user?.room?.roomImages?.length || 0;
             const remainingSlots = maxPhotos - currentCount;
+
+            if (remainingSlots <= 0) {
+                this.error = 'Maximum 5 photos allowed per room.';
+                this.uploadingRoomImage = false;
+                return;
+            }
+
             const filesToAdd = filesToProcess.slice(0, remainingSlots);
+            let uploadedCount = 0;
+            let failedCount = 0;
 
-            let processedCount = 0;
             filesToAdd.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    if (this.user?.room) {
-                        this.user.room.roomImages = this.user.room.roomImages || [];
-                        this.user.room.roomImages.push(e.target?.result as string);
-
-                        // Also set first image as primary
-                        if (!this.user.room.roomImage) {
-                            this.user.room.roomImage = e.target?.result as string;
+                this.roomService.addRoomPhoto(this.user!.room!.id, file).subscribe({
+                    next: (res) => {
+                        // Update local state with new photos
+                        if (this.user?.room) {
+                            this.user.room.roomImages = res.allPhotos;
+                            if (!this.user.room.roomImage && res.allPhotos.length > 0) {
+                                this.user.room.roomImage = res.allPhotos[0];
+                            }
+                        }
+                        uploadedCount++;
+                        if (uploadedCount + failedCount === filesToAdd.length) {
+                            this.uploadingRoomImage = false;
+                            this.message = `${uploadedCount} photo(s) uploaded successfully!`;
+                            this.cdr.detectChanges();
+                        }
+                    },
+                    error: (err) => {
+                        console.error('Error uploading photo', err);
+                        failedCount++;
+                        if (uploadedCount + failedCount === filesToAdd.length) {
+                            this.uploadingRoomImage = false;
+                            this.error = `${failedCount} photo(s) failed to upload.`;
+                            this.cdr.detectChanges();
                         }
                     }
-                    processedCount++;
-                    if (processedCount === filesToAdd.length) {
-                        this.uploadingRoomImage = false;
-                    }
-                };
-                reader.readAsDataURL(file);
+                });
             });
 
             // Reset input so same file can be selected again
@@ -328,14 +347,32 @@ export class ProfileComponent implements OnInit {
 
     removeRoomImage(event: Event, index: number) {
         event.stopPropagation();
-        if (this.user?.room?.roomImages) {
-            this.user.room.roomImages.splice(index, 1);
-            // Update primary image
-            if (this.user.room.roomImages.length > 0) {
-                this.user.room.roomImage = this.user.room.roomImages[0];
-            } else {
-                this.user.room.roomImage = undefined;
+        if (!this.user?.room?.id || !this.user.room.roomImages) return;
+
+        const photoUrl = this.user.room.roomImages[index];
+        this.uploadingRoomImage = true;
+
+        this.roomService.removeRoomPhoto(this.user.room.id, photoUrl, this.user.room).subscribe({
+            next: () => {
+                // Update local state
+                if (this.user?.room?.roomImages) {
+                    this.user.room.roomImages.splice(index, 1);
+                    if (this.user.room.roomImage === photoUrl) {
+                        this.user.room.roomImage = this.user.room.roomImages.length > 0
+                            ? this.user.room.roomImages[0]
+                            : undefined;
+                    }
+                }
+                this.uploadingRoomImage = false;
+                this.message = 'Photo removed successfully!';
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('Error removing photo', err);
+                this.error = 'Failed to remove photo.';
+                this.uploadingRoomImage = false;
+                this.cdr.detectChanges();
             }
-        }
+        });
     }
 }

@@ -130,7 +130,7 @@ namespace RoomieMatch.Model.Repositories
                 Rent = reader.GetDecimal(4),
                 SizeSqm = reader.IsDBNull(5) ? null : reader.GetInt32(5),
                 RoomImage = reader.IsDBNull(6) ? null : reader.GetString(6),
-                RoomImages = reader.IsDBNull(7) ? null : (string[])reader.GetValue(7),
+                RoomImages = reader.IsDBNull(7) ? null : reader.GetFieldValue<string[]>(7),
                 Description = reader.IsDBNull(8) ? null : reader.GetString(8),
                 AvailableFrom = reader.IsDBNull(9) ? null : reader.GetDateTime(9)
             };

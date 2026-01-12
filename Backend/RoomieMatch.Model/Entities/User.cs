@@ -15,8 +15,8 @@ namespace RoomieMatch.Model.Entities
         public Room? Room { get; set; }
         public string? Bio { get; set; }
         public string UserType { get; set; } // "HAS_ROOM" or "NEEDS_ROOM"
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
+        public byte[]? PasswordHash { get; set; }
+        public byte[]? PasswordSalt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

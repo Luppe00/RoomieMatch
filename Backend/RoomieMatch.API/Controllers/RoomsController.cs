@@ -41,14 +41,14 @@ namespace RoomieMatch.API.Controllers
             return Ok(rooms);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Room room)
         {
-            if (room == null) return BadRequest();
-            if (string.IsNullOrWhiteSpace(room.Title) || string.IsNullOrWhiteSpace(room.Location) || room.Rent <= 0)
-            {
-                return BadRequest("Invalid room data");
-            }
+            if (room == null) return BadRequest("Room data is null");
+            if (string.IsNullOrWhiteSpace(room.Title)) return BadRequest("Room title is required");
+            if (string.IsNullOrWhiteSpace(room.Location)) return BadRequest("Room location is required");
+            if (room.Rent <= 0) return BadRequest("Room rent must be greater than 0");
 
             var id = await _roomRepository.CreateAsync(room);
             room.Id = id;

@@ -210,20 +210,27 @@ export class RegisterComponent {
                             });
 
                             // 2. If HAS_ROOM, also save room details
-                            if (this.user.userType === 'HAS_ROOM' && this.room.rent) {
+                            if (this.user.userType === 'HAS_ROOM' && this.room.rent && this.room.title && this.room.location) {
                                 const roomData: Room = {
                                     ...this.room as Room,
                                     userId: currentUser.id,
                                     roomImage: undefined // Clear pending marker, will be set after upload
                                 };
+                                console.log('Creating room with data:', roomData);
                                 this.roomService.createRoom(roomData).subscribe({
                                     next: (createdRoom) => {
+                                        console.log('Room created:', createdRoom);
                                         // Upload photo if we have one
                                         if (this.roomPhotoFile && createdRoom.id) {
+                                            console.log('Uploading room photo for room:', createdRoom.id);
                                             this.roomService.uploadRoomPhoto(createdRoom.id, this.roomPhotoFile).subscribe({
-                                                next: () => this.router.navigate(['/dashboard']),
+                                                next: (photoRes) => {
+                                                    console.log('Room photo uploaded:', photoRes);
+                                                    this.router.navigate(['/dashboard']);
+                                                },
                                                 error: (e) => {
                                                     console.error('Error uploading room photo', e);
+                                                    alert('Room created but photo upload failed. You can add it later in Profile.');
                                                     this.router.navigate(['/dashboard']);
                                                 }
                                             });
@@ -233,9 +240,14 @@ export class RegisterComponent {
                                     },
                                     error: (e) => {
                                         console.error('Error saving room', e);
+                                        alert('Failed to save room: ' + (e.error || e.message || 'Unknown error'));
                                         this.router.navigate(['/dashboard']);
                                     }
                                 });
+                            } else if (this.user.userType === 'HAS_ROOM') {
+                                console.warn('Room not created - missing required fields:', { rent: this.room.rent, title: this.room.title, location: this.room.location });
+                                alert('Room not created - please fill in Title, Location and Rent');
+                                this.router.navigate(['/dashboard']);
                             } else {
                                 this.router.navigate(['/dashboard']);
                             }

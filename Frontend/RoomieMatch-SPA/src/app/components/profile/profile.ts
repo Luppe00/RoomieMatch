@@ -85,7 +85,7 @@ export class ProfileComponent implements OnInit {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             this.user = JSON.parse(storedUser);
-            this.loading = false; // Set loading false immediately - don't wait for preferences
+            // Keep loading=true until all data is fetched
             this.initializeRoom();
             this.loadPreference(this.user!.id);
         } else {
@@ -95,32 +95,46 @@ export class ProfileComponent implements OnInit {
 
     private initializeRoom() {
         if (this.user && this.user.userType === 'HAS_ROOM') {
-            // Initialize with empty room FIRST so template renders the section
-            this.user.room = {
-                id: 0,
-                userId: this.user.id,
-                title: '',
-                location: '',
-                rent: 0,
-                sizeSqm: 0,
-                description: '',
-                availableFrom: new Date().toISOString()
-            };
-
-            // Then fetch from backend and update if room exists
+            // Fetch from backend first
             this.roomService.getRoomByUserId(this.user.id).subscribe({
                 next: (rooms) => {
                     if (rooms && rooms.length > 0) {
-                        // Update with existing room from database
+                        // Use existing room from database
                         this.user!.room = rooms[0];
+                    } else {
+                        // Initialize with empty room if none exists
+                        this.user!.room = {
+                            id: 0,
+                            userId: this.user!.id,
+                            title: '',
+                            location: '',
+                            rent: 0,
+                            sizeSqm: 0,
+                            description: '',
+                            availableFrom: new Date().toISOString()
+                        };
                     }
-                    // If no rooms found, keep the empty one we set above
+                    this.loading = false; // Now we can show the page
                 },
                 error: (e) => {
                     console.error('Error fetching room', e);
-                    // Keep the empty room we set above
+                    // Initialize with empty room on error
+                    this.user!.room = {
+                        id: 0,
+                        userId: this.user!.id,
+                        title: '',
+                        location: '',
+                        rent: 0,
+                        sizeSqm: 0,
+                        description: '',
+                        availableFrom: new Date().toISOString()
+                    };
+                    this.loading = false;
                 }
             });
+        } else {
+            // Not a HAS_ROOM user, no room to fetch
+            this.loading = false;
         }
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -38,7 +38,8 @@ export class ProfileComponent implements OnInit {
         private authService: AuthService,
         private userService: UserService,
         private preferenceService: PreferenceService,
-        private roomService: RoomService
+        private roomService: RoomService,
+        private cdr: ChangeDetectorRef
     ) { }
 
     onFileSelected(event: any) {
@@ -115,6 +116,7 @@ export class ProfileComponent implements OnInit {
                         };
                     }
                     this.loading = false; // Now we can show the page
+                    this.cdr.detectChanges(); // Force Angular to re-render
                 },
                 error: (e) => {
                     console.error('Error fetching room', e);
@@ -130,11 +132,13 @@ export class ProfileComponent implements OnInit {
                         availableFrom: new Date().toISOString()
                     };
                     this.loading = false;
+                    this.cdr.detectChanges();
                 }
             });
         } else {
             // Not a HAS_ROOM user, no room to fetch
             this.loading = false;
+            this.cdr.detectChanges();
         }
     }
 

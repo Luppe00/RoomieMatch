@@ -237,22 +237,31 @@ export class ProfileComponent implements OnInit {
     }
 
     onRoomImageSelected(event: Event) {
-        if (!this.user?.room) return;
+        if (!this.user?.room || !this.user.room.id) {
+            this.error = 'Please save your room first before uploading an image.';
+            return;
+        }
         const input = event.target as HTMLInputElement;
         if (input.files && input.files[0]) {
             const file = input.files[0];
             this.uploadingRoomImage = true;
+            this.error = '';
 
-            // For now, create a local preview using FileReader
-            // In production, you'd upload to server here
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if (this.user?.room) {
-                    this.user.room.roomImage = e.target?.result as string;
+            // Upload to Cloudinary via backend
+            this.roomService.uploadRoomPhoto(this.user.room.id, file).subscribe({
+                next: (res) => {
+                    if (this.user?.room) {
+                        this.user.room.roomImage = res.url;
+                    }
+                    this.uploadingRoomImage = false;
+                    this.message = 'Room photo uploaded successfully!';
+                },
+                error: (err) => {
+                    console.error('Error uploading room photo', err);
+                    this.error = 'Failed to upload room photo.';
+                    this.uploadingRoomImage = false;
                 }
-                this.uploadingRoomImage = false;
-            };
-            reader.readAsDataURL(file);
+            });
         }
     }
 

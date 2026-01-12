@@ -213,10 +213,24 @@ export class RegisterComponent {
                             if (this.user.userType === 'HAS_ROOM' && this.room.rent) {
                                 const roomData: Room = {
                                     ...this.room as Room,
-                                    userId: currentUser.id
+                                    userId: currentUser.id,
+                                    roomImage: undefined // Clear pending marker, will be set after upload
                                 };
                                 this.roomService.createRoom(roomData).subscribe({
-                                    next: () => this.router.navigate(['/dashboard']),
+                                    next: (createdRoom) => {
+                                        // Upload photo if we have one
+                                        if (this.roomPhotoFile && createdRoom.id) {
+                                            this.roomService.uploadRoomPhoto(createdRoom.id, this.roomPhotoFile).subscribe({
+                                                next: () => this.router.navigate(['/dashboard']),
+                                                error: (e) => {
+                                                    console.error('Error uploading room photo', e);
+                                                    this.router.navigate(['/dashboard']);
+                                                }
+                                            });
+                                        } else {
+                                            this.router.navigate(['/dashboard']);
+                                        }
+                                    },
                                     error: (e) => {
                                         console.error('Error saving room', e);
                                         this.router.navigate(['/dashboard']);

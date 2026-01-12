@@ -22,4 +22,10 @@ export class RoomService {
     getRoomByUserId(userId: number): Observable<Room[]> {
         return this.http.get<Room[]>(`${this.apiUrl}/user/${userId}`);
     }
+
+    uploadRoomPhoto(roomId: number, file: File): Observable<{ url: string }> {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http.post<{ url: string }>(`${this.apiUrl}/${roomId}/upload-photo`, formData);
+    }
 }

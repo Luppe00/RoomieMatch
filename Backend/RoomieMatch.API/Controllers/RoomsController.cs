@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoomieMatch.Model.Entities;
 using RoomieMatch.Model.Repositories;
+using RoomieMatch.API.Services;
 
 namespace RoomieMatch.API.Controllers
 {
@@ -9,10 +11,12 @@ namespace RoomieMatch.API.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly IRoomRepository _roomRepository;
+        private readonly IPhotoService _photoService;
 
-        public RoomsController(IRoomRepository roomRepository)
+        public RoomsController(IRoomRepository roomRepository, IPhotoService photoService)
         {
             _roomRepository = roomRepository;
+            _photoService = photoService;
         }
 
         [HttpGet]
@@ -49,6 +53,25 @@ namespace RoomieMatch.API.Controllers
             var id = await _roomRepository.CreateAsync(room);
             room.Id = id;
             return CreatedAtAction(nameof(GetById), new { id = room.Id }, room);
+        }
+
+        [Authorize]
+        [HttpPost("{roomId}/upload-photo")]
+        public async Task<IActionResult> UploadRoomPhoto(int roomId, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded");
+
+            var room = await _roomRepository.GetByIdAsync(roomId);
+            if (room == null) return NotFound("Room not found");
+
+            var result = await _photoService.AddPhotoAsync(file);
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            room.RoomImage = result.SecureUrl.AbsoluteUri;
+            await _roomRepository.UpdateAsync(room);
+
+            return Ok(new { url = room.RoomImage });
         }
 
         [HttpPut("{id}")]

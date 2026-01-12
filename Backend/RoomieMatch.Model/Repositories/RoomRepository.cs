@@ -14,7 +14,7 @@ namespace RoomieMatch.Model.Repositories
         {
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
-            cmd.CommandText = "SELECT id, user_id, title, location, rent, size_sqm, room_image, room_images, description, available_from FROM rooms";
+            cmd.CommandText = "SELECT id, user_id, title, location, rent, size_sqm, room_image, description, available_from FROM rooms";
             
             conn.Open();
             using var reader = await cmd.ExecuteReaderAsync();
@@ -30,7 +30,7 @@ namespace RoomieMatch.Model.Repositories
         {
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
-            cmd.CommandText = "SELECT id, user_id, title, location, rent, size_sqm, room_image, room_images, description, available_from FROM rooms WHERE id = @id";
+            cmd.CommandText = "SELECT id, user_id, title, location, rent, size_sqm, room_image, description, available_from FROM rooms WHERE id = @id";
             cmd.Parameters.AddWithValue("id", id);
             
             conn.Open();
@@ -46,7 +46,7 @@ namespace RoomieMatch.Model.Repositories
         {
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
-            cmd.CommandText = "SELECT id, user_id, title, location, rent, size_sqm, room_image, room_images, description, available_from FROM rooms WHERE user_id = @user_id";
+            cmd.CommandText = "SELECT id, user_id, title, location, rent, size_sqm, room_image, description, available_from FROM rooms WHERE user_id = @user_id";
             cmd.Parameters.AddWithValue("user_id", userId);
             
             conn.Open();
@@ -66,8 +66,8 @@ namespace RoomieMatch.Model.Repositories
             using var conn = CreateConnection();
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
             cmd.CommandText = @"
-                INSERT INTO rooms (user_id, title, location, rent, size_sqm, room_image, room_images, description, available_from)
-                VALUES (@user_id, @title, @location, @rent, @size_sqm, @room_image, @room_images, @description, @available_from)
+                INSERT INTO rooms (user_id, title, location, rent, size_sqm, room_image, description, available_from)
+                VALUES (@user_id, @title, @location, @rent, @size_sqm, @room_image, @description, @available_from)
                 RETURNING id";
             
             cmd.Parameters.AddWithValue("user_id", room.UserId);
@@ -76,7 +76,6 @@ namespace RoomieMatch.Model.Repositories
             cmd.Parameters.AddWithValue("rent", room.Rent);
             cmd.Parameters.AddWithValue("size_sqm", (object?)room.SizeSqm ?? DBNull.Value);
             cmd.Parameters.AddWithValue("room_image", (object?)room.RoomImage ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("room_images", (object?)room.RoomImages ?? DBNull.Value);
             cmd.Parameters.AddWithValue("description", (object?)room.Description ?? DBNull.Value);
             cmd.Parameters.AddWithValue("available_from", (object?)room.AvailableFrom ?? DBNull.Value);
 
@@ -91,7 +90,7 @@ namespace RoomieMatch.Model.Repositories
             using var cmd = conn.CreateCommand() as NpgsqlCommand;
             cmd.CommandText = @"
                 UPDATE rooms 
-                SET title = @title, location = @location, rent = @rent, size_sqm = @size_sqm, room_image = @room_image, room_images = @room_images, description = @description, available_from = @available_from
+                SET title = @title, location = @location, rent = @rent, size_sqm = @size_sqm, room_image = @room_image, description = @description, available_from = @available_from
                 WHERE id = @id";
             
             cmd.Parameters.AddWithValue("id", room.Id);
@@ -100,7 +99,6 @@ namespace RoomieMatch.Model.Repositories
             cmd.Parameters.AddWithValue("rent", room.Rent);
             cmd.Parameters.AddWithValue("size_sqm", (object?)room.SizeSqm ?? DBNull.Value);
             cmd.Parameters.AddWithValue("room_image", (object?)room.RoomImage ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("room_images", (object?)room.RoomImages ?? DBNull.Value);
             cmd.Parameters.AddWithValue("description", (object?)room.Description ?? DBNull.Value);
             cmd.Parameters.AddWithValue("available_from", (object?)room.AvailableFrom ?? DBNull.Value);
 
@@ -121,21 +119,6 @@ namespace RoomieMatch.Model.Repositories
 
         private static Room MapRoom(NpgsqlDataReader reader)
         {
-            // Try to read room_images safely - may not exist in all deployments
-            string[]? roomImages = null;
-            try
-            {
-                if (!reader.IsDBNull(7))
-                {
-                    roomImages = reader.GetFieldValue<string[]>(7);
-                }
-            }
-            catch
-            {
-                // Column might not exist or have wrong type - ignore
-                roomImages = null;
-            }
-
             return new Room
             {
                 Id = reader.GetInt32(0),
@@ -145,9 +128,9 @@ namespace RoomieMatch.Model.Repositories
                 Rent = reader.GetDecimal(4),
                 SizeSqm = reader.IsDBNull(5) ? null : reader.GetInt32(5),
                 RoomImage = reader.IsDBNull(6) ? null : reader.GetString(6),
-                RoomImages = roomImages,
-                Description = reader.IsDBNull(8) ? null : reader.GetString(8),
-                AvailableFrom = reader.IsDBNull(9) ? null : reader.GetDateTime(9)
+                RoomImages = null, // Temporarily disabled - multi-photo feature pending
+                Description = reader.IsDBNull(7) ? null : reader.GetString(7),
+                AvailableFrom = reader.IsDBNull(8) ? null : reader.GetDateTime(8)
             };
         }
     }

@@ -48,7 +48,7 @@
 }
 
 .text-coral {
-    color: #ff6b6b;
+    color: #ff8e53;
 }
 
 .hero-description {
@@ -63,7 +63,7 @@
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    background: #ff6b6b;
+    background: #ff8e53;
     color: white;
     padding: 18px 32px;
     border-radius: 50px;
@@ -77,7 +77,7 @@
 .btn-cta:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5);
-    background: #ff5252;
+    background: #ff7b3a;
 }
 
 .btn-cta svg {
@@ -108,7 +108,7 @@
 .hero-feature svg {
     width: 18px;
     height: 18px;
-    stroke: #ff6b6b;
+    stroke: #ff8e53;
 }
 
 /* Phone Mockup */
@@ -138,7 +138,7 @@
 
 .phone-header {
     padding: 1rem;
-    background: #ff6b6b;
+    background: #ff8e53;
     text-align: center;
 }
 
@@ -176,7 +176,7 @@
 
 .phone-card .card-price {
     font-weight: 700;
-    color: #ff6b6b;
+    color: #ff8e53;
 }
 
 .phone-card .card-title {
@@ -212,7 +212,7 @@
 }
 
 .action-btn.like {
-    background: #ff6b6b;
+    background: #ff8e53;
     color: white;
 }
 
@@ -239,7 +239,7 @@
     display: block;
     font-size: 2.5rem;
     font-weight: 700;
-    color: #ff6b6b;
+    color: #ff8e53;
     letter-spacing: -1px;
 }
 
@@ -296,7 +296,7 @@
 
 .step-number {
     display: inline-block;
-    background: #ff6b6b;
+    background: #ff8e53;
     color: white;
     font-size: 0.8rem;
     font-weight: 700;
@@ -574,7 +574,7 @@ body.dark-mode .floating-card {
 .match-heart svg {
     width: 56px;
     height: 56px;
-    fill: #ff6b6b;
+    fill: #ff8e53;
     filter: drop-shadow(0 4px 15px rgba(255, 107, 107, 0.4));
 }
 

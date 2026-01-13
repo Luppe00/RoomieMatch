@@ -1,49 +1,73 @@
 <div class="card" [ngClass]="{'swiping-left': swipeDirection === 'left', 'swiping-right': swipeDirection === 'right'}">
-    <!-- Card Image -->
-    <div class="card-image"
-        [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : (user.profileImage ? 'url(' + user.profileImage + ')' : null))"
-        [class.has-image]="user.room?.roomImage || user.profileImage">
 
-        <!-- Show initial if no image -->
-        <span *ngIf="!user.room?.roomImage && !user.profileImage">{{ user.firstName[0] }}</span>
-
-        <!-- Price tag for rooms -->
-        <div class="price-tag" *ngIf="user.room?.rent">
-            {{ user.room?.rent | currency:'DKK':'symbol':'1.0-0' }}/mo
-        </div>
-    </div>
-
-    <!-- Card Content -->
-    <div class="card-content">
-        <!-- Room details if available -->
-        <div class="room-details" *ngIf="user.room?.title">
-            <h4 class="room-title">{{ user.room?.title }}</h4>
-            <p class="room-specs">
-                <span *ngIf="user.room?.location">📍 {{ user.room?.location }}</span>
-                <span *ngIf="user.room?.sizeSqm"> · {{ user.room?.sizeSqm }}m²</span>
-            </p>
-        </div>
-
-        <!-- User info -->
-        <div class="header">
-            <div class="user-info">
-                <h3 class="name">{{ user.firstName }}, <span class="age">{{ user.age }}</span></h3>
+    <!-- ROOM CARD: For HAS_ROOM users (showing their room) -->
+    <ng-container *ngIf="user.userType === 'HAS_ROOM'">
+        <div class="card-image"
+            [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : (user.profileImage ? 'url(' + user.profileImage + ')' : null))"
+            [class.has-image]="user.room?.roomImage || user.profileImage">
+            <span *ngIf="!user.room?.roomImage && !user.profileImage">{{ user.firstName[0] }}</span>
+            <div class="price-tag" *ngIf="user.room?.rent">
+                {{ user.room?.rent | currency:'DKK':'symbol':'1.0-0' }}/mo
             </div>
-            <span class="badge" [ngClass]="user.userType === 'HAS_ROOM' ? 'badge-has-room' : 'badge-needs-room'">
-                {{ user.userType === 'HAS_ROOM' ? 'Has Room' : 'Needs Room' }}
-            </span>
         </div>
-
-        <p class="bio">{{ user.bio || 'No details provided.' }}</p>
-
-        <!-- Action buttons -->
-        <div class="actions">
-            <button class="btn-action btn-pass" (click)="onPass($event)">
-                <span>✕</span>
-            </button>
-            <button class="btn-action btn-like" (click)="onLike($event)">
-                <span>♥</span>
-            </button>
+        <div class="card-content">
+            <div class="room-details" *ngIf="user.room?.title">
+                <h4 class="room-title">{{ user.room?.title }}</h4>
+                <p class="room-specs">
+                    <span *ngIf="user.room?.location">📍 {{ user.room?.location }}</span>
+                    <span *ngIf="user.room?.sizeSqm"> · {{ user.room?.sizeSqm }}m²</span>
+                </p>
+            </div>
+            <div class="header">
+                <div class="user-info">
+                    <h3 class="name">{{ user.firstName }}, <span class="age">{{ user.age }}</span></h3>
+                </div>
+                <span class="badge badge-has-room">Has Room</span>
+            </div>
+            <p class="bio">{{ user.bio || 'No details provided.' }}</p>
         </div>
+    </ng-container>
+
+    <!-- PERSON CARD: For NEEDS_ROOM users (no room, just person info) -->
+    <ng-container *ngIf="user.userType === 'NEEDS_ROOM'">
+        <div class="card-image person-card-image"
+            [style.background-image]="user.profileImage ? 'url(' + user.profileImage + ')' : null"
+            [class.has-image]="user.profileImage">
+            <span *ngIf="!user.profileImage" class="avatar-initial">{{ user.firstName[0] }}</span>
+        </div>
+        <div class="card-content person-content">
+            <div class="header">
+                <div class="user-info">
+                    <h3 class="name">{{ user.firstName }}, <span class="age">{{ user.age }}</span></h3>
+                    <p class="user-gender" *ngIf="user.gender">{{ user.gender }}</p>
+                </div>
+                <span class="badge badge-needs-room">Looking for Room</span>
+            </div>
+
+            <div class="person-details">
+                <p class="bio">{{ user.bio || 'No bio provided.' }}</p>
+
+                <div class="person-preferences" *ngIf="user.occupation || user.location">
+                    <div class="pref-item" *ngIf="user.occupation">
+                        <span class="pref-icon">💼</span>
+                        <span>{{ user.occupation }}</span>
+                    </div>
+                    <div class="pref-item" *ngIf="user.location">
+                        <span class="pref-icon">📍</span>
+                        <span>Looking in {{ user.location }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- Action buttons (same for both) -->
+    <div class="actions">
+        <button class="btn-action btn-pass" (click)="onPass($event)">
+            <span>✕</span>
+        </button>
+        <button class="btn-action btn-like" (click)="onLike($event)">
+            <span>♥</span>
+        </button>
     </div>
 </div>

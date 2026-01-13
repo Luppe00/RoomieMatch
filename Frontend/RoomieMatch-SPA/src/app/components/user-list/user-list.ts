@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { MatchService } from '../../services/match.service';
 import { AuthService } from '../../services/auth.service';
@@ -12,7 +13,7 @@ import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, SwipeCardComponent],
+  imports: [CommonModule, RouterModule, SwipeCardComponent],
   templateUrl: './user-list.html',
   styleUrls: ['./user-list.css']
 })

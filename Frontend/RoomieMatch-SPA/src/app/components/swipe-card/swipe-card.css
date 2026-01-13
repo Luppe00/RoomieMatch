@@ -38,12 +38,95 @@
     left: 0;
     right: 0;
     height: 120px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.4));
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.3));
     pointer-events: none;
 }
 
 .card-image.has-image {
     color: transparent;
+}
+
+.no-room-image {
+    font-size: 4rem;
+}
+
+/* Avatar Overlay (Rumly-style) */
+.avatar-overlay {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 10;
+}
+
+.avatar-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 3px solid white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    background-size: cover;
+    background-position: center;
+}
+
+.avatar-circle.has-image {
+    background-color: transparent;
+}
+
+.avatar-circle.has-image span {
+    display: none;
+}
+
+.avatar-name {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Room Content (Rumly-style) */
+.room-content {
+    padding: 1.25rem 1.5rem;
+}
+
+.room-title-main {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.room-meta-row {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.room-price {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.room-description {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #64748b;
+    font-style: italic;
+    line-height: 1.5;
 }
 
 /* Price Tag */

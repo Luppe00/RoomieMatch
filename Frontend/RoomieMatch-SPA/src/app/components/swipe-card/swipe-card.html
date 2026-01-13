@@ -1,30 +1,39 @@
 <div class="card" [ngClass]="{'swiping-left': swipeDirection === 'left', 'swiping-right': swipeDirection === 'right'}">
 
-    <!-- ROOM CARD: For HAS_ROOM users (showing their room) -->
+    <!-- ROOM CARD: For HAS_ROOM users (Rumly-style with avatar overlay) -->
     <ng-container *ngIf="user.userType === 'HAS_ROOM'">
         <div class="card-image"
-            [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : (user.profileImage ? 'url(' + user.profileImage + ')' : null))"
-            [class.has-image]="user.room?.roomImage || user.profileImage">
-            <span *ngIf="!user.room?.roomImage && !user.profileImage">{{ user.firstName[0] }}</span>
-            <div class="price-tag" *ngIf="user.room?.rent">
-                {{ user.room?.rent | currency:'DKK':'symbol':'1.0-0' }}/mo
+            [style.background-image]="(user.room?.roomImage ? 'url(' + user.room?.roomImage + ')' : null)"
+            [class.has-image]="user.room?.roomImage">
+            <span *ngIf="!user.room?.roomImage" class="no-room-image">🏠</span>
+
+            <!-- Avatar overlay on image -->
+            <div class="avatar-overlay">
+                <div class="avatar-circle"
+                    [style.background-image]="user.profileImage ? 'url(' + user.profileImage + ')' : null"
+                    [class.has-image]="user.profileImage">
+                    <span *ngIf="!user.profileImage">{{ user.firstName[0] }}</span>
+                </div>
+                <span class="avatar-name">{{ user.firstName }}</span>
             </div>
         </div>
-        <div class="card-content">
-            <div class="room-details" *ngIf="user.room?.title">
-                <h4 class="room-title">{{ user.room?.title }}</h4>
-                <p class="room-specs">
-                    <span *ngIf="user.room?.location">📍 {{ user.room?.location }}</span>
-                    <span *ngIf="user.room?.sizeSqm"> · {{ user.room?.sizeSqm }}m²</span>
-                </p>
-            </div>
-            <div class="header">
-                <div class="user-info">
-                    <h3 class="name">{{ user.firstName }}, <span class="age">{{ user.age }}</span></h3>
-                </div>
-                <span class="badge badge-has-room">Has Room</span>
-            </div>
-            <p class="bio">{{ user.bio || 'No details provided.' }}</p>
+        <div class="card-content room-content">
+            <!-- Room Title -->
+            <h3 class="room-title-main">{{ user.room?.title || 'Room Available' }}</h3>
+
+            <!-- Room Details Row -->
+            <p class="room-meta-row">
+                <span *ngIf="user.room?.availableFrom">{{ user.room?.availableFrom | date:'d MMM yy' }}</span>
+                <span *ngIf="user.room?.sizeSqm"> · {{ user.room?.sizeSqm }} m²</span>
+                <span *ngIf="user.room?.location"> · {{ user.room?.location }}</span>
+            </p>
+
+            <!-- Price -->
+            <p class="room-price">{{ user.room?.rent | currency:'DKK':'symbol':'1.0-0' }}/mo</p>
+
+            <!-- Description -->
+            <p class="room-description">{{ user.room?.description || user.bio || 'Room for rent in shared apartment' }}
+            </p>
         </div>
     </ng-container>
 

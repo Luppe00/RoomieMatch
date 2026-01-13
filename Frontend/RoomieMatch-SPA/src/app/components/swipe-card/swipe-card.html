@@ -46,17 +46,6 @@
 
             <div class="person-details">
                 <p class="bio">{{ user.bio || 'No bio provided.' }}</p>
-
-                <div class="person-preferences" *ngIf="user.occupation || user.location">
-                    <div class="pref-item" *ngIf="user.occupation">
-                        <span class="pref-icon">💼</span>
-                        <span>{{ user.occupation }}</span>
-                    </div>
-                    <div class="pref-item" *ngIf="user.location">
-                        <span class="pref-icon">📍</span>
-                        <span>Looking in {{ user.location }}</span>
-                    </div>
-                </div>
             </div>
         </div>
     </ng-container>

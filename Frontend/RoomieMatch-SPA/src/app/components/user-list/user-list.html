@@ -218,55 +218,103 @@
             <div class="modal-body">
                 <!-- Left Column: Details -->
                 <div class="modal-main">
-                    <h1 class="room-title">📍 {{ selectedUser.room?.location || 'Location not specified' }}</h1>
-                    <p class="room-subtitle" *ngIf="selectedUser.room?.title">{{ selectedUser.room?.title }}</p>
-                    <p class="address-note">🔒 Full address revealed after matching</p>
+                    <!-- FOR HAS_ROOM USERS: Show Room Details -->
+                    <ng-container *ngIf="selectedUser.userType === 'HAS_ROOM'">
+                        <h1 class="room-title">📍 {{ selectedUser.room?.location || 'Location not specified' }}</h1>
+                        <p class="room-subtitle" *ngIf="selectedUser.room?.title">{{ selectedUser.room?.title }}</p>
+                        <p class="address-note">🔒 Full address revealed after matching</p>
 
-                    <div class="room-meta">
-                        <div class="meta-item" *ngIf="selectedUser.room?.sizeSqm">
-                            <span class="meta-value">{{ selectedUser.room?.sizeSqm }} m²</span>
-                            <span class="meta-label">Size</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-value">{{ selectedUser.room?.rent | currency:'DKK':'symbol':'1.0-0'
-                                }}/mo</span>
-                            <span class="meta-label">Rent</span>
-                        </div>
-                        <div class="meta-item" *ngIf="selectedUser.room?.availableFrom">
-                            <span class="meta-value">{{ selectedUser.room?.availableFrom | date:'mediumDate' }}</span>
-                            <span class="meta-label">Available</span>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <h3>About the Room</h3>
-                        <p class="description">{{ selectedUser.room?.description || 'No description provided.' }}</p>
-                    </div>
-
-                    <div class="section">
-                        <h3>About the Renter</h3>
-                        <div class="renter-info">
-                            <div class="renter-avatar">
-                                <img *ngIf="selectedUser.profileImage" [src]="selectedUser.profileImage" alt="Profile">
-                                <span *ngIf="!selectedUser.profileImage">{{ selectedUser.firstName?.charAt(0) }}{{
-                                    selectedUser.lastName?.charAt(0) }}</span>
+                        <div class="room-meta">
+                            <div class="meta-item" *ngIf="selectedUser.room?.sizeSqm">
+                                <span class="meta-value">{{ selectedUser.room?.sizeSqm }} m²</span>
+                                <span class="meta-label">Size</span>
                             </div>
-                            <div class="renter-details">
-                                <span class="renter-name">{{ selectedUser.firstName }} {{ selectedUser.lastName }}, {{
-                                    selectedUser.age }}</span>
-                                <span class="renter-gender">{{ selectedUser.gender }}</span>
+                            <div class="meta-item">
+                                <span class="meta-value">{{ selectedUser.room?.rent | currency:'DKK':'symbol':'1.0-0'
+                                    }}/mo</span>
+                                <span class="meta-label">Rent</span>
+                            </div>
+                            <div class="meta-item" *ngIf="selectedUser.room?.availableFrom">
+                                <span class="meta-value">{{ selectedUser.room?.availableFrom | date:'mediumDate'
+                                    }}</span>
+                                <span class="meta-label">Available</span>
                             </div>
                         </div>
-                        <p class="renter-bio">{{ selectedUser.bio || 'No bio provided.' }}</p>
-                    </div>
+
+                        <div class="section">
+                            <h3>About the Room</h3>
+                            <p class="description">{{ selectedUser.room?.description || 'No description provided.' }}
+                            </p>
+                        </div>
+
+                        <div class="section">
+                            <h3>About the Renter</h3>
+                            <div class="renter-info">
+                                <div class="renter-avatar">
+                                    <img *ngIf="selectedUser.profileImage" [src]="selectedUser.profileImage"
+                                        alt="Profile">
+                                    <span *ngIf="!selectedUser.profileImage">{{ selectedUser.firstName?.charAt(0) }}{{
+                                        selectedUser.lastName?.charAt(0) }}</span>
+                                </div>
+                                <div class="renter-details">
+                                    <span class="renter-name">{{ selectedUser.firstName }} {{ selectedUser.lastName }},
+                                        {{ selectedUser.age }}</span>
+                                    <span class="renter-gender">{{ selectedUser.gender }}</span>
+                                </div>
+                            </div>
+                            <p class="renter-bio">{{ selectedUser.bio || 'No bio provided.' }}</p>
+                        </div>
+                    </ng-container>
+
+                    <!-- FOR NEEDS_ROOM USERS: Show Person Details -->
+                    <ng-container *ngIf="selectedUser.userType === 'NEEDS_ROOM'">
+                        <h1 class="person-title">{{ selectedUser.firstName }} {{ selectedUser.lastName }}, {{
+                            selectedUser.age }}</h1>
+                        <p class="person-subtitle">
+                            <span class="badge-looking">🔍 Looking for a room</span>
+                            <span *ngIf="selectedUser.gender"> · {{ selectedUser.gender }}</span>
+                        </p>
+
+                        <div class="section">
+                            <h3>About Me</h3>
+                            <p class="description">{{ selectedUser.bio || 'No bio provided yet.' }}</p>
+                        </div>
+
+                        <div class="section">
+                            <h3>What I'm Looking For</h3>
+                            <div class="preference-list">
+                                <div class="pref-row">
+                                    <span class="pref-icon">🏠</span>
+                                    <span>Looking for a shared living situation</span>
+                                </div>
+                                <div class="pref-row">
+                                    <span class="pref-icon">🤝</span>
+                                    <span>Open to connecting with compatible roommates</span>
+                                </div>
+                                <div class="pref-row">
+                                    <span class="pref-icon">💬</span>
+                                    <span>Contact info shared after matching</span>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
 
                 <!-- Right Column: Action Card -->
                 <div class="modal-sidebar">
                     <div class="action-card">
-                        <div class="price-tag">
+                        <!-- Show price for HAS_ROOM -->
+                        <div class="price-tag" *ngIf="selectedUser.userType === 'HAS_ROOM'">
                             <span class="price">{{ selectedUser.room?.rent | currency:'DKK':'symbol':'1.0-0' }}</span>
                             <span class="price-period">per month</span>
+                        </div>
+                        <!-- Show person card for NEEDS_ROOM -->
+                        <div class="person-card-mini" *ngIf="selectedUser.userType === 'NEEDS_ROOM'">
+                            <div class="person-avatar-mini">
+                                <img *ngIf="selectedUser.profileImage" [src]="selectedUser.profileImage" alt="Profile">
+                                <span *ngIf="!selectedUser.profileImage">{{ selectedUser.firstName?.charAt(0) }}</span>
+                            </div>
+                            <span class="person-name-mini">{{ selectedUser.firstName }}</span>
                         </div>
                         <div class="action-buttons">
                             <button class="btn-pass" (click)="passFromModal()">✕ Pass</button>

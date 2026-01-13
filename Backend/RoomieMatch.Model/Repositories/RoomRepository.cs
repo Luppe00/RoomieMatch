@@ -121,18 +121,35 @@ namespace RoomieMatch.Model.Repositories
 
         private static Room MapRoom(NpgsqlDataReader reader)
         {
+            // Safely read room_images - may not exist or may have issues
+            string[]? roomImages = null;
+            try 
+            {
+                // Check if column exists and has data
+                var ordinal = reader.GetOrdinal("room_images");
+                if (!reader.IsDBNull(ordinal))
+                {
+                    roomImages = reader.GetFieldValue<string[]>(ordinal);
+                }
+            }
+            catch 
+            {
+                // Column doesn't exist or other error - just continue with null
+                roomImages = null;
+            }
+
             return new Room
             {
-                Id = reader.GetInt32(0),
-                UserId = reader.GetInt32(1),
-                Title = reader.GetString(2),
-                Location = reader.GetString(3),
-                Rent = reader.GetDecimal(4),
-                SizeSqm = reader.IsDBNull(5) ? null : reader.GetInt32(5),
-                RoomImage = reader.IsDBNull(6) ? null : reader.GetString(6),
-                RoomImages = reader.IsDBNull(7) ? null : reader.GetFieldValue<string[]>(7),
-                Description = reader.IsDBNull(8) ? null : reader.GetString(8),
-                AvailableFrom = reader.IsDBNull(9) ? null : reader.GetDateTime(9)
+                Id = reader.GetInt32(reader.GetOrdinal("id")),
+                UserId = reader.GetInt32(reader.GetOrdinal("user_id")),
+                Title = reader.GetString(reader.GetOrdinal("title")),
+                Location = reader.GetString(reader.GetOrdinal("location")),
+                Rent = reader.GetDecimal(reader.GetOrdinal("rent")),
+                SizeSqm = reader.IsDBNull(reader.GetOrdinal("size_sqm")) ? null : reader.GetInt32(reader.GetOrdinal("size_sqm")),
+                RoomImage = reader.IsDBNull(reader.GetOrdinal("room_image")) ? null : reader.GetString(reader.GetOrdinal("room_image")),
+                RoomImages = roomImages,
+                Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString(reader.GetOrdinal("description")),
+                AvailableFrom = reader.IsDBNull(reader.GetOrdinal("available_from")) ? null : reader.GetDateTime(reader.GetOrdinal("available_from"))
             };
         }
     }

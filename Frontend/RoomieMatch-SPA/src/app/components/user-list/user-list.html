@@ -270,9 +270,8 @@
                     <ng-container *ngIf="selectedUser.userType === 'NEEDS_ROOM'">
                         <h1 class="person-title">{{ selectedUser.firstName }} {{ selectedUser.lastName }}, {{
                             selectedUser.age }}</h1>
-                        <p class="person-subtitle">
-                            <span class="badge-looking">🔍 Looking for a room</span>
-                            <span *ngIf="selectedUser.gender"> · {{ selectedUser.gender }}</span>
+                        <p class="person-subtitle" *ngIf="selectedUser.gender">
+                            {{ selectedUser.gender }}
                         </p>
 
                         <div class="section">

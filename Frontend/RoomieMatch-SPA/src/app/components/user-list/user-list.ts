@@ -237,13 +237,42 @@ export class UserListComponent implements OnInit {
   }
 
   likeFromModal() {
+    // Store reference before closing modal
+    const targetUser = this.selectedUser;
     this.closeDetailModal();
-    this.onLike();
+
+    if (targetUser && this.currentUser) {
+      // Swipe the user that was in the modal
+      this.matchService.swipe({
+        swiperUserId: this.currentUser.id,
+        targetUserId: targetUser.id,
+        liked: true
+      }).subscribe(response => {
+        if (response.isMatch) {
+          this.showMatchAnimation();
+        }
+        this.currentIndex++;
+        this.cdr.detectChanges(); // Force UI update
+      });
+    }
   }
 
   passFromModal() {
+    // Store reference before closing modal
+    const targetUser = this.selectedUser;
     this.closeDetailModal();
-    this.onPass();
+
+    if (targetUser && this.currentUser) {
+      // Swipe the user that was in the modal
+      this.matchService.swipe({
+        swiperUserId: this.currentUser.id,
+        targetUserId: targetUser.id,
+        liked: false
+      }).subscribe(() => {
+        this.currentIndex++;
+        this.cdr.detectChanges(); // Force UI update
+      });
+    }
   }
 
   // Lightbox Methods

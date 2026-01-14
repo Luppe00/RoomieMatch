@@ -11,11 +11,13 @@ namespace RoomieMatch.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPreferenceRepository _preferenceRepository;
         private readonly RoomieMatch.API.Services.IPhotoService _photoService;
 
-        public UsersController(IUserRepository userRepository, RoomieMatch.API.Services.IPhotoService photoService)
+        public UsersController(IUserRepository userRepository, IPreferenceRepository preferenceRepository, RoomieMatch.API.Services.IPhotoService photoService)
         {
             _userRepository = userRepository;
+            _preferenceRepository = preferenceRepository;
             _photoService = photoService;
         }
 
@@ -52,8 +54,11 @@ namespace RoomieMatch.API.Controllers
                 var currentUser = await _userRepository.GetByIdAsync(userId);
                 if (currentUser == null) return Unauthorized();
 
-                // Get matches based on type (Opposites attract!)
-                var users = await _userRepository.GetPotentialMatchesAsync(userId, currentUser.UserType);
+                // Get user's preferences to filter matches
+                var preference = await _preferenceRepository.GetByUserIdAsync(userId);
+
+                // Get matches based on type AND preferences
+                var users = await _userRepository.GetPotentialMatchesAsync(userId, currentUser.UserType, preference);
                 return Ok(users);
             }
             catch(Exception) 

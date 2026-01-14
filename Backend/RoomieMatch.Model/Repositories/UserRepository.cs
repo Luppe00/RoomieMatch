@@ -32,7 +32,7 @@ namespace RoomieMatch.Model.Repositories
             return users;
         }
 
-        public async Task<IEnumerable<User>> GetPotentialMatchesAsync(int currentUserId, string currentUserType)
+        public async Task<IEnumerable<User>> GetPotentialMatchesAsync(int currentUserId, string currentUserType, Preference? preference = null)
         {
             var users = new List<User>();
             using var conn = CreateConnection();
@@ -44,7 +44,8 @@ namespace RoomieMatch.Model.Repositories
             
             string targetType = (currentUserType == "HAS_ROOM") ? "NEEDS_ROOM" : "HAS_ROOM";
 
-            cmd.CommandText = @"
+            // Build dynamic SQL with preference filters
+            var sql = @"
                 SELECT u.id, u.first_name, u.last_name, u.age, u.gender, u.email, u.bio, u.user_type, u.created_at, u.profile_image,
                        r.id, r.title, r.location, r.rent, r.size_sqm, r.room_image, r.description, r.available_from
                 FROM users u
@@ -55,7 +56,47 @@ namespace RoomieMatch.Model.Repositories
                       SELECT 1 FROM swipes s 
                       WHERE s.swiper_user_id = @currentUserId AND s.target_user_id = u.id
                   )";
-            
+
+            // Apply preference filters if available
+            if (preference != null)
+            {
+                // Filter by max rent (for NEEDS_ROOM users looking at HAS_ROOM profiles with rooms)
+                if (currentUserType == "NEEDS_ROOM" && preference.MaxRent.HasValue)
+                {
+                    sql += " AND (r.rent IS NULL OR r.rent <= @maxRent)";
+                    cmd.Parameters.AddWithValue("maxRent", preference.MaxRent.Value);
+                }
+
+                // Filter by preferred gender
+                if (!string.IsNullOrEmpty(preference.PreferredGender) && preference.PreferredGender != "Any")
+                {
+                    sql += " AND u.gender = @preferredGender";
+                    cmd.Parameters.AddWithValue("preferredGender", preference.PreferredGender);
+                }
+
+                // Filter by min age
+                if (preference.MinAgeRoomie.HasValue)
+                {
+                    sql += " AND u.age >= @minAge";
+                    cmd.Parameters.AddWithValue("minAge", preference.MinAgeRoomie.Value);
+                }
+
+                // Filter by max age
+                if (preference.MaxAgeRoomie.HasValue)
+                {
+                    sql += " AND u.age <= @maxAge";
+                    cmd.Parameters.AddWithValue("maxAge", preference.MaxAgeRoomie.Value);
+                }
+
+                // Filter by preferred location (check if room location contains the preference)
+                if (!string.IsNullOrEmpty(preference.PreferredLocation) && currentUserType == "NEEDS_ROOM")
+                {
+                    sql += " AND (r.location IS NULL OR LOWER(r.location) LIKE @preferredLocation)";
+                    cmd.Parameters.AddWithValue("preferredLocation", "%" + preference.PreferredLocation.ToLower() + "%");
+                }
+            }
+
+            cmd.CommandText = sql;
             cmd.Parameters.AddWithValue("targetType", targetType);
             cmd.Parameters.AddWithValue("currentUserId", currentUserId);
 

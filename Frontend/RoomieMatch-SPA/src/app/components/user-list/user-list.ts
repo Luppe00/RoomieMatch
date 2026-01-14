@@ -174,6 +174,7 @@ export class UserListComponent implements OnInit {
         this.showMatchAnimation();
       }
       this.currentIndex++;
+      this.cdr.detectChanges(); // Force UI update to show next card
     });
   }
 

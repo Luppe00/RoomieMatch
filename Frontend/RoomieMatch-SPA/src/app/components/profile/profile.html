@@ -81,14 +81,6 @@
                 <label for="bio">{{ t('profile.bio') }}</label>
                 <textarea id="bio" name="bio" [(ngModel)]="user.bio" rows="3"></textarea>
             </div>
-
-            <div class="form-group">
-                <label for="userType">{{ t('profile.iAm') }}</label>
-                <select id="userType" name="userType" [(ngModel)]="user.userType" required>
-                    <option value="NEEDS_ROOM">{{ t('profile.lookingForRoom') }}</option>
-                    <option value="HAS_ROOM">{{ t('profile.offeringRoom') }}</option>
-                </select>
-            </div>
         </section>
 
 

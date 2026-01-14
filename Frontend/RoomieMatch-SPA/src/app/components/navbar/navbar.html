@@ -2,27 +2,33 @@
     <a [routerLink]="currentUser ? '/dashboard' : '/'" class="brand">RoomieMatch</a>
 
     <div class="links" *ngIf="currentUser">
-        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-        <a routerLink="/explore" routerLinkActive="active">Explore</a>
+        <a routerLink="/dashboard" routerLinkActive="active">{{ t('nav.dashboard') }}</a>
+        <a routerLink="/explore" routerLinkActive="active">{{ t('nav.explore') }}</a>
         <a routerLink="/matches" routerLinkActive="active">
-            Matches
+            {{ t('nav.matches') }}
             <span *ngIf="unreadCount > 0" class="unread-badge">{{ unreadCount }}</span>
         </a>
-        <a routerLink="/profile" routerLinkActive="active">Profile</a>
+        <a routerLink="/profile" routerLinkActive="active">{{ t('nav.profile') }}</a>
     </div>
 
     <div class="user-info">
         <div *ngIf="currentUser; else loginTemplate">
             <span style="margin-right: 1rem;">Hi, {{ currentUser.firstName }}!</span>
+            <button (click)="toggleLanguage()" class="lang-toggle" title="Switch Language">
+                {{ currentLang === 'da' ? '🇬🇧' : '🇩🇰' }}
+            </button>
             <button (click)="toggleDarkMode()" class="dark-mode-toggle" title="Toggle Dark Mode">
                 {{ isDarkMode ? '☀️' : '🌙' }}
             </button>
-            <button (click)="logout()" class="logout-btn">Log out</button>
+            <button (click)="logout()" class="logout-btn">{{ t('nav.logout') }}</button>
         </div>
         <ng-template #loginTemplate>
             <div class="auth-buttons">
-                <a routerLink="/login" class="nav-link">Login</a>
-                <a routerLink="/register" class="btn-register">Register</a>
+                <button (click)="toggleLanguage()" class="lang-toggle" title="Switch Language">
+                    {{ currentLang === 'da' ? '🇬🇧' : '🇩🇰' }}
+                </button>
+                <a routerLink="/login" class="nav-link">{{ t('nav.login') }}</a>
+                <a routerLink="/register" class="btn-register">{{ t('nav.register') }}</a>
             </div>
         </ng-template>
     </div>

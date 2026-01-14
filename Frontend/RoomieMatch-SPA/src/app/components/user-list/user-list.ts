@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.service';
 import { MatchService } from '../../services/match.service';
 import { AuthService } from '../../services/auth.service';
 import { PreferenceService } from '../../services/preference.service';
+import { TranslationService } from '../../services/translation.service';
 import { User, Preference } from '../../models';
 import { SwipeCardComponent } from '../swipe-card/swipe-card';
 import { forkJoin, of } from 'rxjs';
@@ -36,8 +37,18 @@ export class UserListComponent implements OnInit {
     private matchService: MatchService,
     private authService: AuthService,
     private preferenceService: PreferenceService,
+    private translationService: TranslationService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {
+    // Subscribe to language changes to trigger re-render
+    this.translationService.currentLang$.subscribe(() => {
+      this.cdr.detectChanges();
+    });
+  }
+
+  t(key: string): string {
+    return this.translationService.t(key);
+  }
 
   ngOnInit() {
     // Load immediately from localStorage (same pattern as Profile)

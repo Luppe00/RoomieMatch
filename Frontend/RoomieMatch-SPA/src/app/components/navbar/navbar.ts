@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ChatService } from '../../services/chat.service';
+import { TranslationService, Language } from '../../services/translation.service';
 import { User } from '../../models';
 
 @Component({
@@ -16,8 +17,14 @@ export class NavbarComponent implements OnInit {
   currentUser: User | null = null;
   isDarkMode: boolean = false;
   unreadCount: number = 0;
+  currentLang: Language = 'da';
 
-  constructor(public authService: AuthService, private chatService: ChatService) {
+  constructor(
+    public authService: AuthService,
+    private chatService: ChatService,
+    private translationService: TranslationService,
+    private cdr: ChangeDetectorRef
+  ) {
     // Read from localStorage IMMEDIATELY - same pattern as Dashboard
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -32,12 +39,19 @@ export class NavbarComponent implements OnInit {
         this.loadUnreadCount();
       }
     });
+
+    // Subscribe to language changes
+    this.translationService.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.cdr.detectChanges();
+    });
   }
 
   ngOnInit() {
     // Load dark mode preference from localStorage
     this.isDarkMode = localStorage.getItem('darkMode') === 'true';
     this.applyDarkMode();
+    this.currentLang = this.translationService.language;
   }
 
   loadUnreadCount() {
@@ -59,6 +73,14 @@ export class NavbarComponent implements OnInit {
     } else {
       document.body.classList.remove('dark-mode');
     }
+  }
+
+  toggleLanguage() {
+    this.translationService.toggleLanguage();
+  }
+
+  t(key: string): string {
+    return this.translationService.t(key);
   }
 
   logout() {

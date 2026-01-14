@@ -5,15 +5,13 @@
             <div class="hero-inner">
                 <div class="hero-content">
                     <h1 class="hero-title-large">
-                        Find your perfect<br><span class="text-coral">roommate</span>
+                        {{ t('landing.title') }}<br><span class="text-coral">{{ t('landing.titleHighlight') }}</span>
                     </h1>
                     <p class="hero-description">
-                        RoomieMatch is Denmark's platform for finding roommates.
-                        Whether you have a room to share or need one - we connect
-                        the right people together.
+                        {{ t('landing.description') }}
                     </p>
                     <a routerLink="/register" class="btn-cta">
-                        Get started now - it's free
+                        {{ t('landing.cta') }}
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
@@ -23,19 +21,19 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>Verified profiles</span>
+                            <span>{{ t('landing.feature1') }}</span>
                         </div>
                         <div class="hero-feature">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>Smart matching</span>
+                            <span>{{ t('landing.feature2') }}</span>
                         </div>
                         <div class="hero-feature">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>Built-in chat</span>
+                            <span>{{ t('landing.feature3') }}</span>
                         </div>
                     </div>
                 </div>
@@ -66,20 +64,19 @@
             </div>
         </section>
 
-        <!-- Stats Bar -->
         <section class="stats-bar">
             <div class="stats-inner">
                 <div class="stat-item">
                     <span class="stat-number-large">+2,500</span>
-                    <span class="stat-text">Active listings</span>
+                    <span class="stat-text">{{ t('landing.stat1') }}</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number-large">+150</span>
-                    <span class="stat-text">New every week</span>
+                    <span class="stat-text">{{ t('landing.stat2') }}</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number-large">+10,000</span>
-                    <span class="stat-text">Successful matches</span>
+                    <span class="stat-text">{{ t('landing.stat3') }}</span>
                 </div>
             </div>
         </section>

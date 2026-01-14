@@ -6,7 +6,7 @@
                 {{ getGreeting() }}, <span class="gradient-text">{{ currentUser?.firstName || 'there' }}</span>! 👋
             </h1>
             <p class="welcome-subtitle">
-                Ready to find your perfect roommate? Here's your overview.
+                {{ t('dashboard.subtitle') }}
             </p>
         </div>
         <div class="welcome-image">
@@ -25,50 +25,50 @@
             <div class="stat-icon">💕</div>
             <div class="stat-info">
                 <span class="stat-value">{{ totalMatches }}</span>
-                <span class="stat-label">Total Matches</span>
+                <span class="stat-label">{{ t('dashboard.totalMatches') }}</span>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">🔥</div>
             <div class="stat-info">
                 <span class="stat-value">{{ newMatchesToday }}</span>
-                <span class="stat-label">New Today</span>
+                <span class="stat-label">{{ t('dashboard.newToday') }}</span>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">💬</div>
             <div class="stat-info">
                 <span class="stat-value">{{ unreadCount }}</span>
-                <span class="stat-label">Unread Messages</span>
+                <span class="stat-label">{{ t('dashboard.unreadMessages') }}</span>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">📊</div>
             <div class="stat-info">
                 <span class="stat-value">{{ getProfileCompletion() }}%</span>
-                <span class="stat-label">Profile Complete</span>
+                <span class="stat-label">{{ t('dashboard.profileComplete') }}</span>
             </div>
         </div>
     </section>
 
     <!-- Quick Actions -->
     <section class="actions-section">
-        <h2 class="section-title">Quick Actions</h2>
+        <h2 class="section-title">{{ t('dashboard.quickActions') }}</h2>
         <div class="action-cards">
             <a routerLink="/swipe" class="action-card primary">
                 <div class="action-icon">🔍</div>
-                <h3>Find Roommates</h3>
-                <p>Browse and swipe on potential matches</p>
+                <h3>{{ t('dashboard.findRoommates') }}</h3>
+                <p>{{ t('dashboard.findRoommatesDesc') }}</p>
             </a>
             <a routerLink="/matches" class="action-card">
                 <div class="action-icon">💕</div>
-                <h3>View Matches</h3>
-                <p>See all your mutual connections</p>
+                <h3>{{ t('dashboard.viewMatches') }}</h3>
+                <p>{{ t('dashboard.viewMatchesDesc') }}</p>
             </a>
             <a routerLink="/profile" class="action-card">
                 <div class="action-icon">👤</div>
-                <h3>Edit Profile</h3>
-                <p>Update your details and photos</p>
+                <h3>{{ t('dashboard.editProfile') }}</h3>
+                <p>{{ t('dashboard.editProfileDesc') }}</p>
             </a>
         </div>
     </section>
@@ -76,8 +76,8 @@
     <!-- Recent Matches Preview -->
     <section class="recent-section" *ngIf="matchedUsers.length > 0">
         <div class="section-header">
-            <h2 class="section-title">Recent Matches</h2>
-            <a routerLink="/matches" class="see-all-link">See all →</a>
+            <h2 class="section-title">{{ t('dashboard.recentMatches') }}</h2>
+            <a routerLink="/matches" class="see-all-link">{{ t('dashboard.seeAll') }} →</a>
         </div>
         <div class="recent-matches">
             <div class="match-preview-card" *ngFor="let user of matchedUsers">
@@ -89,7 +89,8 @@
                 </div>
                 <div class="match-info">
                     <span class="match-name">{{ user.firstName }}, {{ user.age }}</span>
-                    <span class="match-type">{{ user.userType === 'HAS_ROOM' ? 'Has Room' : 'Needs Room' }}</span>
+                    <span class="match-type">{{ user.userType === 'HAS_ROOM' ? t('card.hasRoom') : t('card.needsRoom')
+                        }}</span>
                 </div>
                 <a [routerLink]="['/chat', user.id]" class="chat-btn">💬</a>
             </div>
@@ -100,9 +101,9 @@
     <section class="empty-section" *ngIf="matchedUsers.length === 0 && !loading">
         <div class="empty-content">
             <div class="empty-icon">🏠</div>
-            <h3>No matches yet</h3>
-            <p>Start swiping to find your perfect roommate!</p>
-            <a routerLink="/swipe" class="btn-primary">Start Exploring</a>
+            <h3>{{ t('dashboard.noMatches') }}</h3>
+            <p>{{ t('dashboard.startSwiping') }}</p>
+            <a routerLink="/swipe" class="btn-primary">{{ t('dashboard.startExploring') }}</a>
         </div>
     </section>
 
@@ -111,15 +112,15 @@
         <div class="reminder-card">
             <div class="reminder-icon">💡</div>
             <div class="reminder-content">
-                <h4>Complete Your Profile</h4>
-                <p>Profiles with photos get 10x more matches! Your profile is {{ getProfileCompletion() }}% complete.
+                <h4>{{ t('dashboard.completeProfile') }}</h4>
+                <p>{{ t('dashboard.profileReminder') }} {{ getProfileCompletion() }}% {{ t('dashboard.complete') }}.
                 </p>
             </div>
-            <a routerLink="/profile" class="reminder-btn">Complete Now</a>
+            <a routerLink="/profile" class="reminder-btn">{{ t('dashboard.completeNow') }}</a>
         </div>
     </section>
 </div>
 
 <div class="loading" *ngIf="loading">
-    Loading your dashboard...
+    {{ t('common.loading') }}
 </div>

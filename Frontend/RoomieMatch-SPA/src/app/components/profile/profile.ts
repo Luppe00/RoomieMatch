@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { PreferenceService } from '../../services/preference.service';
 import { RoomService } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 import { User, Preference, Room } from '../../models';
 import { forkJoin, of } from 'rxjs';
 
@@ -39,8 +40,17 @@ export class ProfileComponent implements OnInit {
         private userService: UserService,
         private preferenceService: PreferenceService,
         private roomService: RoomService,
+        private translationService: TranslationService,
         private cdr: ChangeDetectorRef
-    ) { }
+    ) {
+        this.translationService.currentLang$.subscribe(() => {
+            this.cdr.detectChanges();
+        });
+    }
+
+    t(key: string): string {
+        return this.translationService.t(key);
+    }
 
     onFileSelected(event: any) {
         if (!this.user) return;

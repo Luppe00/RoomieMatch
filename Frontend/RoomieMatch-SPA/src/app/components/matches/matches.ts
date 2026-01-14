@@ -1,9 +1,10 @@
-// BUILD VERSION: 2026-01-11-v2 - Forces Railway to rebuild
+// BUILD VERSION: 2026-01-14-v1 - Language support
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatchService } from '../../services/match.service';
 import { AuthService } from '../../services/auth.service';
+import { TranslationService } from '../../services/translation.service';
 import { User } from '../../models';
 
 @Component({
@@ -20,8 +21,17 @@ export class MatchesComponent implements OnInit {
   constructor(
     private matchService: MatchService,
     private authService: AuthService,
+    private translationService: TranslationService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {
+    this.translationService.currentLang$.subscribe(() => {
+      this.cdr.detectChanges();
+    });
+  }
+
+  t(key: string): string {
+    return this.translationService.t(key);
+  }
 
   // ngOnInit: Runs automatically when the page loads.
   // It checks who is logged in, then asks for their matches.

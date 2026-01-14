@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { PreferenceService } from '../../services/preference.service';
 import { RoomService } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 import { User, Room, Preference } from '../../models';
 
 @Component({
@@ -96,8 +97,18 @@ export class RegisterComponent {
         private authService: AuthService,
         private router: Router,
         private preferenceService: PreferenceService,
-        private roomService: RoomService
-    ) { }
+        private roomService: RoomService,
+        private translationService: TranslationService,
+        private cdr: ChangeDetectorRef
+    ) {
+        this.translationService.currentLang$.subscribe(() => {
+            this.cdr.detectChanges();
+        });
+    }
+
+    t(key: string): string {
+        return this.translationService.t(key);
+    }
 
     toggleLocationDropdown() {
         this.locationDropdownOpen = !this.locationDropdownOpen;

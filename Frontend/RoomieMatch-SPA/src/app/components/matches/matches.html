@@ -1,12 +1,12 @@
 <div class="matches-container">
-    <h2>Your Matches</h2>
+    <h2>{{ t('matches.title') }}</h2>
 
     <div *ngIf="!currentUser" class="empty-state">
-        <p>Please log in to see your matches.</p>
+        <p>{{ t('matches.pleaseLogin') }}</p>
     </div>
 
     <div *ngIf="currentUser && matches.length === 0" class="empty-state">
-        <p>No matches yet. Keep swiping!</p>
+        <p>{{ t('matches.noMatches') }}</p>
     </div>
 
     <div class="matches-grid" *ngIf="matches.length > 0">
@@ -21,11 +21,11 @@
                 <div class="badges">
                     <span class="badge"
                         [ngClass]="{'badge-has-room': match.userType === 'HAS_ROOM', 'badge-needs-room': match.userType === 'NEEDS_ROOM'}">
-                        {{ match.userType === 'HAS_ROOM' ? 'Has Room' : 'Needs Room' }}
+                        {{ match.userType === 'HAS_ROOM' ? t('card.hasRoom') : t('card.needsRoom') }}
                     </span>
                 </div>
             </div>
-            <a [routerLink]="['/chat', match.id]" class="contact-btn">Chat</a>
+            <a [routerLink]="['/chat', match.id]" class="contact-btn">{{ t('matches.chat') }}</a>
         </div>
     </div>
 </div>

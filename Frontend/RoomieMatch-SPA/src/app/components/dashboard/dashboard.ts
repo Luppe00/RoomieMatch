@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { MatchService } from '../../services/match.service';
 import { ChatService } from '../../services/chat.service';
+import { TranslationService } from '../../services/translation.service';
 import { User } from '../../models';
 
 @Component({
@@ -29,8 +30,17 @@ export class DashboardComponent implements OnInit {
         private userService: UserService,
         private matchService: MatchService,
         private chatService: ChatService,
+        private translationService: TranslationService,
         private cdr: ChangeDetectorRef
-    ) { }
+    ) {
+        this.translationService.currentLang$.subscribe(() => {
+            this.cdr.detectChanges();
+        });
+    }
+
+    t(key: string): string {
+        return this.translationService.t(key);
+    }
 
     ngOnInit() {
         this.loadDashboardData();
@@ -75,9 +85,9 @@ export class DashboardComponent implements OnInit {
 
     getGreeting(): string {
         const hour = new Date().getHours();
-        if (hour < 12) return 'Good morning';
-        if (hour < 18) return 'Good afternoon';
-        return 'Good evening';
+        if (hour < 12) return this.t('dashboard.goodMorning');
+        if (hour < 18) return this.t('dashboard.goodAfternoon');
+        return this.t('dashboard.goodEvening');
     }
 
     getProfileCompletion(): number {

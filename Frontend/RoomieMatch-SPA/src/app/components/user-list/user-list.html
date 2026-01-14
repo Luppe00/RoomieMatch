@@ -105,33 +105,63 @@
         </section>
 
         <footer class="landing-footer">
-            <div class="footer-inner">
-                <div class="footer-brand">
-                    <span class="footer-logo">RoomieMatch</span>
-                    <p>{{ t('footer.tagline') }}</p>
+            <div class="footer-main">
+                <div class="footer-col footer-brand-col">
+                    <h4>RoomieMatch ApS</h4>
+                    <p>Copenhagen, Denmark</p>
+                    <p>CVR: 12345678</p>
+                    <p class="footer-tagline">{{ t('footer.tagline') }}</p>
                 </div>
-                <div class="footer-nav">
-                    <div class="footer-col">
-                        <h4>{{ t('footer.company') }}</h4>
-                        <a href="#">{{ t('footer.aboutUs') }}</a>
-                        <a href="#">{{ t('footer.howItWorks') }}</a>
-                        <a href="#">{{ t('footer.contact') }}</a>
-                    </div>
-                    <div class="footer-col">
-                        <h4>{{ t('footer.legal') }}</h4>
-                        <a href="#">{{ t('footer.privacy') }}</a>
-                        <a href="#">{{ t('footer.terms') }}</a>
-                        <a href="#">{{ t('footer.cookies') }}</a>
-                    </div>
-                    <div class="footer-col">
-                        <h4>{{ t('footer.support') }}</h4>
-                        <a href="#">{{ t('footer.faq') }}</a>
-                        <a href="#">{{ t('footer.help') }}</a>
-                        <a href="mailto:support@roomiematch.dk">support&#64;roomiematch.dk</a>
+
+                <div class="footer-col">
+                    <h4>{{ t('footer.information') }}</h4>
+                    <a href="#">{{ t('footer.terms') }}</a>
+                    <a href="#">{{ t('footer.cookies') }}</a>
+                    <a href="#">{{ t('footer.privacy') }}</a>
+                    <a href="#">{{ t('footer.faq') }}</a>
+                    <a href="#">{{ t('footer.contact') }}</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>{{ t('footer.navigation') }}</h4>
+                    <a href="#">{{ t('footer.home') }}</a>
+                    <a href="#">{{ t('footer.searchRoom') }}</a>
+                    <a href="#">{{ t('footer.searchRoommate') }}</a>
+                    <a routerLink="/login">{{ t('nav.login') }}</a>
+                    <a routerLink="/register">{{ t('nav.register') }}</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>{{ t('footer.followUs') }}</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                <rect x="2" y="9" width="4" height="12" />
+                                <circle cx="4" cy="4" r="2" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom-bar">
+
+            <div class="footer-bottom">
                 <p>{{ t('footer.copyright') }}</p>
             </div>
         </footer>

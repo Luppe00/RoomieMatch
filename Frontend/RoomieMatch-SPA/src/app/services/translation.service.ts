@@ -33,6 +33,7 @@ export class TranslationService {
             'landing.stat2': 'New listings / week',
             'landing.stat3': 'Successful matches',
             'landing.howTitle': 'How It Works',
+            'landing.howSubtitle': 'Find your next roommate in three simple steps',
             'landing.step1Title': 'Create Profile',
             'landing.step1Desc': 'Sign up and tell us about yourself and what you\'re looking for.',
             'landing.step2Title': 'Discover Matches',
@@ -44,8 +45,12 @@ export class TranslationService {
             'login.title': 'Welcome Back',
             'login.subtitle': 'Sign in to continue',
             'login.email': 'Email',
+            'login.emailPlaceholder': 'Enter your email',
             'login.password': 'Password',
+            'login.passwordPlaceholder': 'Enter your password',
             'login.submit': 'Sign In',
+            'login.loggingIn': 'Signing in...',
+            'login.error': 'Login failed. User not found or wrong password.',
             'login.noAccount': 'Don\'t have an account?',
             'login.register': 'Register here',
 
@@ -130,6 +135,7 @@ export class TranslationService {
             // Footer
             'footer.company': 'Company',
             'footer.aboutUs': 'About Us',
+            'footer.howItWorks': 'How It Works',
             'footer.careers': 'Careers',
             'footer.press': 'Press',
             'footer.legal': 'Legal',
@@ -138,8 +144,9 @@ export class TranslationService {
             'footer.cookies': 'Cookies',
             'footer.support': 'Support',
             'footer.help': 'Help Center',
-            'footer.contact': 'Contact Us',
+            'footer.contact': 'Contact',
             'footer.faq': 'FAQ',
+            'footer.tagline': 'Denmark\'s platform for finding the perfect roommate.',
             'footer.copyright': '© 2026 RoomieMatch. All rights reserved.',
 
             // Common
@@ -172,6 +179,7 @@ export class TranslationService {
             'landing.stat2': 'Nye opslag / uge',
             'landing.stat3': 'Succesfulde matches',
             'landing.howTitle': 'Sådan Virker Det',
+            'landing.howSubtitle': 'Find din næste roommate i tre nemme trin',
             'landing.step1Title': 'Opret Profil',
             'landing.step1Desc': 'Tilmeld dig og fortæl os om dig selv og hvad du søger.',
             'landing.step2Title': 'Find Matches',
@@ -183,8 +191,12 @@ export class TranslationService {
             'login.title': 'Velkommen Tilbage',
             'login.subtitle': 'Log ind for at fortsætte',
             'login.email': 'Email',
+            'login.emailPlaceholder': 'Indtast din email',
             'login.password': 'Adgangskode',
+            'login.passwordPlaceholder': 'Indtast din adgangskode',
             'login.submit': 'Log Ind',
+            'login.loggingIn': 'Logger ind...',
+            'login.error': 'Login mislykkedes. Bruger ikke fundet eller forkert adgangskode.',
             'login.noAccount': 'Har du ikke en konto?',
             'login.register': 'Opret her',
 
@@ -269,6 +281,7 @@ export class TranslationService {
             // Footer
             'footer.company': 'Virksomhed',
             'footer.aboutUs': 'Om Os',
+            'footer.howItWorks': 'Sådan Virker Det',
             'footer.careers': 'Karriere',
             'footer.press': 'Presse',
             'footer.legal': 'Juridisk',
@@ -277,8 +290,9 @@ export class TranslationService {
             'footer.cookies': 'Cookies',
             'footer.support': 'Support',
             'footer.help': 'Hjælpecenter',
-            'footer.contact': 'Kontakt Os',
+            'footer.contact': 'Kontakt',
             'footer.faq': 'FAQ',
+            'footer.tagline': 'Danmarks platform til at finde den perfekte roommate.',
             'footer.copyright': '© 2026 RoomieMatch. Alle rettigheder forbeholdes.',
 
             // Common

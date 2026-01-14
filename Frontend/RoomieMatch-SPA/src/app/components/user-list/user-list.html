@@ -83,57 +83,56 @@
 
         <!-- How It Works Section -->
         <section class="how-section">
-            <h2 class="section-heading">How RoomieMatch Works</h2>
-            <p class="section-subheading">Find your next roommate in three simple steps</p>
+            <h2 class="section-heading">{{ t('landing.howTitle') }}</h2>
+            <p class="section-subheading">{{ t('landing.howSubtitle') }}</p>
             <div class="steps-grid">
                 <div class="step-card">
                     <div class="step-number">01</div>
-                    <h3>Create your profile</h3>
-                    <p>Tell us about yourself and what you're looking for in a roommate or room.</p>
+                    <h3>{{ t('landing.step1Title') }}</h3>
+                    <p>{{ t('landing.step1Desc') }}</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">02</div>
-                    <h3>Browse matches</h3>
-                    <p>Swipe through profiles that match your preferences. Like the ones you're interested in.</p>
+                    <h3>{{ t('landing.step2Title') }}</h3>
+                    <p>{{ t('landing.step2Desc') }}</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">03</div>
-                    <h3>Connect & chat</h3>
-                    <p>When you both like each other, it's a match! Start chatting and arrange a meetup.</p>
+                    <h3>{{ t('landing.step3Title') }}</h3>
+                    <p>{{ t('landing.step3Desc') }}</p>
                 </div>
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="landing-footer">
             <div class="footer-inner">
                 <div class="footer-brand">
                     <span class="footer-logo">RoomieMatch</span>
-                    <p>Denmark's platform for finding the perfect roommate.</p>
+                    <p>{{ t('footer.tagline') }}</p>
                 </div>
                 <div class="footer-nav">
                     <div class="footer-col">
-                        <h4>Company</h4>
-                        <a href="#">About Us</a>
-                        <a href="#">How It Works</a>
-                        <a href="#">Contact</a>
+                        <h4>{{ t('footer.company') }}</h4>
+                        <a href="#">{{ t('footer.aboutUs') }}</a>
+                        <a href="#">{{ t('footer.howItWorks') }}</a>
+                        <a href="#">{{ t('footer.contact') }}</a>
                     </div>
                     <div class="footer-col">
-                        <h4>Legal</h4>
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Cookie Policy</a>
+                        <h4>{{ t('footer.legal') }}</h4>
+                        <a href="#">{{ t('footer.privacy') }}</a>
+                        <a href="#">{{ t('footer.terms') }}</a>
+                        <a href="#">{{ t('footer.cookies') }}</a>
                     </div>
                     <div class="footer-col">
-                        <h4>Support</h4>
-                        <a href="#">FAQ</a>
-                        <a href="#">Help Center</a>
+                        <h4>{{ t('footer.support') }}</h4>
+                        <a href="#">{{ t('footer.faq') }}</a>
+                        <a href="#">{{ t('footer.help') }}</a>
                         <a href="mailto:support@roomiematch.dk">support&#64;roomiematch.dk</a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom-bar">
-                <p>© 2026 RoomieMatch. All rights reserved.</p>
+                <p>{{ t('footer.copyright') }}</p>
             </div>
         </footer>
     </div>
@@ -142,28 +141,28 @@
         <!-- Explore Header -->
         <div class="explore-header">
             <div class="explore-title">
-                <h1>Discover</h1>
-                <p>Swipe right to like, left to pass</p>
+                <h1>{{ t('explore.title') }}</h1>
+                <p>{{ t('explore.subtitle') }}</p>
             </div>
         </div>
 
-        <div *ngIf="loading" class="loading">Loading potential roomies...</div>
+        <div *ngIf="loading" class="loading">{{ t('explore.loading') }}</div>
 
         <div *ngIf="!loading && currentUserCard" class="card-stack" (click)="openDetailModal(currentUserCard)">
             <app-swipe-card [user]="currentUserCard" (liked)="onLike()" (passed)="onPass()">
             </app-swipe-card>
             <div class="tap-hint">
                 <span class="tap-icon">👆</span>
-                <span>Tap card for details</span>
+                <span>{{ t('explore.tapDetails') }}</span>
             </div>
         </div>
 
         <div *ngIf="!loading && !currentUserCard" class="empty-state">
             <div class="empty-icon">👀</div>
-            <h2>No more potential matches</h2>
-            <p>You've seen everyone in your area for now.</p>
+            <h2>{{ t('explore.noMore') }}</h2>
+            <p>{{ t('explore.checkBack') }}</p>
             <div class="empty-actions">
-                <button class="btn-refresh" (click)="loadUsers()">Check Again</button>
+                <button class="btn-refresh" (click)="loadUsers()">{{ t('common.retry') }}</button>
             </div>
         </div>
     </div>

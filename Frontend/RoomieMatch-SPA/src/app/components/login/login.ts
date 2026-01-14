@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
     selector: 'app-login',
@@ -19,8 +20,18 @@ export class LoginComponent {
 
     constructor(
         private authService: AuthService,
-        private router: Router
-    ) { }
+        private router: Router,
+        private translationService: TranslationService,
+        private cdr: ChangeDetectorRef
+    ) {
+        this.translationService.currentLang$.subscribe(() => {
+            this.cdr.detectChanges();
+        });
+    }
+
+    t(key: string): string {
+        return this.translationService.t(key);
+    }
 
     onSubmit() {
         if (!this.email || !this.password) return;
@@ -34,7 +45,7 @@ export class LoginComponent {
                 this.loading = false;
             },
             error: (err) => {
-                this.error = 'Login failed. User not found or wrong password.';
+                this.error = this.t('login.error');
                 this.loading = false;
                 console.error(err);
             }

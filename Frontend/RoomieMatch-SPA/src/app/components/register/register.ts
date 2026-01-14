@@ -202,21 +202,27 @@ export class RegisterComponent {
                             // Convert selected locations to comma-separated string
                             const selectedLocs = this.locationOptions
                                 .filter(l => l.checked)
-                                .map(l => l.value)
-                                .join(',');
+                                .map(l => l.label) // Use human-readable labels
+                                .join(', ');
 
+                            // Map frontend preference fields to backend field names
                             const preferenceData: Preference = {
-                                ...this.preferences,
                                 id: 0, // Ignored by server
                                 userId: currentUser.id,
+                                maxRent: this.preferences.maxRent,
+                                preferredLocation: selectedLocs || this.preferences.preferredGender, // Use selectedLocs as preferredLocation
                                 preferredLocations: selectedLocs,
+                                preferredGender: this.preferences.preferredGender || 'Any',
+                                minAgeRoomie: this.preferences.preferredAgeMin,
+                                maxAgeRoomie: this.preferences.preferredAgeMax,
                                 rentPeriod: this.preferences.rentPeriod,
-                                // Map smoker answer to preference
-                                smokerPreference: this.smoker === 'No' ? 'Non-smoker only' : 'Smoker OK'
+                                smokerPreference: this.smoker === 'No' ? 'Non-smoker only' : (this.smoker === 'Yes' ? 'Smoker OK' : undefined)
                             };
 
+                            console.log('Saving preferences:', preferenceData);
+
                             this.preferenceService.savePreference(currentUser.id, preferenceData).subscribe({
-                                next: () => console.log('Preferences saved'),
+                                next: () => console.log('Preferences saved successfully'),
                                 error: (e) => console.error('Error saving preferences', e)
                             });
 

@@ -3,7 +3,7 @@
     <section class="welcome-section">
         <div class="welcome-content">
             <h1 class="welcome-title">
-                {{ getGreeting() }}, <span class="gradient-text">{{ currentUser?.firstName || 'there' }}</span>! 👋
+                {{ getGreeting() }}, <span class="gradient-text">{{ currentUser?.firstName || 'there' }}</span>!
             </h1>
             <p class="welcome-subtitle">
                 {{ t('dashboard.subtitle') }}
@@ -22,28 +22,24 @@
     <!-- Stats Cards -->
     <section class="stats-section">
         <div class="stat-card">
-            <div class="stat-icon">💕</div>
             <div class="stat-info">
                 <span class="stat-value">{{ totalMatches }}</span>
                 <span class="stat-label">{{ t('dashboard.totalMatches') }}</span>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">🔥</div>
             <div class="stat-info">
                 <span class="stat-value">{{ newMatchesToday }}</span>
                 <span class="stat-label">{{ t('dashboard.newToday') }}</span>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">💬</div>
             <div class="stat-info">
                 <span class="stat-value">{{ unreadCount }}</span>
                 <span class="stat-label">{{ t('dashboard.unreadMessages') }}</span>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">📊</div>
             <div class="stat-info">
                 <span class="stat-value">{{ getProfileCompletion() }}%</span>
                 <span class="stat-label">{{ t('dashboard.profileComplete') }}</span>
@@ -56,17 +52,14 @@
         <h2 class="section-title">{{ t('dashboard.quickActions') }}</h2>
         <div class="action-cards">
             <a routerLink="/swipe" class="action-card primary">
-                <div class="action-icon">🔍</div>
                 <h3>{{ t('dashboard.findRoommates') }}</h3>
                 <p>{{ t('dashboard.findRoommatesDesc') }}</p>
             </a>
             <a routerLink="/matches" class="action-card">
-                <div class="action-icon">💕</div>
                 <h3>{{ t('dashboard.viewMatches') }}</h3>
                 <p>{{ t('dashboard.viewMatchesDesc') }}</p>
             </a>
             <a routerLink="/profile" class="action-card">
-                <div class="action-icon">👤</div>
                 <h3>{{ t('dashboard.editProfile') }}</h3>
                 <p>{{ t('dashboard.editProfileDesc') }}</p>
             </a>
@@ -92,7 +85,7 @@
                     <span class="match-type">{{ user.userType === 'HAS_ROOM' ? t('card.hasRoom') : t('card.needsRoom')
                         }}</span>
                 </div>
-                <a [routerLink]="['/chat', user.id]" class="chat-btn">💬</a>
+                <a [routerLink]="['/chat', user.id]" class="chat-btn">Chat</a>
             </div>
         </div>
     </section>
@@ -100,7 +93,6 @@
     <!-- Empty State for No Matches -->
     <section class="empty-section" *ngIf="matchedUsers.length === 0 && !loading">
         <div class="empty-content">
-            <div class="empty-icon">🏠</div>
             <h3>{{ t('dashboard.noMatches') }}</h3>
             <p>{{ t('dashboard.startSwiping') }}</p>
             <a routerLink="/swipe" class="btn-primary">{{ t('dashboard.startExploring') }}</a>
@@ -110,7 +102,6 @@
     <!-- Profile Completion Reminder -->
     <section class="reminder-section" *ngIf="getProfileCompletion() < 100">
         <div class="reminder-card">
-            <div class="reminder-icon">💡</div>
             <div class="reminder-content">
                 <h4>{{ t('dashboard.completeProfile') }}</h4>
                 <p>{{ t('dashboard.profileReminder') }} {{ getProfileCompletion() }}% {{ t('dashboard.complete') }}.

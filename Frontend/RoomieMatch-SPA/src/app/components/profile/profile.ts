@@ -24,8 +24,12 @@ export class ProfileComponent implements OnInit {
         userId: 0,
         maxRent: undefined,
         preferredLocation: '',
+        preferredLocations: '',
+        preferredGender: '',
         minAgeRoomie: undefined,
-        maxAgeRoomie: undefined
+        maxAgeRoomie: undefined,
+        rentPeriod: '',
+        smokerPreference: ''
     };
 
     loading: boolean = true;

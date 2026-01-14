@@ -159,10 +159,23 @@
 
             <!-- Room preferences - Only for NEEDS_ROOM -->
             <div *ngIf="user.userType === 'NEEDS_ROOM'">
-                <div class="form-group">
-                    <label for="maxRent">{{ t('profile.maxBudget') }}</label>
-                    <input type="number" id="maxRent" name="maxRent" [(ngModel)]="preference.maxRent"
-                        placeholder="e.g. 800">
+                <div class="row">
+                    <div class="form-group half">
+                        <label for="maxRent">{{ t('profile.maxBudget') }}</label>
+                        <input type="number" id="maxRent" name="maxRent" [(ngModel)]="preference.maxRent"
+                            placeholder="e.g. 800">
+                    </div>
+                    <div class="form-group half">
+                        <label for="rentPeriod">{{ t('profile.rentPeriod') }}</label>
+                        <select id="rentPeriod" name="rentPeriod" [(ngModel)]="preference.rentPeriod">
+                            <option value="">{{ t('profile.selectPeriod') }}</option>
+                            <option value="1-3 months">1-3 months</option>
+                            <option value="3-6 months">3-6 months</option>
+                            <option value="6-12 months">6-12 months</option>
+                            <option value="12+ months">12+ months</option>
+                            <option value="Flexible">Flexible</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -171,14 +184,38 @@
                         [(ngModel)]="preference.preferredLocation" placeholder="e.g. Nørrebro, Vesterbro">
                 </div>
 
-                <div class="form-group">
-                    <label for="preferredGender">{{ t('profile.preferredGenderOwner') }}</label>
-                    <select id="preferredGender" name="preferredGender" [(ngModel)]="preference.preferredGender">
-                        <option value="Any">{{ t('profile.any') }}</option>
-                        <option value="Male">{{ t('register.male') }}</option>
-                        <option value="Female">{{ t('register.female') }}</option>
-                        <option value="Other">{{ t('register.other') }}</option>
-                    </select>
+                <div class="row">
+                    <div class="form-group half">
+                        <label for="preferredGender">{{ t('profile.preferredGenderOwner') }}</label>
+                        <select id="preferredGender" name="preferredGender" [(ngModel)]="preference.preferredGender">
+                            <option value="">{{ t('profile.any') }}</option>
+                            <option value="Any">{{ t('profile.any') }}</option>
+                            <option value="Male">{{ t('register.male') }}</option>
+                            <option value="Female">{{ t('register.female') }}</option>
+                            <option value="Other">{{ t('register.other') }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group half">
+                        <label for="smokerPreference">{{ t('profile.smokerPreference') }}</label>
+                        <select id="smokerPreference" name="smokerPreference" [(ngModel)]="preference.smokerPreference">
+                            <option value="">{{ t('profile.noPreference') }}</option>
+                            <option value="Non-smoker only">{{ t('profile.nonSmokerOnly') }}</option>
+                            <option value="Smoker OK">{{ t('profile.smokerOk') }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group half">
+                        <label for="minAgeRoomie">{{ t('profile.minAge') }}</label>
+                        <input type="number" id="minAgeRoomie" name="minAgeRoomie" [(ngModel)]="preference.minAgeRoomie"
+                            placeholder="e.g. 20" min="18">
+                    </div>
+                    <div class="form-group half">
+                        <label for="maxAgeRoomie">{{ t('profile.maxAge') }}</label>
+                        <input type="number" id="maxAgeRoomie" name="maxAgeRoomie" [(ngModel)]="preference.maxAgeRoomie"
+                            placeholder="e.g. 35">
+                    </div>
                 </div>
             </div>
 

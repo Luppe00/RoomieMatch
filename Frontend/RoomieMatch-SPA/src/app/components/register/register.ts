@@ -210,13 +210,13 @@ export class RegisterComponent {
                                 id: 0, // Ignored by server
                                 userId: currentUser.id,
                                 maxRent: this.preferences.maxRent,
-                                preferredLocation: selectedLocs || this.preferences.preferredGender, // Use selectedLocs as preferredLocation
+                                preferredLocation: selectedLocs, // Use selected locations
                                 preferredLocations: selectedLocs,
                                 preferredGender: this.preferences.preferredGender || 'Any',
                                 minAgeRoomie: this.preferences.preferredAgeMin,
                                 maxAgeRoomie: this.preferences.preferredAgeMax,
                                 rentPeriod: this.preferences.rentPeriod,
-                                smokerPreference: this.smoker === 'No' ? 'Non-smoker only' : (this.smoker === 'Yes' ? 'Smoker OK' : undefined)
+                                smokerPreference: this.preferences.acceptsSmoker || undefined // Use acceptsSmoker from Step 2
                             };
 
                             console.log('Saving preferences:', preferenceData);

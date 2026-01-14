@@ -165,12 +165,14 @@ export class ProfileComponent implements OnInit {
                     this.preference.userId = userId;
                 }
                 this.loading = false;
+                this.cdr.detectChanges(); // Force UI update
             },
             error: (err) => {
                 if (err.status === 404) {
                     this.preference.userId = userId;
                 }
                 this.loading = false;
+                this.cdr.detectChanges(); // Force UI update
             }
         });
     }

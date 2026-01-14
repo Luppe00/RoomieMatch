@@ -1,13 +1,13 @@
 <div class="container">
     <div class="profile-header">
-        <h2>My Profile</h2>
-        <p>Manage your details and preferences</p>
+        <h2>{{ t('profile.title') }}</h2>
+        <p>{{ t('profile.subtitle') }}</p>
     </div>
 
     <!-- Profile Completion Bar -->
     <div *ngIf="!loading && user" class="completion-card">
         <div class="completion-header">
-            <span class="completion-title">Profile Completion</span>
+            <span class="completion-title">{{ t('profile.profileCompletion') }}</span>
             <span class="completion-percent" [class.complete]="getProfileCompletion() === 100">
                 {{ getProfileCompletion() }}%
             </span>
@@ -16,23 +16,23 @@
             <div class="progress-bar-fill" [style.width.%]="getProfileCompletion()"></div>
         </div>
         <div class="missing-fields" *ngIf="getMissingFields().length > 0">
-            <span class="missing-label">Missing:</span>
+            <span class="missing-label">{{ t('profile.missing') }}:</span>
             <span class="missing-item" *ngFor="let field of getMissingFields()">{{ field }}</span>
         </div>
         <div class="completion-success" *ngIf="getMissingFields().length === 0">
-            🎉 Your profile is complete!
+            🎉 {{ t('profile.complete') }}
         </div>
     </div>
 
     <div *ngIf="loading" class="loading-spinner">
-        Loading...
+        {{ t('common.loading') }}
     </div>
 
     <form *ngIf="!loading && user" (ngSubmit)="onSubmit()" #profileForm="ngForm" class="profile-form">
 
         <!-- User Details Section -->
         <section class="form-section">
-            <h3>Personal Information</h3>
+            <h3>{{ t('profile.personalInfo') }}</h3>
 
             <div class="form-group center-content">
                 <div class="avatar-preview" *ngIf="user.profileImage">
@@ -44,49 +44,49 @@
             </div>
 
             <div class="form-group">
-                <label for="profileImage">Profile Image</label>
+                <label for="profileImage">{{ t('profile.profileImage') }}</label>
                 <div class="file-upload-container">
                     <input type="file" (change)="onFileSelected($event)" accept="image/*" [disabled]="uploadingPhoto">
-                    <span *ngIf="uploadingPhoto">Uploading...</span>
+                    <span *ngIf="uploadingPhoto">{{ t('profile.uploading') }}</span>
                 </div>
-                <small class="hint">Upload a real photo (max 10MB)</small>
+                <small class="hint">{{ t('profile.uploadHint') }}</small>
             </div>
 
             <div class="row">
                 <div class="form-group half">
-                    <label for="firstName">First Name</label>
+                    <label for="firstName">{{ t('profile.firstName') }}</label>
                     <input type="text" id="firstName" name="firstName" [(ngModel)]="user.firstName" required>
                 </div>
                 <div class="form-group half">
-                    <label for="lastName">Last Name</label>
+                    <label for="lastName">{{ t('profile.lastName') }}</label>
                     <input type="text" id="lastName" name="lastName" [(ngModel)]="user.lastName" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="age">Age</label>
+                <label for="age">{{ t('profile.age') }}</label>
                 <input type="number" id="age" name="age" [(ngModel)]="user.age" required min="18">
             </div>
 
             <div class="form-group">
-                <label for="gender">Gender</label>
+                <label for="gender">{{ t('profile.gender') }}</label>
                 <select id="gender" name="gender" [(ngModel)]="user.gender" required>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
+                    <option value="Male">{{ t('register.male') }}</option>
+                    <option value="Female">{{ t('register.female') }}</option>
+                    <option value="Other">{{ t('register.other') }}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="bio">Bio</label>
+                <label for="bio">{{ t('profile.bio') }}</label>
                 <textarea id="bio" name="bio" [(ngModel)]="user.bio" rows="3"></textarea>
             </div>
 
             <div class="form-group">
-                <label for="userType">I am...</label>
+                <label for="userType">{{ t('profile.iAm') }}</label>
                 <select id="userType" name="userType" [(ngModel)]="user.userType" required>
-                    <option value="NEEDS_ROOM">Looking for a Room</option>
-                    <option value="HAS_ROOM">Offering a Room</option>
+                    <option value="NEEDS_ROOM">{{ t('profile.lookingForRoom') }}</option>
+                    <option value="HAS_ROOM">{{ t('profile.offeringRoom') }}</option>
                 </select>
             </div>
         </section>
@@ -95,17 +95,17 @@
 
         <!-- Room Details Section (Only for HAS_ROOM) -->
         <section class="form-section" *ngIf="user.userType === 'HAS_ROOM' && user.room">
-            <h3>Room Details</h3>
-            <p class="section-desc">describe the room you are offering</p>
+            <h3>{{ t('profile.roomDetails') }}</h3>
+            <p class="section-desc">{{ t('profile.roomDetailsDesc') }}</p>
 
             <div class="form-group">
-                <label for="roomTitle">Title</label>
+                <label for="roomTitle">{{ t('profile.roomTitle') }}</label>
                 <input type="text" id="roomTitle" name="roomTitle" [(ngModel)]="user.room.title" required
-                    placeholder="e.g. Cozy Room in Nørrebro">
+                    [placeholder]="t('profile.roomTitlePlaceholder')">
             </div>
 
             <div class="form-group">
-                <label>Room Photos (up to 5)</label>
+                <label>{{ t('profile.roomPhotos') }}</label>
                 <div class="photos-grid">
                     <!-- Existing photos -->
                     <div class="photo-item" *ngFor="let img of user.room.roomImages || []; let i = index">
@@ -116,40 +116,40 @@
                     <div class="photo-add" *ngIf="(user.room.roomImages?.length || 0) < 5"
                         (click)="roomPhotoInput.click()">
                         <span class="add-icon">+</span>
-                        <span class="add-text">Add Photo</span>
+                        <span class="add-text">{{ t('profile.addPhoto') }}</span>
                     </div>
                 </div>
                 <input type="file" #roomPhotoInput hidden accept="image/*" multiple
                     (change)="onRoomImagesSelected($event)">
-                <small class="hint" *ngIf="uploadingRoomImage">Uploading...</small>
+                <small class="hint" *ngIf="uploadingRoomImage">{{ t('profile.uploading') }}</small>
             </div>
 
             <div class="form-group">
                 <div class="row">
                     <div class="form-group half">
-                        <label for="roomRent">Rent (Monthly)</label>
+                        <label for="roomRent">{{ t('profile.rent') }}</label>
                         <input type="number" id="roomRent" name="roomRent" [(ngModel)]="user.room.rent" required>
                     </div>
                     <div class="form-group half">
-                        <label for="roomSize">Size (m²)</label>
+                        <label for="roomSize">{{ t('profile.size') }}</label>
                         <input type="number" id="roomSize" name="roomSize" [(ngModel)]="user.room.sizeSqm">
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="roomLocation">Location</label>
+                <label for="roomLocation">{{ t('profile.location') }}</label>
                 <input type="text" id="roomLocation" name="roomLocation" [(ngModel)]="user.room.location" required>
             </div>
 
             <div class="form-group">
-                <label for="roomDescription">Description</label>
+                <label for="roomDescription">{{ t('profile.description') }}</label>
                 <textarea id="roomDescription" name="roomDescription" [(ngModel)]="user.room.description"
                     rows="3"></textarea>
             </div>
 
             <div class="form-group">
-                <label for="availableFrom">Available From</label>
+                <label for="availableFrom">{{ t('profile.availableFrom') }}</label>
                 <input type="date" id="availableFrom" name="availableFrom"
                     [ngModel]="user.room.availableFrom | date:'yyyy-MM-dd'"
                     (ngModelChange)="user.room.availableFrom = $event">
@@ -158,33 +158,34 @@
 
         <!-- Preferences Section -->
         <section class="form-section">
-            <h3>{{ user.userType === 'HAS_ROOM' ? 'Roommate Preferences' : 'Room Preferences' }}</h3>
+            <h3>{{ user.userType === 'HAS_ROOM' ? t('profile.roommatePreferences') : t('profile.roomPreferences') }}
+            </h3>
             <p class="section-desc">
-                {{ user.userType === 'HAS_ROOM' ? 'What kind of roommate are you looking for?' : 'What kind of room and
-                renter are you looking for?' }}
+                {{ user.userType === 'HAS_ROOM' ? t('profile.roommatePreferencesDesc') :
+                t('profile.roomPreferencesDesc') }}
             </p>
 
             <!-- Room preferences - Only for NEEDS_ROOM -->
             <div *ngIf="user.userType === 'NEEDS_ROOM'">
                 <div class="form-group">
-                    <label for="maxRent">Maximum Budget ($)</label>
+                    <label for="maxRent">{{ t('profile.maxBudget') }}</label>
                     <input type="number" id="maxRent" name="maxRent" [(ngModel)]="preference.maxRent"
                         placeholder="e.g. 800">
                 </div>
 
                 <div class="form-group">
-                    <label for="preferredLocation">Preferred Location</label>
+                    <label for="preferredLocation">{{ t('profile.preferredLocation') }}</label>
                     <input type="text" id="preferredLocation" name="preferredLocation"
                         [(ngModel)]="preference.preferredLocation" placeholder="e.g. Nørrebro, Vesterbro">
                 </div>
 
                 <div class="form-group">
-                    <label for="preferredGender">Preferred Gender of Room Owner</label>
+                    <label for="preferredGender">{{ t('profile.preferredGenderOwner') }}</label>
                     <select id="preferredGender" name="preferredGender" [(ngModel)]="preference.preferredGender">
-                        <option value="Any">Any</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="Any">{{ t('profile.any') }}</option>
+                        <option value="Male">{{ t('register.male') }}</option>
+                        <option value="Female">{{ t('register.female') }}</option>
+                        <option value="Other">{{ t('register.other') }}</option>
                     </select>
                 </div>
             </div>
@@ -192,23 +193,23 @@
             <!-- Roommate preferences - Only for HAS_ROOM -->
             <div *ngIf="user.userType === 'HAS_ROOM'">
                 <div class="form-group">
-                    <label for="preferredGender">Preferred Roommate Gender</label>
+                    <label for="preferredGender">{{ t('profile.preferredGender') }}</label>
                     <select id="preferredGender" name="preferredGender" [(ngModel)]="preference.preferredGender">
-                        <option value="Any">Any</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="Any">{{ t('profile.any') }}</option>
+                        <option value="Male">{{ t('register.male') }}</option>
+                        <option value="Female">{{ t('register.female') }}</option>
+                        <option value="Other">{{ t('register.other') }}</option>
                     </select>
                 </div>
 
                 <div class="row">
                     <div class="form-group half">
-                        <label for="minAge">Min Roommate Age</label>
+                        <label for="minAge">{{ t('profile.minAge') }}</label>
                         <input type="number" id="minAge" name="minAgeRoomie" [(ngModel)]="preference.minAgeRoomie"
                             placeholder="18">
                     </div>
                     <div class="form-group half">
-                        <label for="maxAge">Max Roommate Age</label>
+                        <label for="maxAge">{{ t('profile.maxAge') }}</label>
                         <input type="number" id="maxAge" name="maxAgeRoomie" [(ngModel)]="preference.maxAgeRoomie"
                             placeholder="99">
                     </div>
@@ -221,7 +222,7 @@
 
         <div class="form-actions">
             <button type="submit" class="btn-primary" [disabled]="saving">
-                {{ saving ? 'Saving...' : 'Save Changes' }}
+                {{ saving ? t('profile.saving') : t('profile.save') }}
             </button>
         </div>
     </form>
